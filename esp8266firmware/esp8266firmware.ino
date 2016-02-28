@@ -26,7 +26,7 @@ String string;
 char buff[255] = "";
 
 void responseFail(String reason) {
-  while(Serial.available())
+  while (Serial.available())
     Serial.read();
   Serial.print("FAIL: ");
   Serial.println(reason);
@@ -35,7 +35,7 @@ void responseFail(String reason) {
 boolean readString(char b) {
   int len = strlen(buff);
 
-  if (len >= 255) {
+  if (len >= 254) {
     buff[255] = 0;
     return true;
   }
@@ -50,6 +50,12 @@ boolean readString(char b) {
     buff[len + 1] = 0;
     return false;
   }
+}
+
+String getBuffString() {
+  string = String(buff);
+  buff[0] = 0;
+  return string;
 }
 
 void webSocketEvent(WStype_t type, uint8_t * payload, size_t lenght) {
@@ -80,12 +86,12 @@ int parseString(String string, int index1) {
 void setup() {
   Serial.begin(9600);
   Serial.println();
+  responseFail("allright, startup");
 }
 
 void loop() {
   if (Serial.available() > 0 && readString(Serial.read())) {
-    string = String(buff);
-    buff[0] = 0;
+    string = getBuffString();
 
     at_command = false;
     if (string.startsWith("AT"))
