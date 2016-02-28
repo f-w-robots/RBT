@@ -3,7 +3,7 @@
 #ifndef ESP8266Serial_h
 #define ESP8266Serial_h
 
-class ESP8266Serial 
+class ESP8266Serial
 {
   public:
     ESP8266Serial(uint8_t rx, uint8_t tx);
@@ -18,9 +18,10 @@ class ESP8266Serial
     boolean connected();
   private:
     boolean readString(char b);
+    String getBuffString();
     String response();
     boolean responseIsOK(String type);
-    
+
     boolean _espReady;
     boolean _wifi;
     boolean _socket;
@@ -31,4 +32,4 @@ class ESP8266Serial
 };
 
 #endif
-  
+

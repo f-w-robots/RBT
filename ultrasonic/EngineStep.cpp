@@ -2,51 +2,40 @@
 #include "EngineStep.h"
 
 // ENA, EN1, EN2, EN3, EN4, ENB
-EngineStep::EngineStep(Engine *engine)
-{
-  _engine = engine;
+EngineStep::EngineStep(Motor28BYJ* motor) {
+  _motor= motor;
 }
 
 void EngineStep::command(String command) {
-  if(command == "rf") {
+  if (command == "rf") {
     right();
     forward();
-  } else if(command == "lf") {
+  } else if (command == "lf") {
     left();
     forward();
-  } else if(command == "f") {
-    forward();    
-  } else if(command == "r") {
+  } else if (command == "f") {
+    forward();
+  } else if (command == "r") {
     right();
-  } else if(command == "l") {
+  } else if (command == "l") {
     left();
-  } else if(command == "s") {
+  } else if (command == "s") {
     revert();
   }
 }
 
 void EngineStep::forward() {
-  _engine->rightSpeed(defaultSpeed);
-  _engine->leftSpeed(defaultSpeed);
-  delay(950);
-  _engine->stop();
+  _motor->step(5000, 1, 1);
 }
 
 void EngineStep::right() {
-  _engine->leftSpeed(defaultSpeed);
-  delay(900);
-  _engine->stop();
+  _motor->step(5000, 1, 0);
 }
 
 void EngineStep::left() {
-  _engine->rightSpeed(defaultSpeed);
-  delay(900);
-  _engine->stop();
+  _motor->step(5000, 0, 1);
 }
 
 void EngineStep::revert() {
-  _engine->rightSpeed(defaultSpeed);
-  _engine->leftSpeed(-defaultSpeed);
-  delay(1200);
-  _engine->stop();
+  _motor->step(5000, -1, 1);
 }

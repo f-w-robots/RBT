@@ -1,19 +1,18 @@
-#include "EngineStep.h"
 #include "ESP8266Serial.h"
 #include "RGBIndication.h"
-#include "LineSensor.h"
+//#include "LineSensor.h"
+#include "EngineStep.h"
+#include "Motor28BYJ.h"
 
-EngineStepper engine(0, 1, 2, 3, 4, 5, 6, 7);
+Motor28BYJ motor(A0, A1, 2, 3, 4, 5, 6, 7);
+EngineStep engine(&motor);
 
-// ENA, IN1, IN2, IN3, IN4, ENB
-Engine engine(6, 7, 5, 4, 2, 3);
-EngineStep engineStep(&engine);
 // TX, RX
 ESP8266Serial esp(8, 9);
 //Red, Green, Blue
 RGBIndication rgb(11, 12, 13);
 // S0, S1, S2, Z
-LineSensor line(A3, A4, A5, A2);
+//LineSensor line(A3, A4, A5, A2);
 
 String ssid = "robohub";
 String password = "robohub1";
@@ -98,7 +97,6 @@ void setup()
 {
   Serial.begin(9600);
 
-
   connect();
   rgb.connection();
 
@@ -121,53 +119,16 @@ void loop()
       return;
     }
     if (response.startsWith("S")) {
-      engineStep.command(response.substring(1));
-    }
-    if (response.startsWith("T")) {
-      parseResponse(response.substring(1));
-      engine.rightSpeed(leftSpeed);
-      engine.leftSpeed(rightSpeed);
-    }
-    if (response.startsWith("L1")) {
-      lineMode = true;
-      engine.rightSpeed(lineModeSpeed);
-      engine.leftSpeed(lineModeSpeed);
-    }
-    if (response.startsWith("L0")) {
-      lineMode = false;
-      engine.rightSpeed(0);
-      engine.leftSpeed(0);
+      engine.command(response.substring(1));
     }
   }
-  if (lineMode) {
-    int x = 30;
-    int position = line.sensorsPosition();
-    if (position == 1)
-      engine.stop();
-    if (position == 2) {
-      engine.rightSpeed(lineModeSpeed + x);
-      engine.leftSpeed(lineModeSpeed);
-    }
-    if (position == 4) {
-      engine.rightSpeed(lineModeSpeed + x * 2);
-      engine.leftSpeed(lineModeSpeed);
-    }
-    if (position == 3) {
-      engine.rightSpeed(lineModeSpeed);
-      engine.leftSpeed(lineModeSpeed + x);
-    }
-    if (position == 5) {
-      engine.rightSpeed(lineModeSpeed);
-      engine.leftSpeed(lineModeSpeed + x * 2);
-    }
-  }
-  requestTimeout += 1;
-  if (requestTimeout > 1000) {
-    line.readSensors();
-    String req = line.printSensorsBool();
-    Serial.println(req);
-    esp.request(req);
-    requestTimeout = 0;
-  }
+//  requestTimeout += 1;
+//  if (requestTimeout > 1000) {
+//    line.readSensors();
+//    String req = line.printSensorsBool();
+//    Serial.println(req);
+//    esp.request(req);
+//    requestTimeout = 0;
+//  }
 }
 
