@@ -2,9 +2,7 @@
 
 #include "ESP8266Serial.h"
 
-ESP8266Serial::ESP8266Serial(uint8_t rx, uint8_t tx) {
-  _serial = new SoftwareSerial(rx, tx);
-  _serial->begin(9600);
+ESP8266Serial::ESP8266Serial() {
   _buff[0] = 0;
   _connection_timeout = 0;
   _espReady = false;
@@ -25,12 +23,12 @@ int ESP8266Serial::status() {
 
 void ESP8266Serial::request(String string) {
   if (_socket) {
-    _serial->println(string);
+    Serial.println(string);
   }
 }
 
 boolean ESP8266Serial::prepare() {
-  _serial->println("AT:reset");
+  Serial.println("AT:reset");
   _espReady = responseIsOK("reset");
   return _espReady;
 }
@@ -39,7 +37,7 @@ boolean ESP8266Serial::upWiFi(String ssid, String password) {
   if (!_espReady) {
     return false;
   }
-  _serial->println("AT:setup+" + ssid + "+" + password);
+  Serial.println("AT:setup+" + ssid + "+" + password);
   _wifi = responseIsOK("wifi");
   return _wifi;
 }
@@ -48,26 +46,25 @@ boolean ESP8266Serial::connectToSocket(String host, String port, String sha) {
   if (!_wifi) {
     return false;
   }
-  _serial->println("AT:connect+" + host + "+" + port + "+/" + sha);
+  Serial.println("AT:connect+" + host + "+" + port + "+/" + sha);
   _socket = responseIsOK("connect");
   return _socket;
 }
 
 boolean ESP8266Serial::responseIsOK(String type) {
   String resp = response();
-  Serial.println(resp);
   return resp.endsWith("OK:" + type);
 }
 
 boolean ESP8266Serial::responseAvailable() {
-  return _serial->available() > 0;
+  return Serial.available() > 0;
 }
 
 String ESP8266Serial::getResponse() {
   if (!_socket)
     return "FAIL: not socket";
-  while (_serial->available() > 0) {
-    if (readString(_serial->read())) {
+  while (Serial.available() > 0) {
+    if (readString(Serial.read())) {
       _string = getBuffString();
       if (_string.startsWith("FAIL:"))
         _socket = false;
@@ -84,9 +81,8 @@ boolean ESP8266Serial::connected() {
 
 String ESP8266Serial::response() {
   while (true) {
-    while (_serial->available() > 0) {
-      char b = _serial->read();
-      //      Serial.println(int(b));
+    while (Serial.available() > 0) {
+      char b = Serial.read();
       if (readString(b)) {
         _string = getBuffString();
 
@@ -121,4 +117,3 @@ String ESP8266Serial::getBuffString() {
   _buff[0] = 0;
   return _string;
 }
-
