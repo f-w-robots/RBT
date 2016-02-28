@@ -24,6 +24,15 @@ String LineSensor::printSensors() {
   return req;
 }
 
+String LineSensor::printSensorsBool() {
+  String req = "";
+  for (int i = 0; i < 6; i++) {
+    req += (_sensors[i] < 300);
+    req += " ";
+  }
+  return req;
+}
+
 void LineSensor::readSensors() {
   for (int i = 0; i < 6; i++) {
     _cd4051->switchInput(i);
@@ -35,13 +44,21 @@ void LineSensor::readSensors() {
 int LineSensor::sensorsPosition() {
   readSensors();
   return correctPath(
-           constrain(map(_sensors[5], 200, 800, 0, 10), 0, 10),
-           constrain(map(_sensors[2], 200, 800, 0, 10), 0, 10),
-           constrain(map(_sensors[3], 200, 800, 0, 10), 0, 10),
-           constrain(map(_sensors[1], 200, 800, 0, 10), 0, 10),
-           constrain(map(_sensors[4], 200, 800, 0, 10), 0, 10),
-           constrain(map(_sensors[0], 200, 800, 0, 10), 0, 10)
+           _sensors[5] < 300,
+           _sensors[2] < 300,
+           _sensors[3] < 300,
+           _sensors[1] < 300,
+           _sensors[4] < 300,
+           _sensors[0] < 300
          );
+//  return correctPath(
+//           constrain(map(_sensors[5], 200, 800, 0, 10), 0, 10),
+//           constrain(map(_sensors[2], 200, 800, 0, 10), 0, 10),
+//           constrain(map(_sensors[3], 200, 800, 0, 10), 0, 10),
+//           constrain(map(_sensors[1], 200, 800, 0, 10), 0, 10),
+//           constrain(map(_sensors[4], 200, 800, 0, 10), 0, 10),
+//           constrain(map(_sensors[0], 200, 800, 0, 10), 0, 10)
+//         );
 }
 
 // 1 - stop
@@ -49,29 +66,47 @@ int LineSensor::sensorsPosition() {
 // 3 - left
 // 4 - right*2
 // 5 - left*2
-int LineSensor::correctPath(int v0, int vc, int vr, int vl, int vr2, int vl2) {
-//  if (!vc && !vr && !vl) {
-//    return 1;
-//  }
-//  if (!vr && !vc) {
-//    return 4;
-//  }
-//  if (!vl && !vc) {
-//    return 5;
-//  }
-//  if (!vr) {
-//    return 2;
-//  }
-//  if (!vl) {
-//    return 3;
-//  }
-  int x = 10 - vc;
-  if(vr - vl < 0) {
-    return vr - vl - x;
+int LineSensor::correctPath(boolean v0, boolean vc, boolean vr, boolean vl, boolean vr2, boolean vl2) {
+  if (!vc && !vr && !vl) {
+    return 1;
   }
-  if(vr - vl > 0) {
-    return vr - vl + x;
+  if (!vr && !vc) {
+    return 4;
   }
-  return 0;
+  if (!vl && !vc) {
+    return 5;
+  }
+  if (!vr) {
+    return 2;
+  }
+  if (!vl) {
+    return 3;
+  }  
 }
+
+//int LineSensor::correctPath(int v0, int vc, int vr, int vl, int vr2, int vl2) {
+////  if (!vc && !vr && !vl) {
+////    return 1;
+////  }
+////  if (!vr && !vc) {
+////    return 4;
+////  }
+////  if (!vl && !vc) {
+////    return 5;
+////  }
+////  if (!vr) {
+////    return 2;
+////  }
+////  if (!vl) {
+////    return 3;
+////  }
+//  int x = 10 - vc;
+//  if(vr - vl < 0) {
+//    return vr - vl - x;
+//  }
+//  if(vr - vl > 0) {
+//    return vr - vl + x;
+//  }
+//  return 0;
+//}
 

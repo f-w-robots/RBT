@@ -3,6 +3,8 @@
 #include "RGBIndication.h"
 #include "LineSensor.h"
 
+EngineStepper engine(0, 1, 2, 3, 4, 5, 6, 7);
+
 // ENA, IN1, IN2, IN3, IN4, ENB
 Engine engine(6, 7, 5, 4, 2, 3);
 EngineStep engineStep(&engine);
@@ -23,7 +25,7 @@ int rightSpeed = 0;
 int leftSpeed = 0;
 
 boolean lineMode = false;
-const uint8_t lineModeSpeed = 70;
+const uint8_t lineModeSpeed = 100;
 
 int requestTimeout = 0;
 
@@ -138,21 +140,33 @@ void loop()
     }
   }
   if (lineMode) {
-    int position = line.sensorsPosition() / 2;
-    if (position != 0) {
-      if (requestTimeout == 0) {
-        esp.request("l " + String(lineModeSpeed + position) + " r " + String(lineModeSpeed - position));
-      }
-      engine.rightSpeed(lineModeSpeed - position);
-      engine.leftSpeed(lineModeSpeed + position);
+    int x = 30;
+    int position = line.sensorsPosition();
+    if (position == 1)
+      engine.stop();
+    if (position == 2) {
+      engine.rightSpeed(lineModeSpeed + x);
+      engine.leftSpeed(lineModeSpeed);
     }
-
+    if (position == 4) {
+      engine.rightSpeed(lineModeSpeed + x * 2);
+      engine.leftSpeed(lineModeSpeed);
+    }
+    if (position == 3) {
+      engine.rightSpeed(lineModeSpeed);
+      engine.leftSpeed(lineModeSpeed + x);
+    }
+    if (position == 5) {
+      engine.rightSpeed(lineModeSpeed);
+      engine.leftSpeed(lineModeSpeed + x * 2);
+    }
   }
   requestTimeout += 1;
-  if (requestTimeout > 15) {
-    //    line.readSensors();
-    //    String req = line.printSensors();
-    //    esp.request(req);
+  if (requestTimeout > 1000) {
+    line.readSensors();
+    String req = line.printSensorsBool();
+    Serial.println(req);
+    esp.request(req);
     requestTimeout = 0;
   }
 }
