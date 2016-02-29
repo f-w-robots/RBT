@@ -9,6 +9,7 @@ LineSensor::LineSensor(uint8_t pin0, uint8_t pin1, uint8_t pin2, uint8_t analog)
   pinMode(pin1, OUTPUT);
   _pins[2] = pin2;
   pinMode(pin2, OUTPUT);
+
   _analog = analog;
 
   _cd4051 = new CD4051(pin0, pin1, pin2);
@@ -57,72 +58,12 @@ void LineSensor::readSensors() {
   }
 }
 
-int LineSensor::sensorsPosition() {
-  readSensors();
-  return correctPath(
-           _sensors[5] < 300,
-           _sensors[2] < 300,
-           _sensors[3] < 300,
-           _sensors[1] < 300,
-           _sensors[4] < 300,
-           _sensors[0] < 300
-         );
-//  return correctPath(
-//           constrain(map(_sensors[5], 200, 800, 0, 10), 0, 10),
-//           constrain(map(_sensors[2], 200, 800, 0, 10), 0, 10),
-//           constrain(map(_sensors[3], 200, 800, 0, 10), 0, 10),
-//           constrain(map(_sensors[1], 200, 800, 0, 10), 0, 10),
-//           constrain(map(_sensors[4], 200, 800, 0, 10), 0, 10),
-//           constrain(map(_sensors[0], 200, 800, 0, 10), 0, 10)
-//         );
+void LineSensor::assignValues(int8_t &v0, int8_t &vc, int8_t &vr, int8_t &vl, int8_t &vrr, int8_t &vll) {
+  v0 = constrain(map(_sensors[5], 200, 800, 0, 10), 0, 10);
+  vc = constrain(map(_sensors[2], 200, 800, 0, 10), 0, 10);
+  vr = constrain(map(_sensors[3], 200, 800, 0, 10), 0, 10);
+  vl = constrain(map(_sensors[1], 200, 800, 0, 10), 0, 10);
+  vrr = constrain(map(_sensors[4], 200, 800, 0, 10), 0, 10);
+  vll = constrain(map(_sensors[0], 200, 800, 0, 10), 0, 10);
 }
-
-// 1 - stop
-// 2 - right
-// 3 - left
-// 4 - right*2
-// 5 - left*2
-int LineSensor::correctPath(boolean v0, boolean vc, boolean vr, boolean vl, boolean vr2, boolean vl2) {
-  if (!vc && !vr && !vl) {
-    return 1;
-  }
-  if (!vr && !vc) {
-    return 4;
-  }
-  if (!vl && !vc) {
-    return 5;
-  }
-  if (!vr) {
-    return 2;
-  }
-  if (!vl) {
-    return 3;
-  }  
-}
-
-//int LineSensor::correctPath(int v0, int vc, int vr, int vl, int vr2, int vl2) {
-////  if (!vc && !vr && !vl) {
-////    return 1;
-////  }
-////  if (!vr && !vc) {
-////    return 4;
-////  }
-////  if (!vl && !vc) {
-////    return 5;
-////  }
-////  if (!vr) {
-////    return 2;
-////  }
-////  if (!vl) {
-////    return 3;
-////  }
-//  int x = 10 - vc;
-//  if(vr - vl < 0) {
-//    return vr - vl - x;
-//  }
-//  if(vr - vl > 0) {
-//    return vr - vl + x;
-//  }
-//  return 0;
-//}
 

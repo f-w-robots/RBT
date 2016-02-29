@@ -1,6 +1,8 @@
 #include "LineSensor.h"
 #include "Motor28BYJ.h"
 
+const int speed = 1200;
+
 Motor28BYJ motor1(2, 3, 4, 5);
 Motor28BYJ motor2(6, 7, 8, 9);
 
@@ -8,17 +10,13 @@ Motor28BYJ motor2(6, 7, 8, 9);
 LineSensor line(A3, A4, A5, A2);
 
 boolean move = false;
+boolean turning = false;
 int8_t right = 0;
 int8_t left = 0;
 
+int skipSensorsStep = 0;
+
 unsigned long oldTimeValue = 0;
-unsigned long newTimeValue = 0;
-
-int speed = 1200;
-
-int stepCount = 0;
-
-char request = 0;
 
 void setup()
 {
@@ -27,38 +25,60 @@ void setup()
 
 void loop()
 {
-  if (move)  {
-    newTimeValue = micros() / speed;
+  if (move)
+    doMove();
+  else
+    readCommand();
 
-    if (newTimeValue != oldTimeValue) {
-      oldTimeValue = newTimeValue ;
-      motor1.step(right);
-      motor2.step(left);
-      stepCount++;
-      if (stepCount > 2500) {
-        move = false;
-        Serial.write('w');
+  processSensors();
+}
+
+void doMove() {
+  unsigned long newTimeValue = micros() / speed;
+
+  if (newTimeValue != oldTimeValue) {
+    oldTimeValue = newTimeValue ;
+    motor1.step(right);
+    motor2.step(left);
+  }
+}
+
+void readCommand() {
+  if (Serial.available() > 0) {
+    char request = Serial.read();
+    if (request == 'f' || request == 'r' || request == 'l') {
+      move = true;
+      skipSensorsStep = 1000;
+      if (request == 'f') {
+        left = 1;
+        right = -1;
+      }
+      if (request == 'l') {
+        turning = true;
+        left = -1;
+        right = -1;
+      }
+      if (request == 'r') {
+        turning = true;
+        left = 1;
+        right = 1;
       }
     }
-  } else {
-    if (Serial.available() > 0) {
-      request = Serial.read();
-      if (request == 'f' || request == 'r' || request == 'l') {
-        move = true;
-        stepCount = 0;
-        if (request == 'f') {
-          left = 1;
-          right = -1;
-        }
-        if (request == 'l') {
-          left = -1;
-          right = -1;
-        }
-        if (request == 'r') {
-          left = 1;
-          right = 1;
-        }
-      }
-    }
+  }
+}
+
+void processSensors() {
+  line.readSensor();
+  if (skipSensorsStep > 0) {
+    skipSensorsStep --;
+    return;
+  }
+  if (line.sensorsRead()) {
+    int8_t sforward, scenter, sright, sleft, sright2, sleft2 ;
+    line.assignValues(sforward, scenter, sright, sleft, sright2, sleft2);
+    if (sforward == 0 && !turning)
+      move = false;
+    if (sright2 > 0 && sleft2 > 0)
+      move = false;
   }
 }
