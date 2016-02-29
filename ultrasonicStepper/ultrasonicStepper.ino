@@ -67,6 +67,14 @@ void readCommand() {
   }
 }
 
+void endStep() {
+  if(move) {
+    move = false;
+    turning = false;
+    Serial.write('w');
+  }
+}
+
 void processSensors() {
   line.readSensor();
   if (skipSensorsStep > 0) {
@@ -77,8 +85,8 @@ void processSensors() {
     int8_t sforward, scenter, sright, sleft, sright2, sleft2 ;
     line.assignValues(sforward, scenter, sright, sleft, sright2, sleft2);
     if (sforward == 0 && !turning)
-      move = false;
+      endStep();
     if (sright2 > 0 && sleft2 > 0)
-      move = false;
+      endStep();
   }
 }
