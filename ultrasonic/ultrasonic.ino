@@ -5,8 +5,8 @@
 #include "Motor28BYJ.h"
 #include <SoftwareSerial.h>
 
-Motor28BYJ motor(A0, A1, 2, 3, 4, 5, 6, 7);
-EngineStep engine(&motor);
+Motor28BYJ motor1(2,3,4,5);
+Motor28BYJ motor2(6,7,8,9);
 
 // TX, RX
 ESP8266Serial esp;
@@ -15,12 +15,12 @@ RGBIndication rgb(11, 12, 13);
 // S0, S1, S2, Z
 //LineSensor line(A3, A4, A5, A2);
 
-SoftwareSerial dbgSerial(8, 9);
+SoftwareSerial dbgSerial(A0, A1);
 //#define dbgSerial Serial
 
-String ssid = "robohub";
-String password = "robohub1";
-String host = "192.168.43.252";
+String ssid = "kernel";
+String password = "axtr456E";
+String host = "192.168.1.4";
 String sha = "car";
 
 String response = "";
@@ -104,9 +104,21 @@ void setup()
 
   connect();
   rgb.connection();
-
+  esp.request("waiting");
+  
   dbgSerial.println("connected");
 }
+
+boolean moveMode = false;
+int8_t right = 0;
+int8_t left = 0;
+
+unsigned long oldTimeValue = 0;
+unsigned long newTimeValue = 0;
+
+int speed = 1200;
+
+int stepCount = 0;
 
 void loop()
 {
@@ -123,9 +135,37 @@ void loop()
       rgb.error();
       return;
     }
-    if (response.startsWith("S")) {
-      engine.command(response.substring(1));
+    if (response.startsWith("S") && !moveMode) {
+      moveMode = true;
+      stepCount = 0;
+      if(response.substring(1) == "f") {
+        left = 1;
+        right = 1;
+      }
+      if(response.substring(1) == "l") {
+        left = 0;
+        right = 1;
+      }
+      if(response.substring(1) == "r") {
+        left = 1;
+        right = 0;
+      }
     }
+  }
+  if(moveMode) {
+    newTimeValue = micros() / speed;
+ 
+    if (newTimeValue != oldTimeValue) {
+      oldTimeValue = newTimeValue ;
+      motor1.step(right);
+      motor2.step(left);
+      stepCount++;
+      if(stepCount > 3000) {
+        moveMode = false;
+        esp.request("wait");
+      }
+    }
+    
   }
 //  requestTimeout += 1;
 //  if (requestTimeout > 1000) {

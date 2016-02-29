@@ -3,11 +3,12 @@
 
 class Motor28BYJ {
   public:
-    Motor28BYJ(uint8_t pin1, uint8_t pin2, uint8_t pin3, uint8_t pin4, uint8_t pin1a, uint8_t pin2a, uint8_t pin3a, uint8_t pin4a);
-    void step(int duration, int8_t directionA, int8_t directionB);
+    Motor28BYJ(uint8_t pin1, uint8_t pin2, uint8_t pin3, uint8_t pin4);
+    void step(int direction);
   private:
-  int _pins[8];
+  int _pins[4];
   int _speed = 1000;
+  uint8_t position = 0;
   const boolean _sequence[8][4] = {
       {LOW, LOW, LOW, HIGH },
       {LOW, LOW, HIGH, HIGH},
