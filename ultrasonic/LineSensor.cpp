@@ -33,6 +33,22 @@ String LineSensor::printSensorsBool() {
   return req;
 }
 
+boolean LineSensor::sensorsRead() {
+  return _sensorsRead;
+}
+
+void LineSensor::readSensor() {
+  _sensorsRead = false;
+  _cd4051->switchInput(_currentSensor);
+  delayMicroseconds(100);
+  _sensors[_currentSensor] = (analogRead(_analog) - _sensorsColibration[_currentSensor]) * (1023.0 / _sensorsColibrationUp[_currentSensor]);
+  _currentSensor++;
+  if(_currentSensor >= 6) {
+    _currentSensor = 0;
+    _sensorsRead = true;
+  }
+}
+
 void LineSensor::readSensors() {
   for (int i = 0; i < 6; i++) {
     _cd4051->switchInput(i);

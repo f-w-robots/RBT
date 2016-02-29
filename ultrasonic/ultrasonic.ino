@@ -1,6 +1,6 @@
 #include "ESP8266Serial.h"
 #include "RGBIndication.h"
-//#include "LineSensor.h"
+#include "LineSensor.h"
 #include "EngineStep.h"
 #include "Motor28BYJ.h"
 #include <SoftwareSerial.h>
@@ -13,7 +13,7 @@ ESP8266Serial esp;
 //Red, Green, Blue
 RGBIndication rgb(11, 12, 13);
 // S0, S1, S2, Z
-//LineSensor line(A3, A4, A5, A2);
+LineSensor line(A3, A4, A5, A2);
 
 SoftwareSerial dbgSerial(A0, A1);
 //#define dbgSerial Serial
@@ -164,8 +164,13 @@ void loop()
         moveMode = false;
         esp.request("wait");
       }
+    } 
+  }
+  if(lineMode) {
+    line.readSensor();
+    if(line.sensorsRead()) {
+      
     }
-    
   }
 //  requestTimeout += 1;
 //  if (requestTimeout > 1000) {
