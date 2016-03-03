@@ -11,7 +11,7 @@ char password[] = "axtr456E";
 
 char address[] = "192.168.1.7";
 uint16_t port = 2500;
-char hwid[] = "car2";
+char hwid[] = "i2c";
 char baseUrl[] = "/";
 char *url = new char[strlen(hwid) + strlen(baseUrl) + 1];
 
@@ -22,10 +22,7 @@ char* getUrl() {
 }
 
 void dbgMsg(char msg[], bool newLine = true) {
-  if(newLine)
-    Serial.println(msg);
-   else
-    Serial.print(msg);
+//  if(newLine) Serial.println(msg);else Serial.print(msg);
 }
 
 void webSocketEvent(WStype_t type, uint8_t *payload, size_t lenght) {
@@ -33,11 +30,10 @@ void webSocketEvent(WStype_t type, uint8_t *payload, size_t lenght) {
     case WStype_DISCONNECTED:
       break;
     case WStype_CONNECTED:
-      for(int i = 0; payload[i] != 0; i++) 
-        Serial.write(payload[i]);
       break;
     case WStype_TEXT:
-      webSocket.sendTXT("x");
+      for(int i = 0; payload[i] != 0; i++)
+        Serial.write(payload[i]);
       break;
     case WStype_BIN:
       break;
@@ -62,7 +58,27 @@ void setup() {
   webSocket.onEvent(webSocketEvent);
 }
 
+int incomePackageLen = 0;
+int incomePackageI = 0;
+char message[256];
+char c;
+
 void loop() {
   webSocket.loop();
+  if(Serial.available() > 0) {
+    if(incomePackageLen == 0) {
+      incomePackageLen = Serial.read() - 48;
+      message[incomePackageLen] = 0;
+    }
+    while(Serial.available() > 0) {
+      message[incomePackageI] = Serial.read();
+      incomePackageI++;
+      if(incomePackageI == incomePackageLen) {
+        incomePackageLen = 0;
+        incomePackageI = 0;
+        webSocket.sendTXT(message);
+      }
+    }
+  }
 }
 

@@ -38,25 +38,8 @@ unsigned long oldTimeValue = 0;
 void setup()
 {
   Serial.begin(9600);
+  move = true;
 }
-
-void rgb() {
-  if(pins[0])
-    digitalWrite(2, HIGH);
-  else
-    digitalWrite(2, LOW);
-    
-  if(pins[1])
-    digitalWrite(3, HIGH);
-  else
-    digitalWrite(3, LOW);
-    
-  if(pins[2])
-    digitalWrite(4, HIGH);
-  else
-    digitalWrite(4, LOW);
-}
-
 void loop()
 {
   if (!i2c.check()) return;
@@ -71,7 +54,7 @@ void loop()
 void responseNextTick() {  
   line.readSensor();
 
-  i2c.response((char)(line.getSensor(0) + 42));
+  i2c.response((char)(line.getSensor(0) + 48));
 
   if (line.sensorsRead()) {
     needResponse = false;
