@@ -37,7 +37,7 @@ unsigned long oldTimeValue = 0;
 
 void setup()
 {
-  Serial.begin(9600);
+  Serial.begin(115200);
   move = true;
 }
 void loop()

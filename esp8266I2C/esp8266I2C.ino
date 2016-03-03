@@ -6,10 +6,10 @@
 
 WebSocketsClient webSocket;
 
-char ssid[] = "kernel";
-char password[] = "axtr456E";
+char ssid[] = "robohub";
+char password[] = "robohub1";
 
-char address[] = "192.168.1.7";
+char address[] = "192.168.43.252";
 uint16_t port = 2500;
 char hwid[] = "i2c";
 char baseUrl[] = "/";
@@ -49,7 +49,7 @@ void webSocketEvent(WStype_t type, uint8_t *payload, size_t lenght) {
 void setup() {
   WiFi.softAPdisconnect(true);
   
-  Serial.begin(9600);
+  Serial.begin(115200);
   delay(10);
   
   WiFi.begin(ssid, password);
