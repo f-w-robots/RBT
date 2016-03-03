@@ -21,6 +21,11 @@ char* getUrl() {
   strcat(url, hwid);  
 }
 
+String debugString;
+
+long int time1 = 0;
+long int time4 = 0;
+
 void dbgMsg(char msg[], bool newLine = true) {
 //  if(newLine) Serial.println(msg);else Serial.print(msg);
 }
@@ -32,6 +37,7 @@ void webSocketEvent(WStype_t type, uint8_t *payload, size_t lenght) {
     case WStype_CONNECTED:
       break;
     case WStype_TEXT:
+      time1 = micros();
       for(int i = 0; payload[i] != 0; i++)
         Serial.write(payload[i]);
       break;
@@ -76,7 +82,10 @@ void loop() {
       if(incomePackageI == incomePackageLen) {
         incomePackageLen = 0;
         incomePackageI = 0;
+        time4 = micros();
         webSocket.sendTXT(message);
+        debugString = String(time4 - time1);
+        webSocket.sendTXT(debugString);
       }
     }
   }
