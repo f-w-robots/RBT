@@ -23,7 +23,6 @@ void LineSensor::readSensor() {
   sensorsReadFinish = false;
   cd4051->switchInput(currentSensor);
   delayMicroseconds(100);
-  Serial.println(analogRead(A2));
   sensorValues[currentSensor] = maps(calibrate(analogRead(analogIn)));
   currentSensor++;
   if (currentSensor >= 6) {

@@ -11,12 +11,12 @@ void inCallback(uint8_t pin, char c) {
     pins[pin - 1] = (c == '1');
 }
 
+I2C i2c('1', inCallback, outCallback);
+
 void outCallback() {
   needResponse = true;
-//  Serial.write('6');
+  i2c.response('6');
 }
-
-I2C i2c('1', inCallback, outCallback);
 
 const int speed = 1000;
 
@@ -64,20 +64,14 @@ void loop()
   if(needResponse) 
     responseNextTick();
   
-  rgb();
-
-//  if (move)
-//    doMove();
-//  else
-//    readCommand();
-//
-//  processSensors();
+  if (move)
+    doMove();
 }
 
 void responseNextTick() {  
   line.readSensor();
 
-//  Serial.write((char)(line.getSensor(0) + 42));
+  i2c.response((char)(line.getSensor(0) + 42));
 
   if (line.sensorsRead()) {
     needResponse = false;
@@ -99,38 +93,6 @@ void doMove() {
     oldTimeValue = newTimeValue;
     motor1.step(rightDirection());
     motor2.step(leftDirection());
-  }
-}
-
-void readCommand() {
-  if (Serial.available() > 0) {
-    char request = Serial.read();
-    if (request == 'f' || request == 'r' || request == 'l') {
-      move = true;
-      skipSensorsStep = 1000;
-      if (request == 'f') {
-        left = 1;
-        right = -1;
-      }
-      if (request == 'l') {
-        turning = true;
-        left = -1;
-        right = -1;
-      }
-      if (request == 'r') {
-        turning = true;
-        left = 1;
-        right = 1;
-      }
-    }
-  }
-}
-
-void endStep() {
-  if (move) {
-    move = false;
-    turning = false;
-    Serial.write('w');
   }
 }
 
