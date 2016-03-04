@@ -14,7 +14,7 @@ class I2C
 
   private:
     void _checkInit(char c);
-    void _nextPackage();
+    void _nextPackage(uint8_t size);
     void dbgMsg(char msg[]);
 
     boolean init = false;
@@ -25,6 +25,7 @@ class I2C
     uint16_t dataCount = 0;
     char deviceId = 0;
     int pinId = 0;
+    boolean needPackageSize = false;
     boolean readPackage = false;
     boolean packageSize = false;
     InCallback inCallback;

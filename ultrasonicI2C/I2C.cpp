@@ -14,6 +14,12 @@ boolean I2C::check() {
 
   char c = Serial.read();
 
+  if (needPackageSize) {
+    needPackageSize = false;
+    _nextPackage(c - 48);
+    return init;
+  }
+
   if (readPackage) {
     if (!pinId) {
       pinId = c;
@@ -28,8 +34,10 @@ boolean I2C::check() {
   if (dataCount > 0) {
     dataCount --;
     if (dataCount == 0) {
-      readPackage = false;
-      outCallback();
+      if (readPackage) {
+        readPackage = false;
+        outCallback();
+      }
       dbgMsg("endPackage");
     }
     return init;
@@ -39,9 +47,10 @@ boolean I2C::check() {
     _checkInit(c);
   } else {
     if (c != deviceId) {
-      _nextPackage();
+      needPackageSize = true;
+      dbgMsg("NO");
     } else {
-      _nextPackage();
+      needPackageSize = true;
       readPackage = true;
       dbgMsg("OK");
     }
@@ -61,8 +70,8 @@ void I2C::_checkInit(char c) {
   }
 }
 
-void I2C::_nextPackage() {
-  dataCount = 8;
+void I2C::_nextPackage(uint8_t size) {
+  dataCount = size;
 }
 
 void I2C::responseStart(uint8_t size) {
