@@ -4,6 +4,11 @@
 
 #define MAX_MSG_LEN 255
 
+#define PIN_LED_WIFI 2
+#define PIN_LED_SOCKET 0
+
+int8_t status = 0;
+
 WebSocketsClient webSocket;
 
 char ssid[] = "robohub";
@@ -33,8 +38,15 @@ void dbgMsg(char msg[], bool newLine = true) {
 void webSocketEvent(WStype_t type, uint8_t *payload, size_t lenght) {
   switch (type) {
     case WStype_DISCONNECTED:
+      if(status) {
+        digitalWrite(PIN_LED_WIFI, HIGH);
+        digitalWrite(PIN_LED_SOCKET, HIGH);
+      }
       break;
     case WStype_CONNECTED:
+      status = 1;
+      digitalWrite(PIN_LED_WIFI, LOW);
+      digitalWrite(PIN_LED_SOCKET, HIGH);
       break;
     case WStype_TEXT:
       time1 = micros();
@@ -48,6 +60,11 @@ void webSocketEvent(WStype_t type, uint8_t *payload, size_t lenght) {
 
 void setup() {
   WiFi.softAPdisconnect(true);
+
+  pinMode(PIN_LED_WIFI, OUTPUT);
+  pinMode(PIN_LED_SOCKET, OUTPUT);
+  digitalWrite(PIN_LED_WIFI, HIGH);
+  digitalWrite(PIN_LED_SOCKET, LOW);
   
   Serial.begin(115200);
   delay(10);
@@ -56,7 +73,10 @@ void setup() {
 
   while (WiFi.status() != WL_CONNECTED) {
     dbgMsg(".", false);
-    delay(100);
+    delay(50);
+    digitalWrite(PIN_LED_WIFI, LOW);
+    delay(50);
+    digitalWrite(PIN_LED_WIFI, HIGH);
   }
   getUrl();
 
@@ -67,10 +87,8 @@ void setup() {
 int incomePackageLen = 0;
 int incomePackageI = 0;
 char message[256];
-char c;
 
-void loop() {
-  webSocket.loop();
+void readPackages() {
   if(Serial.available() > 0) {
     if(incomePackageLen == 0) {
       incomePackageLen = Serial.read() - 48;
@@ -89,5 +107,10 @@ void loop() {
       }
     }
   }
+}
+
+void loop() {
+  webSocket.loop();
+  readPackages();
 }
 
