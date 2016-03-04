@@ -11,7 +11,7 @@ I2C::I2C(char deviceId, InCallback inCallback, OutCallback outCallback) {
 boolean I2C::check() {
   if (Serial.available() < 1)
     return init;
-    
+
   char c = Serial.read();
 
   if (readPackage) {
@@ -24,10 +24,10 @@ boolean I2C::check() {
       pinId = 0;
     }
   }
- 
+
   if (dataCount > 0) {
     dataCount --;
-    if(dataCount == 0) {
+    if (dataCount == 0) {
       readPackage = false;
       outCallback();
       dbgMsg("endPackage");
@@ -43,7 +43,7 @@ boolean I2C::check() {
     } else {
       _nextPackage();
       readPackage = true;
-      dbgMsg("OK");      
+      dbgMsg("OK");
     }
   }
   return init;
@@ -66,7 +66,7 @@ void I2C::_nextPackage() {
 }
 
 void I2C::responseStart(uint8_t size) {
-  Serial.write('6');
+  Serial.write((char)(size + 48));
 }
 
 void I2C::response(char c) {
@@ -74,6 +74,6 @@ void I2C::response(char c) {
 }
 
 void I2C::dbgMsg(char msg[]) {
-//  Serial.println(msg);
+  //  Serial.println(msg);
 }
 

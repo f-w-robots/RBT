@@ -13,12 +13,12 @@ class LineSensor
   private:
     int calibrate(int value);
     int maps(int value);
-    
+
     uint8_t pins[3];
     uint8_t analogIn;
     int sensorValues[6];
     CD4051* cd4051;
-    int sensorsColibrationDonw[6] = {0,0,0,0,0,0};//{90, 97, 134, 155, 75, 73};
+    int sensorsColibrationDonw[6] = {0, 0, 0, 0, 0, 0}; //{90, 97, 134, 155, 75, 73};
     int sensorsColibrationUp[6] = {1023, 1023, 1023, 1023, 1023, 1023};//{560, 926, 820, 868, 693, 950};//
     int8_t currentSensor;
     boolean sensorsReadFinish = false;

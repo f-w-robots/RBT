@@ -14,7 +14,7 @@ I2C i2c('1', inCallback, outCallback);
 
 void outCallback() {
   needResponse = true;
-  i2c.response('6');
+  i2c.responseStart(6);
 }
 
 const int speed = 1000;
@@ -40,20 +40,20 @@ void loop()
   if (!i2c.check()) return;
 
 
-  if(needResponse)
+  if (needResponse)
     responseNextTick();
-  
+
   doMove();
 }
 
-void responseNextTick() {  
+void responseNextTick() {
   line.readSensor();
 
   i2c.response((char)(line.getSensor(0) + 48));
 
   if (line.sensorsRead()) {
     needResponse = false;
-  }  
+  }
 }
 
 boolean rightDirection() {

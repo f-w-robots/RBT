@@ -15,11 +15,11 @@ void CD4051::switchInput(uint8_t number) {
   uint8_t i = 0;
   uint8_t m = 0;
 
-  while(i < 3) {
+  while (i < 3) {
     m = number % 2;
     number = number / 2;
     digitalWrite(_pins[i], m);
-    
+
     i++;
   }
 }

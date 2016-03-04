@@ -11,12 +11,12 @@ class I2C
     boolean check();
     void responseStart(uint8_t size);
     void response(char c);
-    
+
   private:
     void _checkInit(char c);
     void _nextPackage();
     void dbgMsg(char msg[]);
-    
+
     boolean init = false;
     static const uint8_t initPackageSize = 6;
     boolean initArr[initPackageSize] = {false, false, false, false, false, false};

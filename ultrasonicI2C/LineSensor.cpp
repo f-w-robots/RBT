@@ -37,9 +37,9 @@ int LineSensor::calibrate(int value) {
 
 int LineSensor::maps(int value) {
   int v = (value - 200) / 100;
-  if(v < 0)
+  if (v < 0)
     v = 0;
-  if(v > 8)
+  if (v > 8)
     v = 8;
   return v;
 }
