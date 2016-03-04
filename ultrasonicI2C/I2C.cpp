@@ -52,7 +52,7 @@ boolean I2C::check() {
 void I2C::_checkInit(char c) {
   if (!initArr[initI] &&  c == initMask[initI]) {
     initI ++;
-    if (initI >= 4) {
+    if (initI >= initPackageSize) {
       init = true;
       dbgMsg("init");
     }

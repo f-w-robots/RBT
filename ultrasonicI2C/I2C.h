@@ -18,8 +18,9 @@ class I2C
     void dbgMsg(char msg[]);
     
     boolean init = false;
-    boolean initArr[4] = {false, false, false, false};
-    char initMask[4] = {'I', 'N', 'I', 'T'};
+    static const uint8_t initPackageSize = 6;
+    boolean initArr[initPackageSize] = {false, false, false, false, false, false};
+    char initMask[initPackageSize] = {'0', '4', 'I', 'N', 'I', 'T'};
     uint8_t initI = 0;
     uint16_t dataCount = 0;
     char deviceId = 0;
