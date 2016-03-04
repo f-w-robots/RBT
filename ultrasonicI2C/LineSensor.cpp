@@ -36,7 +36,12 @@ int LineSensor::calibrate(int value) {
 }
 
 int LineSensor::maps(int value) {
-  return constrain(map(value, 200, 800, 0, 10), 0, 10);
+  int v = (value - 200) / 100;
+  if(v < 0)
+    v = 0;
+  if(v > 8)
+    v = 8;
+  return v;
 }
 
 uint8_t LineSensor::getSensor(uint8_t i) {

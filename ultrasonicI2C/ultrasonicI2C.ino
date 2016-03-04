@@ -4,7 +4,6 @@
 
 boolean pins[4] = {false, false, false, false};
 boolean needResponse = false;
-boolean toSendResponse = false;
 
 void inCallback(uint8_t pin, char c) {
   if (pin <= 4)
@@ -24,31 +23,27 @@ Motor28BYJ motor1(2, 3, 4, 5);
 Motor28BYJ motor2(6, 7, 8, 9);
 
 // S0, S1, S2, Z
-LineSensor line(A3, A4, A5, A2  );
+LineSensor line(A3, A4, A5, A2);
 
-boolean move = false;
-boolean turning = false;
 int8_t right = 0;
 int8_t left = 0;
-
-int skipSensorsStep = 0;
 
 unsigned long oldTimeValue = 0;
 
 void setup()
 {
   Serial.begin(115200);
-  move = true;
 }
+
 void loop()
 {
   if (!i2c.check()) return;
 
-  if(needResponse) 
+
+  if(needResponse)
     responseNextTick();
   
-  if (move)
-    doMove();
+  doMove();
 }
 
 void responseNextTick() {  
