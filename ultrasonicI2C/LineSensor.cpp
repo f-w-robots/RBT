@@ -23,13 +23,14 @@ uint16_t LineSensor::readSensor() {
   sensorsReadFinish = false;
   cd4051->switchInput(currentSensor);
   delayMicroseconds(100);
-  sensorValues[currentSensor] = maps(calibrate(analogRead(analogIn)));
+  uint16_t value = maps(calibrate(analogRead(analogIn)));
+  sensorValues[currentSensor] = value;
   currentSensor++;
   if (currentSensor >= 6) {
     currentSensor = 0;
     sensorsReadFinish = true;
   }
-  return currentSensor - sensorValues[currentSensor - 1];
+  return value;
 }
 
 int LineSensor::calibrate(int value) {

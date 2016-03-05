@@ -18,8 +18,8 @@ class LineSensor
     uint8_t analogIn;
     int sensorValues[6];
     CD4051* cd4051;
-    int sensorsColibrationDonw[6] = {0, 0, 0, 150, 0, 0}; //{90, 97, 134, 155, 75, 73};
-    int sensorsColibrationUp[6] = {1023, 1023, 1023, 1023, 900, 1023};//{560, 926, 820, 868, 693, 950};//
+    int sensorsColibrationDonw[6] = {130, 160, 170, 200, 130, 140}; //{90, 97, 134, 155, 75, 73};
+    int sensorsColibrationUp[6] = {950, 1023, 1023, 1023, 800, 1023};//{560, 926, 820, 868, 693, 950};//
     int8_t currentSensor;
     boolean sensorsReadFinish = false;
 };
