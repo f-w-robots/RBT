@@ -46,12 +46,15 @@ void doMove() {
 void readCommand() {
   if (Serial.available() > 0) {
     char request = Serial.read();
-    if (request == 'f' || request == 'r' || request == 'l') {
+    if (request == 'f' || request == 'r' || request == 'l' || request  == 'x') {
       move = true;
       skipSensorsStep = 1000;
       if (request == 'f') {
         left = 1;
         right = -1;
+      }
+      if (request == 'x') {
+        Serial.println(line.printSensors());
       }
       if (request == 'l') {
         turning = true;
@@ -68,7 +71,7 @@ void readCommand() {
 }
 
 void endStep() {
-  if(move) {
+  if (move) {
     move = false;
     turning = false;
     Serial.write('w');
@@ -89,4 +92,5 @@ void processSensors() {
     if (sright2 > 0 && sleft2 > 0)
       endStep();
   }
+  Serial.println(line.printSensors());
 }
