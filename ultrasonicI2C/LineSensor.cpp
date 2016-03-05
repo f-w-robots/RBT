@@ -19,7 +19,7 @@ boolean LineSensor::sensorsRead() {
   return sensorsReadFinish;
 }
 
-void LineSensor::readSensor() {
+uint16_t LineSensor::readSensor() {
   sensorsReadFinish = false;
   cd4051->switchInput(currentSensor);
   delayMicroseconds(100);
@@ -29,6 +29,7 @@ void LineSensor::readSensor() {
     currentSensor = 0;
     sensorsReadFinish = true;
   }
+  return currentSensor - sensorValues[currentSensor - 1];
 }
 
 int LineSensor::calibrate(int value) {

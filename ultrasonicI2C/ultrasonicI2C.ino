@@ -25,9 +25,6 @@ Motor28BYJ motor2(6, 7, 8, 9);
 // S0, S1, S2, Z
 LineSensor line(A3, A4, A5, A2);
 
-int8_t right = 0;
-int8_t left = 0;
-
 unsigned long oldTimeValue = 0;
 
 void setup()
@@ -47,20 +44,18 @@ void loop()
 }
 
 void responseNextTick() {
-  line.readSensor();
-
-  i2c.response((char)(line.getSensor(0) + 48));
+  i2c.response((char)(line.readSensor() + 48));
 
   if (line.sensorsRead()) {
     needResponse = false;
   }
 }
 
-boolean rightDirection() {
+int8_t rightDirection() {
   return (pins[0] == pins[1] ? 0 : (pins[0] > pins[1] ? 1 : -1));
 }
 
-boolean leftDirection() {
+int8_t leftDirection() {
   return (pins[2] == pins[3] ? 0 : (pins[2] > pins[3] ? 1 : -1));
 }
 
