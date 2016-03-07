@@ -19,24 +19,27 @@ uint16_t port = 2500;
 char hwid[] = "i2c";
 char baseUrl[] = "/";
 
+uint16_t wifiTimeout = 0;
+const uint16_t wifiBlinkDelay = 50;
+
 char* url = new char[strlen(hwid) + strlen(baseUrl) + 1];
 char* getUrl() {
   url[0] = 0;
   strcat(url, baseUrl);
-  strcat(url, hwid);  
+  strcat(url, hwid);
 }
 
 //String debugString;
 //long int time1 = 0;
 //long int time4 = 0;
 void dbgMsg(char msg[], bool newLine = true) {
-//  if(newLine) Serial.println(msg);else Serial.print(msg);
+  //  if(newLine) Serial.println(msg);else Serial.print(msg);
 }
 
 void webSocketEvent(WStype_t type, uint8_t *payload, size_t lenght) {
   switch (type) {
     case WStype_DISCONNECTED:
-      if(status) {
+      if (status) {
         digitalWrite(PIN_LED_WIFI, HIGH);
         digitalWrite(PIN_LED_SOCKET, HIGH);
       }
@@ -47,8 +50,8 @@ void webSocketEvent(WStype_t type, uint8_t *payload, size_t lenght) {
       digitalWrite(PIN_LED_SOCKET, HIGH);
       break;
     case WStype_TEXT:
-//      time1 = micros();
-      for(int i = 0; payload[i] != 0; i++)
+      //      time1 = micros();
+      for (int i = 0; payload[i] != 0; i++)
         Serial.write(payload[i]);
       break;
     case WStype_BIN:
@@ -63,18 +66,33 @@ void setup() {
   pinMode(PIN_LED_SOCKET, OUTPUT);
   digitalWrite(PIN_LED_WIFI, HIGH);
   digitalWrite(PIN_LED_SOCKET, LOW);
-  
+
   Serial.begin(115200);
   delay(10);
-  
-  WiFi.begin(ssid, password);
 
   while (WiFi.status() != WL_CONNECTED) {
-    dbgMsg(".", false);
-    delay(50);
-    digitalWrite(PIN_LED_WIFI, LOW);
-    delay(50);
-    digitalWrite(PIN_LED_WIFI, HIGH);
+
+    WiFi.begin(ssid, password);
+
+    while (WiFi.status() != WL_CONNECTED) {
+      dbgMsg(".", false);
+      delay(wifiBlinkDelay);
+      digitalWrite(PIN_LED_WIFI, LOW);
+      delay(wifiBlinkDelay);
+      digitalWrite(PIN_LED_WIFI, HIGH);
+      wifiTimeout++;
+      if ((wifiTimeout * wifiBlinkDelay * 2) > 10000) {
+        wifiTimeout = 0;
+        WiFi.disconnect();
+        for (int i = 0; i < 10; i++) {
+          delay(50);
+          digitalWrite(PIN_LED_SOCKET, HIGH);
+          delay(50);
+          digitalWrite(PIN_LED_SOCKET, LOW);
+        }
+        break;
+      }
+    }
   }
 
   webSocket.begin(address, port, getUrl());
@@ -86,21 +104,21 @@ int incomePackageI = 0;
 char package[256];
 
 void readPackages() {
-  if(Serial.available() > 0) {
-    if(incomePackageLen == 0) {
+  if (Serial.available() > 0) {
+    if (incomePackageLen == 0) {
       incomePackageLen = Serial.read() - 48;
       package[incomePackageLen] = 0;
     }
-    while(Serial.available() > 0) {
+    while (Serial.available() > 0) {
       package[incomePackageI] = Serial.read();
       incomePackageI++;
-      if(incomePackageI == incomePackageLen) {
+      if (incomePackageI == incomePackageLen) {
         incomePackageLen = 0;
         incomePackageI = 0;
-//        time4 = micros();
+        //        time4 = micros();
         webSocket.sendTXT(package);
-//        debugString = String(time4 - time1);
-//        webSocket.sendTXT(debugString);
+        //        debugString = String(time4 - time1);
+        //        webSocket.sendTXT(debugString);
       }
     }
   }
