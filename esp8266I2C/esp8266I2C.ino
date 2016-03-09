@@ -19,7 +19,6 @@ uint16_t port = 2500;
 char hwid[] = "i2c";
 char baseUrl[] = "/";
 
-uint16_t wifiTimeout = 0;
 const uint16_t wifiBlinkDelay = 50;
 
 char* url = new char[strlen(hwid) + strlen(baseUrl) + 1];
@@ -32,9 +31,6 @@ char* getUrl() {
 //String debugString;
 //long int time1 = 0;
 //long int time4 = 0;
-void dbgMsg(char msg[], bool newLine = true) {
-  //  if(newLine) Serial.println(msg);else Serial.print(msg);
-}
 
 void webSocketEvent(WStype_t type, uint8_t *payload, size_t lenght) {
   switch (type) {
@@ -59,6 +55,16 @@ void webSocketEvent(WStype_t type, uint8_t *payload, size_t lenght) {
   }
 }
 
+void resetConnection() {
+  WiFi.disconnect();
+  for (int i = 0; i < 10; i++) {
+    delay(50);
+    digitalWrite(PIN_LED_SOCKET, HIGH);
+    delay(50);
+    digitalWrite(PIN_LED_SOCKET, LOW);
+  }
+}
+
 void setup() {
   WiFi.softAPdisconnect(true);
 
@@ -75,21 +81,12 @@ void setup() {
     WiFi.begin(ssid, password);
 
     while (WiFi.status() != WL_CONNECTED) {
-      dbgMsg(".", false);
       delay(wifiBlinkDelay);
       digitalWrite(PIN_LED_WIFI, LOW);
       delay(wifiBlinkDelay);
       digitalWrite(PIN_LED_WIFI, HIGH);
-      wifiTimeout++;
-      if ((wifiTimeout * wifiBlinkDelay * 2) > 10000) {
-        wifiTimeout = 0;
-        WiFi.disconnect();
-        for (int i = 0; i < 10; i++) {
-          delay(50);
-          digitalWrite(PIN_LED_SOCKET, HIGH);
-          delay(50);
-          digitalWrite(PIN_LED_SOCKET, LOW);
-        }
+      if (WiFi.status() == WL_CONNECT_FAILED) {
+        resetConnection();
         break;
       }
     }
@@ -99,22 +96,22 @@ void setup() {
   webSocket.onEvent(webSocketEvent);
 }
 
-int incomePackageLen = 0;
-int incomePackageI = 0;
+int packageLen = 0;
+int packageI = 0;
 char package[256];
 
 void readPackages() {
   if (Serial.available() > 0) {
-    if (incomePackageLen == 0) {
-      incomePackageLen = Serial.read() - 48;
-      package[incomePackageLen] = 0;
+    if (packageLen == 0) {
+      packageLen = Serial.read() - 48;
+      package[packageLen] = 0;
     }
     while (Serial.available() > 0) {
-      package[incomePackageI] = Serial.read();
-      incomePackageI++;
-      if (incomePackageI == incomePackageLen) {
-        incomePackageLen = 0;
-        incomePackageI = 0;
+      package[packageI] = Serial.read();
+      packageI++;
+      if (packageI == packageLen) {
+        packageLen = 0;
+        packageI = 0;
         //        time4 = micros();
         webSocket.sendTXT(package);
         //        debugString = String(time4 - time1);
