@@ -10,7 +10,6 @@ int8_t calibrationMode = 0;
 void inCallback(uint8_t pin, char c) {
   if (pin == 6) {
     Config::sensorCount(c - 48);
-    Serial.println(c - 48);
   }
   if (pin == 5)
     calibrationMode = c - 48;

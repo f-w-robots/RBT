@@ -14,7 +14,7 @@ WebSocketsClient webSocket;
 char ssid[] = "robohub";
 char password[] = "robohub1";
 
-char address[] = "192.168.43.252";
+char address[] = "192.168.43.3";
 uint16_t port = 2500;
 char hwid[] = "i2c";
 char baseUrl[] = "/";
