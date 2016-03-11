@@ -1,11 +1,19 @@
 #include "LineSensor.h"
 #include "Motor28BYJ.h"
 #include "I2C.h"
+#include "Config.h"
 
 boolean pins[4] = {false, false, false, false};
 boolean needResponse = false;
+int8_t calibrationMode = 0;
 
 void inCallback(uint8_t pin, char c) {
+  if (pin == 6) {
+    Config::sensorCount(c - 48);
+    Serial.println(c - 48);
+  }
+  if (pin == 5)
+    calibrationMode = c - 48;
   if (pin <= 4)
     pins[pin - 1] = (c == '1');
 }
@@ -14,7 +22,7 @@ I2C i2c('1', inCallback, outCallback);
 
 void outCallback() {
   needResponse = true;
-  i2c.responseStart(6);
+  i2c.responseStart(Config::sensorCount());
 }
 
 const int speed = 1000;
@@ -38,7 +46,18 @@ void loop()
 
 
   if (needResponse)
-    responseNextTick();
+    if (calibrationMode == 0) {
+      responseNextTick();
+    } else {
+      if (calibrationMode == 2) {
+        line.calibrateDown();
+        calibrationMode = 0;
+      }
+      if (calibrationMode == 1) {
+        line.calibrateUp();
+        calibrationMode = 0;
+      }
+    }
 
   doMove();
 }

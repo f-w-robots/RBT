@@ -6,20 +6,23 @@
 class LineSensor
 {
   public:
-    LineSensor(uint8_t pin0, uint8_t pin1, uint8_t pin2, uint8_t analog);
+    LineSensor(uint8_t pin0, uint8_t pin1, uint8_t pin2, uint8_t analogIn);
     uint16_t readSensor();
     boolean sensorsRead();
-    uint8_t getSensor(uint8_t i);
+    void calibrateDown();
+    void calibrateUp();
   private:
-    int calibrate(int value);
+    uint16_t readSensor(uint8_t sensor);
+    uint8_t sensorsCount = 0;
+    int calibrate(int value, int sensor);
     int maps(int value);
 
     uint8_t pins[3];
     uint8_t analogIn;
-    int sensorValues[6];
+    int16_t* sensorValues;
+    int16_t* sensorsColibrationDonw;
+    int16_t* sensorsColibrationUp;
     CD4051* cd4051;
-    int sensorsColibrationDonw[6] = {130, 160, 170, 200, 130, 140}; //{90, 97, 134, 155, 75, 73};
-    int sensorsColibrationUp[6] = {950, 1023, 1023, 1023, 800, 1023};//{560, 926, 820, 868, 693, 950};//
     int8_t currentSensor;
     boolean sensorsReadFinish = false;
 };
