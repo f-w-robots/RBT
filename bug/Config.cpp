@@ -15,7 +15,7 @@ void Config::sensorCount(int8_t count) {
   EEPROM.write(0, _sensorCount);
 }
 
-void Config::writeDonwSensor(uint8_t number, uint16_t value) {
+void Config::writeDownSensor(uint8_t number, uint16_t value) {
   EEPROM.write(1 + sensorCount() + sensorCount() + number + number, value & 0xFF);
   EEPROM.write(1 + sensorCount() + sensorCount() + number + number + 1, (value >> 8) & 0xFF);
 }
@@ -25,7 +25,7 @@ void Config::writeUpSensor(uint8_t number, uint16_t value) {
   EEPROM.write(1 + number + number + 1, (value >> 8) & 0xFF);
 }
 
-uint16_t Config::readDonwSensor(uint8_t number) {
+uint16_t Config::readDownSensor(uint8_t number) {
   return ((EEPROM.read(1 + sensorCount() + sensorCount() + number + number) << 0) & 0xFF) +
          ((EEPROM.read(1 + sensorCount() + sensorCount() + number + number + 1) << 8) & 0xFFFF);
 }

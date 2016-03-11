@@ -14,15 +14,15 @@ LineSensor::LineSensor(uint8_t pin0, uint8_t pin1, uint8_t pin2, uint8_t analogI
 
   cd4051 = new CD4051(pin0, pin1, pin2);
 
-  this->sensorsCount = Config::sensorCount();
+  int sensorsCount = Config::sensorCount();
 
   sensorValues = new int16_t[sensorsCount];
-  sensorsColibrationDonw = new int16_t[sensorsCount];
+  sensorsColibrationDown = new int16_t[sensorsCount];
   sensorsColibrationUp = new int16_t[sensorsCount];
   if (sensorsCount > 9)
     return;
   for (int8_t i = 0;  i < sensorsCount; i++) {
-    sensorsColibrationDonw[i] = Config::readDonwSensor(i);
+    sensorsColibrationDown[i] = Config::readDownSensor(i);
     sensorsColibrationUp[i] = Config::readUpSensor(i);
   }
 }
@@ -38,7 +38,7 @@ uint16_t LineSensor::readSensor() {
   uint16_t value = maps(calibrate(analogRead(analogIn), currentSensor));
   sensorValues[currentSensor] = value;
   currentSensor++;
-  if (currentSensor >= sensorsCount) {
+  if (currentSensor >= Config::sensorCount()) {
     currentSensor = 0;
     sensorsReadFinish = true;
   }
@@ -46,14 +46,14 @@ uint16_t LineSensor::readSensor() {
 }
 
 
-uint16_t LineSensor::readSensor(uint8_t sensor) {
+uint16_t LineSensor::readRawSensor(uint8_t sensor) {
   cd4051->switchInput(sensor);
   delayMicroseconds(300);
   return analogRead(analogIn);
 }
 
 int LineSensor::calibrate(int value, int sensor) {
-  return (value - sensorsColibrationDonw[sensor]) * (1023.0 / (sensorsColibrationUp[sensor] - sensorsColibrationDonw[sensor]));
+  return (value - sensorsColibrationDown[sensor]) * (1023.0 / (sensorsColibrationUp[sensor] - sensorsColibrationDown[sensor]));
 }
 
 int LineSensor::maps(int value) {
@@ -67,13 +67,13 @@ int LineSensor::maps(int value) {
 
 void LineSensor::calibrateDown() {
   for (uint8_t i = 0; i < Config::sensorCount(); i++) {
-    Config::writeUpSensor(i, readSensor(i));
+    Config::writeUpSensor(i, readRawSensor(i));
   }
 }
 
 void LineSensor::calibrateUp() {
   for (uint8_t i = 0; i < Config::sensorCount(); i++) {
-    Config::writeDonwSensor(i, readSensor(i));
+    Config::writeDownSensor(i, readRawSensor(i));
   }
 }
 

@@ -12,15 +12,14 @@ class LineSensor
     void calibrateDown();
     void calibrateUp();
   private:
-    uint16_t readSensor(uint8_t sensor);
-    uint8_t sensorsCount = 0;
+    uint16_t readRawSensor(uint8_t sensor);
     int calibrate(int value, int sensor);
     int maps(int value);
 
     uint8_t pins[3];
     uint8_t analogIn;
     int16_t* sensorValues;
-    int16_t* sensorsColibrationDonw;
+    int16_t* sensorsColibrationDown;
     int16_t* sensorsColibrationUp;
     CD4051* cd4051;
     int8_t currentSensor;

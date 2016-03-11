@@ -5,8 +5,8 @@ class Config {
   public:
     static uint8_t sensorCount();
     static void sensorCount(int8_t count);
-    static void writeDonwSensor(uint8_t number, uint16_t value);
-    static uint16_t readDonwSensor(uint8_t number);
+    static void writeDownSensor(uint8_t number, uint16_t value);
+    static uint16_t readDownSensor(uint8_t number);
     static void writeUpSensor(uint8_t number, uint16_t value);
     static uint16_t readUpSensor(uint8_t number);
   private:
