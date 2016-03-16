@@ -159,7 +159,7 @@ U 1 1 56E9759E
 P 4600 4200
 F 0 "R1" V 4680 4200 50  0000 C CNN
 F 1 "R" V 4600 4200 50  0000 C CNN
-F 2 "MY:resistor2pins" V 4530 4200 50  0001 C CNN
+F 2 "w_pth_resistors:rc05_vert" V 4530 4200 50  0001 C CNN
 F 3 "" H 4600 4200 50  0000 C CNN
 	1    4600 4200
 	1    0    0    -1  
@@ -170,7 +170,7 @@ U 1 1 56E9759F
 P 4850 4200
 F 0 "R2" V 4930 4200 50  0000 C CNN
 F 1 "R" V 4850 4200 50  0000 C CNN
-F 2 "MY:resistor2pins" V 4780 4200 50  0001 C CNN
+F 2 "w_pth_resistors:rc05_vert" V 4780 4200 50  0001 C CNN
 F 3 "" H 4850 4200 50  0000 C CNN
 	1    4850 4200
 	1    0    0    -1  
@@ -181,7 +181,7 @@ U 1 1 56E975A0
 P 5200 4200
 F 0 "R3" V 5280 4200 50  0000 C CNN
 F 1 "R" V 5200 4200 50  0000 C CNN
-F 2 "MY:resistor2pins" V 5130 4200 50  0001 C CNN
+F 2 "w_pth_resistors:rc05_vert" V 5130 4200 50  0001 C CNN
 F 3 "" H 5200 4200 50  0000 C CNN
 	1    5200 4200
 	1    0    0    -1  
@@ -192,7 +192,7 @@ U 1 1 56E975A1
 P 5450 4200
 F 0 "R4" V 5530 4200 50  0000 C CNN
 F 1 "R" V 5450 4200 50  0000 C CNN
-F 2 "MY:resistor2pins" V 5380 4200 50  0001 C CNN
+F 2 "w_pth_resistors:rc05_vert" V 5380 4200 50  0001 C CNN
 F 3 "" H 5450 4200 50  0000 C CNN
 	1    5450 4200
 	1    0    0    -1  
@@ -203,7 +203,7 @@ U 1 1 56E975A2
 P 5800 4200
 F 0 "R5" V 5880 4200 50  0000 C CNN
 F 1 "R" V 5800 4200 50  0000 C CNN
-F 2 "MY:resistor2pins" V 5730 4200 50  0001 C CNN
+F 2 "w_pth_resistors:rc05_vert" V 5730 4200 50  0001 C CNN
 F 3 "" H 5800 4200 50  0000 C CNN
 	1    5800 4200
 	1    0    0    -1  
@@ -214,7 +214,7 @@ U 1 1 56E975A3
 P 6050 4200
 F 0 "R6" V 6130 4200 50  0000 C CNN
 F 1 "R" V 6050 4200 50  0000 C CNN
-F 2 "MY:resistor2pins" V 5980 4200 50  0001 C CNN
+F 2 "w_pth_resistors:rc05_vert" V 5980 4200 50  0001 C CNN
 F 3 "" H 6050 4200 50  0000 C CNN
 	1    6050 4200
 	1    0    0    -1  
@@ -225,7 +225,7 @@ U 1 1 56E975A4
 P 6400 4200
 F 0 "R7" V 6480 4200 50  0000 C CNN
 F 1 "R" V 6400 4200 50  0000 C CNN
-F 2 "MY:resistor2pins" V 6330 4200 50  0001 C CNN
+F 2 "Resistors_ThroughHole:Resistor_Horizontal_RM15mm" V 6330 4200 50  0001 C CNN
 F 3 "" H 6400 4200 50  0000 C CNN
 	1    6400 4200
 	1    0    0    -1  
@@ -236,7 +236,7 @@ U 1 1 56E975A5
 P 6650 4200
 F 0 "R8" V 6730 4200 50  0000 C CNN
 F 1 "R" V 6650 4200 50  0000 C CNN
-F 2 "MY:resistor2pins" V 6580 4200 50  0001 C CNN
+F 2 "Resistors_ThroughHole:Resistor_Horizontal_RM15mm" V 6580 4200 50  0001 C CNN
 F 3 "" H 6650 4200 50  0000 C CNN
 	1    6650 4200
 	1    0    0    -1  
@@ -247,7 +247,7 @@ U 1 1 56E975A6
 P 7000 4200
 F 0 "R9" V 7080 4200 50  0000 C CNN
 F 1 "R" V 7000 4200 50  0000 C CNN
-F 2 "MY:resistor2pins" V 6930 4200 50  0001 C CNN
+F 2 "Resistors_ThroughHole:Resistor_Horizontal_RM15mm" V 6930 4200 50  0001 C CNN
 F 3 "" H 7000 4200 50  0000 C CNN
 	1    7000 4200
 	1    0    0    -1  
@@ -258,7 +258,7 @@ U 1 1 56E975A7
 P 7250 4200
 F 0 "R10" V 7330 4200 50  0000 C CNN
 F 1 "R" V 7250 4200 50  0000 C CNN
-F 2 "MY:resistor2pins" V 7180 4200 50  0001 C CNN
+F 2 "Resistors_ThroughHole:Resistor_Horizontal_RM15mm" V 7180 4200 50  0001 C CNN
 F 3 "" H 7250 4200 50  0000 C CNN
 	1    7250 4200
 	1    0    0    -1  
