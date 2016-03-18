@@ -1,0 +1,311 @@
+EESchema Schematic File Version 2
+LIBS:power
+LIBS:device
+LIBS:transistors
+LIBS:conn
+LIBS:linear
+LIBS:regul
+LIBS:74xx
+LIBS:cmos4000
+LIBS:adc-dac
+LIBS:memory
+LIBS:xilinx
+LIBS:microcontrollers
+LIBS:dsp
+LIBS:microchip
+LIBS:analog_switches
+LIBS:motorola
+LIBS:texas
+LIBS:intel
+LIBS:audio
+LIBS:interface
+LIBS:digital-audio
+LIBS:philips
+LIBS:display
+LIBS:cypress
+LIBS:siliconi
+LIBS:opto
+LIBS:atmel
+LIBS:contrib
+LIBS:valves
+LIBS:stabl3v3
+LIBS:bugs
+LIBS:esp8266-cache
+EELAYER 25 0
+EELAYER END
+$Descr A4 11693 8268
+encoding utf-8
+Sheet 1 1
+Title ""
+Date ""
+Rev ""
+Comp ""
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+$Comp
+L R R2
+U 1 1 56E9A0E8
+P 4500 3800
+F 0 "R2" V 4580 3800 50  0000 C CNN
+F 1 "560" V 4500 3800 50  0000 C CNN
+F 2 "w_pth_resistors:RC05" V 4430 3800 50  0001 C CNN
+F 3 "" H 4500 3800 50  0000 C CNN
+	1    4500 3800
+	1    0    0    -1  
+$EndComp
+$Comp
+L R R4
+U 1 1 56E9A131
+P 4750 3800
+F 0 "R4" V 4830 3800 50  0000 C CNN
+F 1 "560" V 4750 3800 50  0000 C CNN
+F 2 "w_pth_resistors:RC05" V 4680 3800 50  0001 C CNN
+F 3 "" H 4750 3800 50  0000 C CNN
+	1    4750 3800
+	1    0    0    -1  
+$EndComp
+$Comp
+L R R1
+U 1 1 56E9A207
+P 4500 2600
+F 0 "R1" V 4580 2600 50  0000 C CNN
+F 1 "10K" V 4500 2600 50  0000 C CNN
+F 2 "w_pth_resistors:rc05_vert" V 4430 2600 50  0001 C CNN
+F 3 "" H 4500 2600 50  0000 C CNN
+	1    4500 2600
+	1    0    0    -1  
+$EndComp
+$Comp
+L R R3
+U 1 1 56E9A2D8
+P 4750 2600
+F 0 "R3" V 4830 2600 50  0000 C CNN
+F 1 "10K" V 4750 2600 50  0000 C CNN
+F 2 "w_pth_resistors:rc05_vert" V 4680 2600 50  0001 C CNN
+F 3 "" H 4750 2600 50  0000 C CNN
+	1    4750 2600
+	1    0    0    -1  
+$EndComp
+$Comp
+L LED D1
+U 1 1 56E9A353
+P 4500 4350
+F 0 "D1" H 4500 4450 50  0000 C CNN
+F 1 "RED" H 4500 4250 50  0000 C CNN
+F 2 "LEDs:LED-5MM" H 4500 4350 50  0001 C CNN
+F 3 "" H 4500 4350 50  0000 C CNN
+	1    4500 4350
+	0    -1   -1   0   
+$EndComp
+$Comp
+L LED D2
+U 1 1 56E9A3F4
+P 4750 4350
+F 0 "D2" H 4750 4450 50  0000 C CNN
+F 1 "BLUE" H 4750 4250 50  0000 C CNN
+F 2 "LEDs:LED-5MM" H 4750 4350 50  0001 C CNN
+F 3 "" H 4750 4350 50  0000 C CNN
+	1    4750 4350
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	3850 2150 4300 2150
+Wire Wire Line
+	4300 2150 4300 1800
+Wire Wire Line
+	4400 1850 4400 2300
+Wire Wire Line
+	4400 2300 4000 2300
+Wire Wire Line
+	4500 1800 4500 2450
+Wire Wire Line
+	4250 2400 4750 2400
+Wire Wire Line
+	4250 2400 4250 2900
+Connection ~ 4500 2400
+Wire Wire Line
+	4750 2400 4750 2450
+Wire Wire Line
+	4750 2800 4750 2750
+Wire Wire Line
+	4500 2750 4500 2900
+Wire Wire Line
+	4500 3950 4500 4150
+Wire Wire Line
+	4750 4150 4750 3950
+Wire Wire Line
+	4750 3650 4750 3500
+Wire Wire Line
+	5000 4550 3750 4550
+Wire Wire Line
+	3750 4550 3750 2600
+Wire Wire Line
+	3750 2600 4100 2600
+Wire Wire Line
+	4100 2600 4100 2300
+Connection ~ 4100 2300
+Connection ~ 4500 4550
+Wire Wire Line
+	5000 3400 5000 4550
+Connection ~ 4750 4550
+Wire Wire Line
+	4150 4050 3750 4050
+Wire Wire Line
+	4150 3750 4150 4050
+Connection ~ 3750 4050
+Wire Wire Line
+	5250 2350 5250 2800
+Wire Wire Line
+	5250 2800 5000 2800
+Wire Wire Line
+	5200 2250 5300 2250
+$Comp
+L PWR_FLAG #FLG01
+U 1 1 56E9B768
+P 4000 2050
+F 0 "#FLG01" H 4000 2145 50  0001 C CNN
+F 1 "PWR_FLAG" H 4000 2230 50  0000 C CNN
+F 2 "" H 4000 2050 50  0000 C CNN
+F 3 "" H 4000 2050 50  0000 C CNN
+	1    4000 2050
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4000 2150 4000 2050
+$Comp
+L LM1084IS-3.3/NOPB U1
+U 1 1 56E9AE54
+P 4400 1600
+F 0 "U1" H 4600 1400 50  0000 C CNN
+F 1 "LM1084IS-3.3/NOPB" H 4100 1800 50  0000 L CNN
+F 2 "TO_SOT_Packages_THT:TO-92_Inline_Wide" H 4400 1700 50  0000 C CIN
+F 3 "" H 4400 1600 50  0000 C CNN
+	1    4400 1600
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4000 1550 4000 1800
+Wire Wire Line
+	4000 1800 4300 1800
+Wire Wire Line
+	4500 1800 4800 1800
+Wire Wire Line
+	4800 1800 4800 1550
+$Comp
+L PWR_FLAG #FLG02
+U 1 1 56E9B125
+P 4000 2350
+F 0 "#FLG02" H 4000 2445 50  0001 C CNN
+F 1 "PWR_FLAG" H 4000 2530 50  0000 C CNN
+F 2 "" H 4000 2350 50  0000 C CNN
+F 3 "" H 4000 2350 50  0000 C CNN
+	1    4000 2350
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	4000 2250 4000 2350
+$Comp
+L CONN_02X04 P3
+U 1 1 56E9B273
+P 4600 3150
+F 0 "P3" H 4600 3400 50  0000 C CNN
+F 1 "CONN_02X04" H 4600 2900 50  0000 C CNN
+F 2 "Pin_Headers:Pin_Header_Straight_2x04" H 4600 1950 50  0001 C CNN
+F 3 "" H 4600 1950 50  0000 C CNN
+	1    4600 3150
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	4500 2900 4550 2900
+Wire Wire Line
+	4650 2900 4650 2800
+Wire Wire Line
+	4650 2800 4750 2800
+Wire Wire Line
+	4750 2900 5000 2900
+Wire Wire Line
+	5000 2900 5000 2800
+Wire Wire Line
+	4250 2900 4450 2900
+Wire Wire Line
+	4550 3500 4550 3400
+Wire Wire Line
+	4650 3400 4650 3500
+Wire Wire Line
+	4650 3500 4750 3500
+Wire Wire Line
+	4500 3650 4500 3500
+Wire Wire Line
+	4500 3500 4550 3500
+Wire Wire Line
+	4500 3600 4150 3600
+Connection ~ 4500 3600
+Wire Wire Line
+	4450 3400 4450 3450
+Wire Wire Line
+	4450 3450 5300 3450
+Wire Wire Line
+	4750 3400 5000 3400
+Wire Wire Line
+	5300 3450 5300 2250
+$Comp
+L CONN_01X02 P4
+U 1 1 56E9BEE9
+P 5000 2300
+F 0 "P4" H 5000 2450 50  0000 C CNN
+F 1 "RX, TX" V 5100 2300 50  0000 C CNN
+F 2 "Pin_Headers:Pin_Header_Straight_1x02" H 5000 2300 50  0001 C CNN
+F 3 "" H 5000 2300 50  0000 C CNN
+	1    5000 2300
+	-1   0    0    1   
+$EndComp
+$Comp
+L CONN_01X02 P1
+U 1 1 56E9BF65
+P 3650 2200
+F 0 "P1" H 3650 2350 50  0000 C CNN
+F 1 "VCC, GND" V 3750 2200 50  0000 C CNN
+F 2 "Pin_Headers:Pin_Header_Straight_1x02" H 3650 2200 50  0001 C CNN
+F 3 "" H 3650 2200 50  0000 C CNN
+	1    3650 2200
+	-1   0    0    1   
+$EndComp
+$Comp
+L CONN_01X02 P2
+U 1 1 56E9C021
+P 3950 3700
+F 0 "P2" H 3950 3850 50  0000 C CNN
+F 1 "GPIO0->GND" V 4050 3700 50  0000 C CNN
+F 2 "Pin_Headers:Pin_Header_Straight_1x02" H 3950 3700 50  0001 C CNN
+F 3 "" H 3950 3700 50  0000 C CNN
+	1    3950 3700
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	4150 3600 4150 3650
+Wire Wire Line
+	3850 2250 4000 2250
+Connection ~ 4000 2300
+Connection ~ 4000 2150
+Wire Wire Line
+	5250 2350 5200 2350
+Text Notes 4400 3150 0    21   ~ 0
+VCC
+Text Notes 4500 3150 0    21   ~ 0
+RST
+Text Notes 4600 3150 0    21   ~ 0
+CHPD
+Text Notes 4700 3150 0    21   ~ 0
+TX
+Text Notes 4400 3200 0    21   ~ 0
+RX
+Text Notes 4500 3200 0    21   ~ 0
+GPIO0
+Text Notes 4600 3200 0    21   ~ 0
+GPIO2
+Text Notes 4700 3200 0    21   ~ 0
+GND
+$EndSCHEMATC
