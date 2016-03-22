@@ -64,6 +64,7 @@ void I2C::_checkInit(char c) {
     if (initI >= initPackageSize) {
       init = true;
       dbgMsg("init");
+      digitalWrite(13, HIGH);
     }
   } else {
     initI = 0;
@@ -83,6 +84,6 @@ void I2C::response(char c) {
 }
 
 void I2C::dbgMsg(char msg[]) {
-  //  Serial.println(msg);
+//  Serial.println(msg);
 }
 

@@ -3,6 +3,14 @@
 #include "I2C.h"
 #include "Config.h"
 
+boolean led13State = HIGH;
+uint16_t led13StateDelay = 0;
+
+void switchLed13() {
+  led13State = !led13State;
+  digitalWrite(13, led13State);
+}
+
 boolean pins[4] = {false, false, false, false};
 boolean needResponse = false;
 int8_t calibrationMode = 0;
@@ -30,13 +38,14 @@ Motor28BYJ motor1(2, 3, 4, 5);
 Motor28BYJ motor2(6, 7, 8, 9);
 
 // S0, S1, S2, Z
-LineSensor line(A3, A4, A5, A2);
+LineSensor line(A0);
 
 unsigned long oldTimeValue = 0;
 
 void setup()
 {
   Serial.begin(115200);
+  pinMode(13, OUTPUT);
 }
 
 void loop()
@@ -84,6 +93,15 @@ void doMove() {
     oldTimeValue = newTimeValue;
     motor1.step(rightDirection());
     motor2.step(leftDirection());
+
+    if (leftDirection() != 0 && leftDirection() != 0) {
+      led13StateDelay++;
+      if (led13StateDelay >= 1000) {
+
+        led13StateDelay = 0;
+        switchLed13();
+      }
+    }
   }
 }
 
