@@ -37,8 +37,7 @@ const int speed = 1000;
 Motor28BYJ motor1(2, 3, 4, 5);
 Motor28BYJ motor2(6, 7, 8, 9);
 
-// S0, S1, S2, Z
-LineSensor line(A0);
+LineSensor* line;
 
 unsigned long oldTimeValue = 0;
 
@@ -46,34 +45,36 @@ void setup()
 {
   Serial.begin(115200);
   pinMode(13, OUTPUT);
+  line = new LineSensor(A0);
 }
 
 void loop()
 {
   if (!i2c.check()) return;
 
-
-  if (needResponse)
-    if (calibrationMode == 0) {
-      responseNextTick();
-    } else {
-      if (calibrationMode == 2) {
-        line.calibrateDown();
-        calibrationMode = 0;
-      }
-      if (calibrationMode == 1) {
-        line.calibrateUp();
-        calibrationMode = 0;
-      }
+  if (calibrationMode != 0) {
+    if (calibrationMode == 1) {
+      line->calibrateDown();
+      calibrationMode = 0;
     }
+    if (calibrationMode == 2) {
+      line->calibrateUp();
+      calibrationMode = 0;
+    }
+    return;
+  }
+
+  if (needResponse) {
+    responseNextTick();
+  }
 
   doMove();
 }
 
 void responseNextTick() {
-  i2c.response((char)(line.readSensor() + 48));
+  i2c.response((char)(line->readSensor() + 48));
 
-  if (line.sensorsRead()) {
+  if (line->sensorsRead()) {
     needResponse = false;
   }
 }

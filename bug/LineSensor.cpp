@@ -38,7 +38,7 @@ uint16_t LineSensor::readSensor() {
 
 
 uint16_t LineSensor::readRawSensor(uint8_t sensor) {
-  return analogRead(sensor+analogInStart);
+  return analogRead(sensor + analogInStart);
 }
 
 int LineSensor::calibrate(int value, int sensor) {
@@ -56,13 +56,13 @@ int LineSensor::maps(int value) {
 
 void LineSensor::calibrateDown() {
   for (uint8_t i = 0; i < Config::sensorCount(); i++) {
-    Config::writeUpSensor(i, readRawSensor(i));
+    Config::writeDownSensor(i, readRawSensor(i));
   }
 }
 
 void LineSensor::calibrateUp() {
   for (uint8_t i = 0; i < Config::sensorCount(); i++) {
-    Config::writeDownSensor(i, readRawSensor(i));
+    Config::writeUpSensor(i, readRawSensor(i));
   }
 }
 
