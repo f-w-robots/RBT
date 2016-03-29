@@ -14,9 +14,9 @@ WebSocketsClient webSocket;
 char ssid[] = "robohub";
 char password[] = "robohub1";
 
-char address[] = "192.168.43.3";
+char address[] = "192.168.43.252";
 uint16_t port = 2500;
-char hwid[] = "i2c";
+char hwid[] = "i2c1";
 char baseUrl[] = "/";
 
 const uint16_t wifiBlinkDelay = 50;
