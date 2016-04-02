@@ -2,19 +2,20 @@
 #include "Config.h"
 #include "LineSensor.h"
 
-LineSensor::LineSensor(int analogInStart) {
-  this->analogInStart = analogInStart;
-
+LineSensor::LineSensor(uint8_t inputs[], uint8_t inputs_size) {
   this->currentSensor = 0;
 
   int sensorsCount = Config::sensorCount();
+  if (inputs_size < sensorsCount || sensorsCount > 9)
+    return;
 
+  sensorInputs = new uint8_t[sensorsCount];
   sensorValues = new int16_t[sensorsCount];
   sensorsColibrationDown = new int16_t[sensorsCount];
   sensorsColibrationUp = new int16_t[sensorsCount];
-  if (sensorsCount > 9)
-    return;
+
   for (int8_t i = 0;  i < sensorsCount; i++) {
+    sensorInputs[i] = inputs[i];
     sensorsColibrationDown[i] = Config::readDownSensor(i);
     sensorsColibrationUp[i] = Config::readUpSensor(i);
   }
@@ -26,7 +27,7 @@ boolean LineSensor::sensorsRead() {
 
 uint16_t LineSensor::readSensor() {
   sensorsReadFinish = false;
-  uint16_t value = maps(calibrate(analogRead(currentSensor + analogInStart), currentSensor));
+  uint16_t value = maps(calibrate(analogRead(sensorInputs[currentSensor]), currentSensor));
   sensorValues[currentSensor] = value;
   currentSensor++;
   if (currentSensor >= Config::sensorCount()) {
@@ -38,7 +39,7 @@ uint16_t LineSensor::readSensor() {
 
 
 uint16_t LineSensor::readRawSensor(uint8_t sensor) {
-  return analogRead(sensor + analogInStart);
+  return analogRead(sensorInputs[sensor]);
 }
 
 int LineSensor::calibrate(int value, int sensor) {

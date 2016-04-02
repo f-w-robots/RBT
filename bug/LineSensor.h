@@ -4,7 +4,7 @@
 class LineSensor
 {
   public:
-    LineSensor(int analogInStart);
+    LineSensor(uint8_t inputs[], uint8_t inputs_size);
     uint16_t readSensor();
     boolean sensorsRead();
     void calibrateDown();
@@ -14,7 +14,7 @@ class LineSensor
     int calibrate(int value, int sensor);
     int maps(int value);
 
-    uint8_t analogInStart;
+    uint8_t* sensorInputs;
     int16_t* sensorValues;
     int16_t* sensorsColibrationDown;
     int16_t* sensorsColibrationUp;

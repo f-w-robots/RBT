@@ -38,6 +38,7 @@ Motor28BYJ motor1(2, 3, 4, 5);
 Motor28BYJ motor2(6, 7, 8, 9);
 
 LineSensor* line;
+uint8_t lineInputs[] = {A0, A1, A2, A3, A4};
 
 unsigned long oldTimeValue = 0;
 
@@ -45,7 +46,7 @@ void setup()
 {
   Serial.begin(115200);
   pinMode(13, OUTPUT);
-  line = new LineSensor(A0);
+  line = new LineSensor(lineInputs, 5);
 }
 
 void loop()
