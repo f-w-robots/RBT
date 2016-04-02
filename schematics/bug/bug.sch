@@ -1,5 +1,4 @@
 EESchema Schematic File Version 2
-LIBS:bug-rescue
 LIBS:power
 LIBS:device
 LIBS:transistors
@@ -249,8 +248,6 @@ Wire Wire Line
 Wire Wire Line
 	5400 2400 6300 2400
 Wire Wire Line
-	5650 1650 5650 2400
-Wire Wire Line
 	5500 3150 5400 3150
 Wire Wire Line
 	5550 2950 5500 2950
@@ -341,9 +338,6 @@ Wire Wire Line
 Connection ~ 6700 2750
 Connection ~ 7250 4850
 Wire Wire Line
-	3200 2050 5650 2050
-Connection ~ 5650 2050
-Wire Wire Line
 	3200 2050 3200 3350
 Connection ~ 3200 3350
 Wire Wire Line
@@ -366,6 +360,26 @@ Wire Wire Line
 	6300 4850 6800 4850
 Wire Wire Line
 	5000 1550 5750 1550
+Wire Wire Line
+	5000 1650 5350 1650
+Wire Wire Line
+	5500 2950 5500 3150
+Wire Wire Line
+	4200 2550 6400 2550
+Wire Wire Line
+	4200 3350 4200 2550
+Connection ~ 5750 2550
+Connection ~ 4200 3350
+Wire Wire Line
+	5350 1650 5350 1450
+Wire Wire Line
+	3200 2050 5250 2050
+Wire Wire Line
+	5250 2050 5250 1450
+Wire Wire Line
+	5100 800  5650 800 
+Wire Wire Line
+	5650 800  5650 2400
 $Comp
 L button U5
 U 1 1 56F2F512
@@ -378,23 +392,11 @@ F 3 "" H 5400 1150 60  0000 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	5650 1650 5350 1650
+	5250 800  5250 850 
 Wire Wire Line
-	5350 1650 5350 1450
+	5250 1500 5100 1500
 Wire Wire Line
-	5100 1650 5100 700 
-Wire Wire Line
-	5100 700  5450 700 
-Wire Wire Line
-	5450 700  5450 850 
-Wire Wire Line
-	5100 1650 5000 1650
-Wire Wire Line
-	5500 2950 5500 3150
-Wire Wire Line
-	4200 2550 6400 2550
-Wire Wire Line
-	4200 3350 4200 2550
-Connection ~ 5750 2550
-Connection ~ 4200 3350
+	5100 1500 5100 800 
+Connection ~ 5250 800 
+Connection ~ 5250 1500
 $EndSCHEMATC
