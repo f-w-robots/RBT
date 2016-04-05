@@ -13,8 +13,12 @@ Motor28BYJ::Motor28BYJ(uint8_t pin1, uint8_t pin2, uint8_t pin3, uint8_t pin4) {
 }
 
 void Motor28BYJ::step(int direction) {
-  if (direction == 0)
+  if (direction == 0) {
+    for (int pin = 0; pin < 4; pin++) {
+      digitalWrite(_pins[pin], LOW);
+    }
     return;
+  }
   for (int pin = 0; pin < 4; pin++) {
     digitalWrite(_pins[pin], _sequence[(int)(3.5 - (3.5 * direction) + (direction * position))][pin]);
   }

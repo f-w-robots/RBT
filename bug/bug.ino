@@ -32,7 +32,7 @@ void outCallback() {
   i2c.responseStart(Config::sensorCount());
 }
 
-const int speed = 2000;
+const int speed = 1600;
 
 Motor28BYJ motor2(2, 3, 4, 5);
 Motor28BYJ motor1(6, 7, 8, 9);
