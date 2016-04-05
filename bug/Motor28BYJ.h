@@ -10,14 +10,14 @@ class Motor28BYJ {
     int _speed = 1000;
     uint8_t position = 0;
     const boolean _sequence[8][4] = {
-      {LOW, LOW, LOW, HIGH },
-      {LOW, LOW, HIGH, HIGH},
-      {LOW, LOW, HIGH, LOW },
-      {LOW, HIGH, HIGH, LOW},
-      {LOW, HIGH, LOW, LOW },
-      {HIGH, HIGH, LOW, LOW},
-      {HIGH, LOW, LOW, LOW },
-      {HIGH, LOW, LOW, HIGH}
+      {HIGH, LOW,  LOW,  LOW},
+      {LOW, HIGH,  LOW,  LOW},
+      {LOW,  LOW, HIGH,  LOW},
+      {LOW,  LOW,  LOW, HIGH},
+      {HIGH, LOW,  LOW,  LOW},
+      {LOW, HIGH,  LOW,  LOW},
+      {LOW,  LOW,  HIGH, LOW},
+      {LOW,  LOW,  LOW, HIGH}
     };
 };
 

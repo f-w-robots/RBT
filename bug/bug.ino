@@ -32,10 +32,10 @@ void outCallback() {
   i2c.responseStart(Config::sensorCount());
 }
 
-const int speed = 1000;
+const int speed = 2000;
 
-Motor28BYJ motor1(2, 3, 4, 5);
-Motor28BYJ motor2(6, 7, 8, 9);
+Motor28BYJ motor2(2, 3, 4, 5);
+Motor28BYJ motor1(6, 7, 8, 9);
 
 LineSensor* line;
 uint8_t lineInputs[] = {A0, A1, A2, A3, A4};
@@ -93,8 +93,8 @@ void doMove() {
 
   if (newTimeValue != oldTimeValue) {
     oldTimeValue = newTimeValue;
-    motor1.step(rightDirection());
     motor2.step(leftDirection());
+    motor1.step(rightDirection());
 
     if (leftDirection() != 0 && leftDirection() != 0) {
       led13StateDelay++;
