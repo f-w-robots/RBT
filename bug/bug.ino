@@ -32,7 +32,7 @@ void outCallback() {
   i2c.responseStart(Config::sensorCount());
 }
 
-const int speed = 1600;
+const int speed = 2000;
 
 Motor28BYJ motor2(2, 3, 4, 5);
 Motor28BYJ motor1(6, 7, 8, 9);
@@ -44,7 +44,7 @@ unsigned long oldTimeValue = 0;
 
 void setup()
 {
-  Serial.begin(115200);
+  Serial.begin(57600);
   pinMode(13, OUTPUT);
   line = new LineSensor(lineInputs, 5);
 }

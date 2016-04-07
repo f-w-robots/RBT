@@ -14,10 +14,6 @@ class Motor28BYJ {
       {LOW, HIGH,  LOW,  LOW},
       {LOW,  LOW, HIGH,  LOW},
       {LOW,  LOW,  LOW, HIGH},
-      {HIGH, LOW,  LOW,  LOW},
-      {LOW, HIGH,  LOW,  LOW},
-      {LOW,  LOW,  HIGH, LOW},
-      {LOW,  LOW,  LOW, HIGH}
     };
 };
 

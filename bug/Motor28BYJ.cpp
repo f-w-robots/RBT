@@ -20,9 +20,9 @@ void Motor28BYJ::step(int direction) {
     return;
   }
   for (int pin = 0; pin < 4; pin++) {
-    digitalWrite(_pins[pin], _sequence[(int)(3.5 - (3.5 * direction) + (direction * position))][pin]);
+    digitalWrite(_pins[pin], _sequence[(direction > 0 ? position : 3 - position)][pin]);
   }
   position ++;
-  if (position > 7)
+  if (position > 3)
     position = 0;
 }
