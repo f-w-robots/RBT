@@ -135,13 +135,13 @@ $EndComp
 $Comp
 L CONN_01X06 P3
 U 1 1 56F1BCB1
-P 6000 3500
-F 0 "P3" H 6000 3850 50  0000 C CNN
-F 1 "CONN_01X06" V 6100 3500 50  0000 C CNN
-F 2 "Pin_Headers:Pin_Header_Straight_1x06" H 6000 3500 50  0001 C CNN
-F 3 "" H 6000 3500 50  0000 C CNN
-	1    6000 3500
-	1    0    0    -1  
+P 5750 3700
+F 0 "P3" H 5750 4050 50  0000 C CNN
+F 1 "CONN_01X06" V 5850 3700 50  0000 C CNN
+F 2 "Pin_Headers:Pin_Header_Straight_1x06" H 5750 3700 50  0001 C CNN
+F 3 "" H 5750 3700 50  0000 C CNN
+	1    5750 3700
+	1    0    0    1   
 $EndComp
 $Comp
 L CONN_01X02 P2
@@ -209,6 +209,17 @@ F 3 "" H 6000 4450 60  0000 C CNN
 	1    4850 3600
 	1    0    0    -1  
 $EndComp
+$Comp
+L button U5
+U 1 1 56F2F512
+P 5350 1150
+F 0 "U5" H 5400 1150 60  0000 C CNN
+F 1 "button" H 5400 1150 60  0000 C CNN
+F 2 "bugs:button" H 5400 1150 60  0001 C CNN
+F 3 "" H 5400 1150 60  0000 C CNN
+	1    5350 1150
+	1    0    0    -1  
+$EndComp
 Wire Wire Line
 	7250 3650 7100 3650
 Wire Wire Line
@@ -256,29 +267,9 @@ Wire Wire Line
 Wire Wire Line
 	5550 3050 5550 3350
 Wire Wire Line
-	5650 3250 5800 3250
-Wire Wire Line
-	5650 4700 5650 3250
-Wire Wire Line
-	5700 3350 5700 4800
-Wire Wire Line
-	5800 3350 5700 3350
-Wire Wire Line
-	5700 4800 4700 4800
-Wire Wire Line
 	4700 4800 4700 4600
 Wire Wire Line
-	4800 4700 5650 4700
-Wire Wire Line
 	4800 4600 4800 4700
-Wire Wire Line
-	5400 3450 5800 3450
-Wire Wire Line
-	5400 3550 5800 3550
-Wire Wire Line
-	5400 3650 5800 3650
-Wire Wire Line
-	5400 3750 5800 3750
 Wire Wire Line
 	3100 3350 3250 3350
 Wire Wire Line
@@ -380,17 +371,6 @@ Wire Wire Line
 	5100 800  5650 800 
 Wire Wire Line
 	5650 800  5650 2400
-$Comp
-L button U5
-U 1 1 56F2F512
-P 5350 1150
-F 0 "U5" H 5400 1150 60  0000 C CNN
-F 1 "button" H 5400 1150 60  0000 C CNN
-F 2 "bugs:button" H 5400 1150 60  0001 C CNN
-F 3 "" H 5400 1150 60  0000 C CNN
-	1    5350 1150
-	1    0    0    -1  
-$EndComp
 Wire Wire Line
 	5250 800  5250 850 
 Wire Wire Line
@@ -399,4 +379,26 @@ Wire Wire Line
 	5100 1500 5100 800 
 Connection ~ 5250 800 
 Connection ~ 5250 1500
+Wire Wire Line
+	5400 3450 5550 3450
+Wire Wire Line
+	5400 3550 5550 3550
+Wire Wire Line
+	5400 3650 5550 3650
+Wire Wire Line
+	5400 3750 5550 3750
+Wire Wire Line
+	5550 3950 5550 4800
+Wire Wire Line
+	5550 4800 4700 4800
+Wire Wire Line
+	5550 4900 4700 4900
+Wire Wire Line
+	5550 5000 4700 5000
+Wire Wire Line
+	4800 4700 5500 4700
+Wire Wire Line
+	5500 4700 5500 3850
+Wire Wire Line
+	5500 3850 5550 3850
 $EndSCHEMATC
