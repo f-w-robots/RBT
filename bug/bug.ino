@@ -44,7 +44,7 @@ unsigned long oldTimeValue = 0;
 
 void setup()
 {
-  Serial.begin(57600);
+  Serial.begin(115200);
   pinMode(13, OUTPUT);
   line = new LineSensor(lineInputs, 5);
 }

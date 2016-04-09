@@ -73,7 +73,7 @@ void setup() {
   digitalWrite(PIN_LED_WIFI, HIGH);
   digitalWrite(PIN_LED_SOCKET, LOW);
 
-  Serial.begin(57600);
+  Serial.begin(115200);
   delay(10);
 
   while (WiFi.status() != WL_CONNECTED) {
