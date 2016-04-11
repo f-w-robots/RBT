@@ -14,6 +14,13 @@ boolean I2C::check() {
 
   char c = Serial.read();
 
+  if(c == '~') {
+    needPackageSize = false;
+    readPackage = false;
+    dataCount = 0;
+    return init;
+  }
+
   if (needPackageSize) {
     needPackageSize = false;
     _nextPackage(c - 48);
