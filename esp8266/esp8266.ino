@@ -7,6 +7,8 @@
 #define PIN_LED_WIFI 2
 #define PIN_LED_SOCKET 0
 
+boolean pin_led_socket_value = LOW;
+
 int8_t status = 0;
 
 WebSocketsClient webSocket;
@@ -47,6 +49,14 @@ void webSocketEvent(WStype_t type, uint8_t *payload, size_t lenght) {
       break;
     case WStype_TEXT:
       //      time1 = micros();
+      if (payload[0] != 0 && payload[0] == 'P' &&
+          payload[1] != 0 && payload[1] == 'I' &&
+          payload[2] != 0 && payload[2] == 'N' &&
+          payload[3] != 0 && payload[3] == 'G' &&
+        payload[4] == 0) {
+        webSocket.sendTXT("PONG");
+        break;
+      }
       for (int i = 0; payload[i] != 0; i++)
         Serial.write(payload[i]);
       break;
@@ -105,6 +115,8 @@ void readPackages() {
     if (packageLen == 0) {
       packageLen = Serial.read() - 48;
       package[packageLen] = 0;
+      pin_led_socket_value = !pin_led_socket_value;
+      digitalWrite(PIN_LED_SOCKET, pin_led_socket_value);
     }
     while (Serial.available() > 0) {
       package[packageI] = Serial.read();
