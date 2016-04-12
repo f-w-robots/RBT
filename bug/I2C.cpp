@@ -15,6 +15,7 @@ boolean I2C::check() {
   char c = Serial.read();
 
   if(c == '~') {
+    switchLed13();
     needPackageSize = false;
     readPackage = false;
     dataCount = 0;
@@ -92,5 +93,10 @@ void I2C::response(char c) {
 
 void I2C::dbgMsg(char msg[]) {
 //  Serial.println(msg);
+}
+
+void I2C::switchLed13() {
+  led13State = !led13State;
+  digitalWrite(13, led13State);
 }
 

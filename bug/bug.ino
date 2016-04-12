@@ -3,14 +3,6 @@
 #include "I2C.h"
 #include "Config.h"
 
-boolean led13State = HIGH;
-uint16_t led13StateDelay = 0;
-
-void switchLed13() {
-  led13State = !led13State;
-  digitalWrite(13, led13State);
-}
-
 boolean pins[4] = {false, false, false, false};
 boolean needResponse = false;
 int8_t calibrationMode = 0;
@@ -37,8 +29,9 @@ const int speed = 2000;
 Motor28BYJ motor2(2, 3, 4, 5);
 Motor28BYJ motor1(6, 7, 8, 9);
 
-LineSensor* line;
+
 uint8_t lineInputs[] = {A0, A1, A2, A3, A4};
+LineSensor line(lineInputs, 5);
 
 unsigned long oldTimeValue = 0;
 
@@ -46,7 +39,6 @@ void setup()
 {
   Serial.begin(115200);
   pinMode(13, OUTPUT);
-  line = new LineSensor(lineInputs, 5);
 }
 
 void loop()
@@ -55,11 +47,11 @@ void loop()
 
   if (calibrationMode != 0) {
     if (calibrationMode == 1) {
-      line->calibrateDown();
+      line.calibrateDown();
       calibrationMode = 0;
     }
     if (calibrationMode == 2) {
-      line->calibrateUp();
+      line.calibrateUp();
       calibrationMode = 0;
     }
     return;
@@ -73,9 +65,9 @@ void loop()
 }
 
 void responseNextTick() {
-  i2c.response((char)(line->readSensor() + 48));
+  i2c.response((char)(line.readSensor() + 48));
 
-  if (line->sensorsRead()) {
+  if (line.sensorsRead()) {
     needResponse = false;
   }
 }
@@ -95,15 +87,6 @@ void doMove() {
     oldTimeValue = newTimeValue;
     motor2.step(leftDirection());
     motor1.step(rightDirection());
-
-    if (leftDirection() != 0 && leftDirection() != 0) {
-      led13StateDelay++;
-      if (led13StateDelay >= 1000) {
-
-        led13StateDelay = 0;
-        switchLed13();
-      }
-    }
   }
 }
 

@@ -16,7 +16,9 @@ class I2C
     void _checkInit(char c);
     void _nextPackage(uint8_t size);
     void dbgMsg(char msg[]);
+    void switchLed13();
 
+    boolean led13State = false;
     boolean init = false;
     static const uint8_t initPackageSize = 6;
     boolean initArr[initPackageSize] = {false, false, false, false, false, false};
