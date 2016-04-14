@@ -2,7 +2,7 @@
 #include <ESP8266WiFi.h>
 #include <WebSocketsClient.h>
 
-#define MAX_MSG_LEN 255
+#define MAX_MSG_LEN 256
 
 #define PIN_LED_WIFI 2
 #define PIN_LED_SOCKET 0
@@ -16,7 +16,7 @@ WebSocketsClient webSocket;
 char ssid[] = "robohub";
 char password[] = "robohub1";
 
-char address[] = "192.168.33.2";
+char address[] = "192.168.43.252";
 uint16_t port = 2500;
 char url[] = "/bugDebug";
 
@@ -93,17 +93,13 @@ void readPackages() {
   if (Serial.available() > 0) {
     if (packageLen == 0) {
       packageLen = Serial.read() - 48;
-      if(packageLen <= 0 || packageLen > MAX_MSG_LEN)
-        return;
-      package[packageLen] = 0;
-    }
-    while (Serial.available() > 0) {
+    } else {
       package[packageI] = Serial.read();
       packageI++;
       if (packageI == packageLen) {
+        webSocket.sendTXT(package, packageLen);
         packageLen = 0;
         packageI = 0;
-        webSocket.sendTXT(package);
       }
     }
   }
