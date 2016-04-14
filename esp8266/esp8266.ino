@@ -18,21 +18,9 @@ char password[] = "robohub1";
 
 char address[] = "192.168.33.2";
 uint16_t port = 2500;
-char hwid[] = "bugDebug";
-char baseUrl[] = "/";
+char url[] = "/bugDebug";
 
 const uint16_t wifiBlinkDelay = 50;
-
-char* url = new char[strlen(hwid) + strlen(baseUrl) + 1];
-char* getUrl() {
-  url[0] = 0;
-  strcat(url, baseUrl);
-  strcat(url, hwid);
-}
-
-//String debugString;
-//long int time1 = 0;
-//long int time4 = 0;
 
 void webSocketEvent(WStype_t type, uint8_t *payload, size_t lenght) {
   switch (type) {
@@ -48,15 +36,6 @@ void webSocketEvent(WStype_t type, uint8_t *payload, size_t lenght) {
       digitalWrite(PIN_LED_SOCKET, HIGH);
       break;
     case WStype_TEXT:
-      //      time1 = micros();
-      if (payload[0] != 0 && payload[0] == 'P' &&
-          payload[1] != 0 && payload[1] == 'I' &&
-          payload[2] != 0 && payload[2] == 'N' &&
-          payload[3] != 0 && payload[3] == 'G' &&
-        payload[4] == 0) {
-        webSocket.sendTXT("PONG");
-        break;
-      }
       for (int i = 0; payload[i] != 0; i++)
         Serial.write(payload[i]);
       break;
@@ -102,7 +81,7 @@ void setup() {
     }
   }
 
-  webSocket.begin(address, port, getUrl());
+  webSocket.begin(address, port, url);
   webSocket.onEvent(webSocketEvent);
 }
 
@@ -114,9 +93,9 @@ void readPackages() {
   if (Serial.available() > 0) {
     if (packageLen == 0) {
       packageLen = Serial.read() - 48;
+      if(packageLen <= 0 || packageLen > MAX_MSG_LEN)
+        return;
       package[packageLen] = 0;
-      pin_led_socket_value = !pin_led_socket_value;
-      digitalWrite(PIN_LED_SOCKET, pin_led_socket_value);
     }
     while (Serial.available() > 0) {
       package[packageI] = Serial.read();
@@ -124,10 +103,7 @@ void readPackages() {
       if (packageI == packageLen) {
         packageLen = 0;
         packageI = 0;
-        //        time4 = micros();
         webSocket.sendTXT(package);
-        //        debugString = String(time4 - time1);
-        //        webSocket.sendTXT(debugString);
       }
     }
   }
