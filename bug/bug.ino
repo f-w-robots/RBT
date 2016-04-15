@@ -3,32 +3,38 @@
 #include "I2C.h"
 #include "Config.h"
 
-boolean pins[4] = {false, false, false, false};
+typedef union
+{
+  struct
+  {
+    unsigned char setSensorsCount : 1;
+    unsigned char wheels : 1;
+    unsigned char leftWheelForward : 1;
+    unsigned char leftWheelReverse : 1;
+    unsigned char rightWheelForward : 1;
+    unsigned char rightWheelReverse : 1;
+    unsigned char calibrationLower : 1;
+    unsigned char calibrationUpper : 1;
+  } bits;
+  unsigned char byte;
+} PackageHeader;
+
+PackageHeader packageHeader;
+
+boolean newPackage = false;
+
 boolean needResponse = false;
-int8_t calibrationMode = 0;
 
-void inCallback(uint8_t pin, char c) {
-  if (pin == 6) {
-    Config::sensorCount(c - 48);
-  }
-  if (pin == 5)
-    calibrationMode = c - 48;
-  if (pin <= 4)
-    pins[pin - 1] = (c == '1');
-}
-
-I2C i2c('1', inCallback, outCallback);
-
-void outCallback() {
-  needResponse = true;
-  i2c.responseStart(Config::sensorCount());
-}
+uint8_t *data = new uint8_t[2];
+I2C i2c(1, data, &newPackage);
 
 const int speed = 2000;
 
 Motor28BYJ motor2(2, 3, 4, 5);
 Motor28BYJ motor1(6, 7, 8, 9);
 
+int8_t rightDirection = 0;
+int8_t leftDirection = 0;
 
 uint8_t lineInputs[] = {A0, A1, A2, A3, A4};
 LineSensor line(lineInputs, 5);
@@ -39,45 +45,54 @@ void setup()
 {
   Serial.begin(115200);
   pinMode(13, OUTPUT);
+
+  data[0] = 0;
+  data[1] = 0;
 }
 
 void loop()
 {
   if (!i2c.check()) return;
 
-  if (calibrationMode != 0) {
-    if (calibrationMode == 1) {
-      line.calibrateDown();
-      calibrationMode = 0;
-    }
-    if (calibrationMode == 2) {
-      line.calibrateUp();
-      calibrationMode = 0;
-    }
-    return;
-  }
+  packageHeader.byte = data[0];
 
-  if (needResponse) {
+  if (needResponse)
     responseNextTick();
-  }
 
+  if (newPackage) {
+    newPackage = false;
+    needResponse = true;
+    parsePackage();
+    i2c.response(5);
+  }
   doMove();
 }
 
+void parsePackage() {
+  if (packageHeader.bits.calibrationLower) {
+    line.calibrateDown();
+  }
+  if (packageHeader.bits.calibrationUpper) {
+    line.calibrateUp();
+  }
+
+  if (data[1] != 0) {
+    Config::sensorCount(data[1]);
+    data[1] = 0;
+  }
+
+  if (packageHeader.bits.wheels) {
+    rightDirection = packageHeader.bits.rightWheelForward ? 1 : (packageHeader.bits.rightWheelReverse ? -1 : 0);
+    leftDirection = packageHeader.bits.leftWheelForward ? 1 : (packageHeader.bits.leftWheelReverse ? -1 : 0);
+  }
+}
+
 void responseNextTick() {
-  i2c.response((char)(line.readSensor() + 48));
+  i2c.response((char)(line.readSensor()));
 
   if (line.sensorsRead()) {
     needResponse = false;
   }
-}
-
-int8_t rightDirection() {
-  return (pins[0] == pins[1] ? 0 : (pins[0] > pins[1] ? 1 : -1));
-}
-
-int8_t leftDirection() {
-  return (pins[2] == pins[3] ? 0 : (pins[2] > pins[3] ? 1 : -1));
 }
 
 void doMove() {
@@ -85,8 +100,8 @@ void doMove() {
 
   if (newTimeValue != oldTimeValue) {
     oldTimeValue = newTimeValue;
-    motor2.step(leftDirection());
-    motor1.step(rightDirection());
+    motor2.step(leftDirection);
+    motor1.step(rightDirection);
   }
 }
 
