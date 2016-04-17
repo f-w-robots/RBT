@@ -146,12 +146,12 @@ $EndComp
 $Comp
 L CONN_01X02 P4
 U 1 1 56F1CB48
-P 4800 1600
-F 0 "P4" H 4800 1750 50  0000 C CNN
-F 1 "CONN_01X02" V 4900 1600 50  0000 C CNN
-F 2 "Pin_Headers:Pin_Header_Straight_1x02" H 4800 1600 50  0001 C CNN
-F 3 "" H 4800 1600 50  0000 C CNN
-	1    4800 1600
+P 4800 1000
+F 0 "P4" H 4800 1150 50  0000 C CNN
+F 1 "CONN_01X02" V 4900 1000 50  0000 C CNN
+F 2 "Pin_Headers:Pin_Header_Straight_1x02" H 4800 1000 50  0001 C CNN
+F 3 "" H 4800 1000 50  0000 C CNN
+	1    4800 1000
 	-1   0    0    1   
 $EndComp
 $Comp
@@ -198,17 +198,6 @@ F 3 "" H 6000 4450 60  0000 C CNN
 	1    4850 3600
 	1    0    0    -1  
 $EndComp
-$Comp
-L button U5
-U 1 1 56F2F512
-P 5350 1150
-F 0 "U5" H 5400 1150 60  0000 C CNN
-F 1 "button" H 5400 1150 60  0000 C CNN
-F 2 "bugs:button" H 5400 1150 60  0001 C CNN
-F 3 "" H 5400 1150 60  0000 C CNN
-	1    5350 1150
-	1    0    0    -1  
-$EndComp
 Wire Wire Line
 	7250 3650 7100 3650
 Wire Wire Line
@@ -241,7 +230,7 @@ Wire Wire Line
 Wire Wire Line
 	6400 2550 6400 2750
 Wire Wire Line
-	5750 1550 5750 2550
+	5750 2550 5750 950 
 Connection ~ 5650 2400
 Wire Wire Line
 	5400 2400 5400 3050
@@ -280,7 +269,7 @@ Wire Wire Line
 Wire Wire Line
 	4300 3450 4150 3450
 Wire Wire Line
-	7250 5750 6800 5750
+	6800 5750 7250 5750
 Wire Wire Line
 	6900 3500 6900 3650
 Wire Wire Line
@@ -288,7 +277,7 @@ Wire Wire Line
 Connection ~ 6800 5750
 Connection ~ 7100 5750
 Wire Wire Line
-	7250 4850 7250 5750
+	7250 5750 7250 4850
 Wire Wire Line
 	7100 4850 7350 4850
 Wire Wire Line
@@ -310,7 +299,7 @@ Wire Wire Line
 Connection ~ 6700 2750
 Connection ~ 7250 4850
 Wire Wire Line
-	3200 2050 3200 3350
+	3200 2000 3200 3350
 Connection ~ 3200 3350
 Wire Wire Line
 	4150 3350 4300 3350
@@ -331,33 +320,15 @@ Wire Wire Line
 Wire Wire Line
 	6300 4850 6800 4850
 Wire Wire Line
-	5000 1550 5750 1550
+	5750 950  5000 950 
 Wire Wire Line
-	5000 1650 5350 1650
+	5000 1050 5000 1300
 Wire Wire Line
-	4200 2550 6400 2550
+	2500 2550 6400 2550
 Wire Wire Line
 	4200 3350 4200 2550
 Connection ~ 5750 2550
 Connection ~ 4200 3350
-Wire Wire Line
-	5350 1650 5350 1450
-Wire Wire Line
-	3200 2050 5250 2050
-Wire Wire Line
-	5250 2050 5250 1450
-Wire Wire Line
-	5100 800  5650 800 
-Wire Wire Line
-	5650 800  5650 2400
-Wire Wire Line
-	5250 800  5250 850 
-Wire Wire Line
-	5250 1500 5100 1500
-Wire Wire Line
-	5100 1500 5100 800 
-Connection ~ 5250 800 
-Connection ~ 5250 1500
 Wire Wire Line
 	5400 3450 5550 3450
 Wire Wire Line
@@ -376,4 +347,83 @@ Wire Wire Line
 	5500 3250 5550 3250
 Wire Wire Line
 	5550 3350 5550 4800
+$Comp
+L CONN_01X04 P2
+U 1 1 57121D04
+P 5900 4000
+F 0 "P2" H 5900 4250 50  0000 C CNN
+F 1 "CONN_01X04" V 6000 4000 50  0000 C CNN
+F 2 "Pin_Headers:Pin_Header_Straight_1x04" H 5900 4000 50  0001 C CNN
+F 3 "" H 5900 4000 50  0000 C CNN
+	1    5900 4000
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5700 3850 5400 3850
+Wire Wire Line
+	5400 3950 5700 3950
+Wire Wire Line
+	5700 4050 5400 4050
+Wire Wire Line
+	5400 4150 5700 4150
+Wire Wire Line
+	5400 3350 5450 3350
+Wire Wire Line
+	5450 3350 5450 1750
+Wire Wire Line
+	5450 1750 2100 1750
+Connection ~ 4200 2550
+$Comp
+L R R5
+U 1 1 57122C38
+P 2350 2550
+F 0 "R5" V 2430 2550 50  0000 C CNN
+F 1 "R" V 2350 2550 50  0000 C CNN
+F 2 "Resistors_ThroughHole:Resistor_Horizontal_RM7mm" V 2280 2550 50  0001 C CNN
+F 3 "" H 2350 2550 50  0000 C CNN
+	1    2350 2550
+	0    1    1    0   
+$EndComp
+$Comp
+L CONN_01X01 P6
+U 1 1 57122CBD
+P 1900 2550
+F 0 "P6" H 1900 2650 50  0000 C CNN
+F 1 "CONN_01X01" V 2000 2550 50  0000 C CNN
+F 2 "Socket_Strips:Socket_Strip_Straight_1x01" H 1900 2550 50  0001 C CNN
+F 3 "" H 1900 2550 50  0000 C CNN
+	1    1900 2550
+	-1   0    0    1   
+$EndComp
+$Comp
+L CONN_01X01 P5
+U 1 1 57122DD6
+P 1900 1750
+F 0 "P5" H 1900 1850 50  0000 C CNN
+F 1 "CONN_01X01" V 2000 1750 50  0000 C CNN
+F 2 "Socket_Strips:Socket_Strip_Straight_1x01" H 1900 1750 50  0001 C CNN
+F 3 "" H 1900 1750 50  0000 C CNN
+	1    1900 1750
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	2200 2550 2100 2550
+$Comp
+L CONN_01X02 P7
+U 1 1 5712384B
+P 4800 1350
+F 0 "P7" H 4800 1500 50  0000 C CNN
+F 1 "CONN_01X02" V 4900 1350 50  0000 C CNN
+F 2 "Pin_Headers:Pin_Header_Straight_1x02" H 4800 1350 50  0001 C CNN
+F 3 "" H 4800 1350 50  0000 C CNN
+	1    4800 1350
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	5000 1400 5000 2000
+Wire Wire Line
+	3200 2000 5650 2000
+Wire Wire Line
+	5650 2000 5650 2400
+Connection ~ 5000 2000
 $EndSCHEMATC
