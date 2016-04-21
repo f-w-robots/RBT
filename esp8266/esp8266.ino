@@ -2,8 +2,6 @@
 #include <ESP8266WiFi.h>
 #include <WebSocketsClient.h>
 
-#include "DeviceRC522.h"
-
 #define MAX_MSG_LEN 256
 
 #define PIN_LED_WIFI 2
@@ -11,7 +9,6 @@
 
 #define RST_PIN 4
 #define SS_PIN  2
-DeviceRC522 *device = NULL;
 
 boolean pin_led_socket_value = LOW;
 
@@ -71,8 +68,6 @@ void setup() {
   Serial.begin(115200);
   delay(10);
 
-  device = new DeviceRC522(2, 4);
-
   while (WiFi.status() != WL_CONNECTED) {
 
     WiFi.begin(ssid, password);
@@ -113,18 +108,8 @@ void readPackages() {
   }
 }
 
-void checkInternalVirtualDevice() {
-  if (device != NULL) {
-    device->tick();
-    if (device->newData()) {
-      webSocket.sendTXT(device->readData(), 4);
-    }
-  }
-}
-
 void loop() {
   webSocket.loop();
   readPackages();
-  checkInternalVirtualDevice();
 }
 
