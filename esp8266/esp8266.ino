@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include <ESP8266WiFi.h>
 #include <WebSocketsClient.h>
+#include <EEPROM.h>
 
 #define MAX_MSG_LEN 256
 
@@ -16,12 +17,12 @@ int8_t status = 0;
 
 WebSocketsClient webSocket;
 
-char ssid[] = "robohub";
-char password[] = "robohub1";
+char *ssid;
+char *password;
 
-char address[] = "192.168.33.4";
-uint16_t port = 2500;
-char url[] = "/lh";
+char *host;
+const uint16_t port = 2500;
+char *url;
 
 const uint16_t wifiBlinkDelay = 50;
 
@@ -39,21 +40,48 @@ void webSocketEvent(WStype_t type, uint8_t *payload, size_t lenght) {
       digitalWrite(PIN_LED_SOCKET, HIGH);
       break;
     case WStype_TEXT:
-      for (int i = 0; payload[i] != 0; i++)
+      for (int i = 0; lenght != i; i++)
         Serial.write(payload[i]);
       break;
     case WStype_BIN:
+      for (int i = 0; lenght != i; i++)
+        Serial.write(payload[i]);
       break;
   }
 }
 
-void resetConnection() {
-  WiFi.disconnect();
-  for (int i = 0; i < 10; i++) {
-    delay(50);
-    digitalWrite(PIN_LED_SOCKET, HIGH);
-    delay(50);
-    digitalWrite(PIN_LED_SOCKET, LOW);
+uint8_t connectToWiFI(const char* ssid, const char* pass) {
+  WiFi.begin(ssid, pass);
+
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(wifiBlinkDelay);
+    digitalWrite(PIN_LED_WIFI, LOW);
+    delay(wifiBlinkDelay);
+    digitalWrite(PIN_LED_WIFI, HIGH);
+    if (WiFi.status() == WL_CONNECT_FAILED) {
+      WiFi.disconnect();
+      return WiFi.status();
+    }
+  }
+  return WiFi.status();
+}
+
+void loadConfig() {
+  ssid = new char[32];
+  for (int i = 0; i < 32; i++) {
+    ssid[i] = EEPROM.read(i);
+  }
+  password = new char[32];
+  for (int i = 32; i < 64; i++) {
+    password[i - 32] = EEPROM.read(i);
+  }
+  host = new char[32];
+  for (int i = 64; i < 96; i++) {
+    host[i - 64] = EEPROM.read(i);
+  }
+  url = new char[32];
+  for (int i = 96; i < 128; i++) {
+    url[i - 96] = EEPROM.read(i);
   }
 }
 
@@ -68,23 +96,17 @@ void setup() {
   Serial.begin(115200);
   delay(10);
 
+  EEPROM.begin(512);
+  loadConfig();
+
   while (WiFi.status() != WL_CONNECTED) {
+    int status = connectToWiFI(ssid, password);
+    if (status == WL_NO_SSID_AVAIL) {
 
-    WiFi.begin(ssid, password);
-
-    while (WiFi.status() != WL_CONNECTED) {
-      delay(wifiBlinkDelay);
-      digitalWrite(PIN_LED_WIFI, LOW);
-      delay(wifiBlinkDelay);
-      digitalWrite(PIN_LED_WIFI, HIGH);
-      if (WiFi.status() == WL_CONNECT_FAILED) {
-        resetConnection();
-        break;
-      }
     }
   }
 
-  webSocket.begin(address, port, url);
+  webSocket.begin(host, port, url);
   webSocket.onEvent(webSocketEvent);
 }
 
