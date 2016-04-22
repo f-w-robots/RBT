@@ -24,6 +24,15 @@ void loadConfig() {
   }
 }
 
+void writeConfig(uint8_t i, char* data) {
+  for (int j = 0; j < 32; j++) {
+    EEPROM.write(i * 32 + j, data[j]);
+  }
+  Serial.print("write ");
+  Serial.print(i + 1);
+  Serial.println(" done");
+}
+
 void setup() {
   Serial.begin(115200);
   Serial.println("begin setup");
@@ -32,12 +41,7 @@ void setup() {
   char data[4][32] = {"robohub", "robohub1", "192.168.43.252", "/bug1"};
   Serial.println("begin cicle");
   for (int i = 0; i < 4; i ++) {
-    for (int j = 0; j < 32; j++) {
-      EEPROM.write(i * 32 + j, data[i][j]);
-    }
-    Serial.print("write ");
-    Serial.print(i + 1);
-    Serial.println(" done");
+    writeConfig(i, data[i]);
   }
   EEPROM.commit();
   Serial.println("write all done");

@@ -2,20 +2,21 @@
 #include <ESP8266WiFi.h>
 #include <WebSocketsClient.h>
 #include <EEPROM.h>
+#include <ESP8266HTTPClient.h>
 
 #define MAX_MSG_LEN 256
 
 #define PIN_LED_WIFI 2
 #define PIN_LED_SOCKET 0
 
-#define RST_PIN 4
-#define SS_PIN  2
-
 boolean pin_led_socket_value = LOW;
 
 int8_t status = 0;
 
 WebSocketsClient webSocket;
+
+const char SYS_SSID[] = "kernel";
+const char SYS_PASS[] = "axtr456E";
 
 char *ssid;
 char *password;
@@ -50,7 +51,7 @@ void webSocketEvent(WStype_t type, uint8_t *payload, size_t lenght) {
   }
 }
 
-uint8_t connectToWiFI(const char* ssid, const char* pass) {
+uint8_t connectToWiFi(const char* ssid, const char* pass) {
   WiFi.begin(ssid, pass);
 
   while (WiFi.status() != WL_CONNECTED) {
@@ -58,9 +59,10 @@ uint8_t connectToWiFI(const char* ssid, const char* pass) {
     digitalWrite(PIN_LED_WIFI, LOW);
     delay(wifiBlinkDelay);
     digitalWrite(PIN_LED_WIFI, HIGH);
-    if (WiFi.status() == WL_CONNECT_FAILED) {
+    if (WiFi.status() == WL_CONNECT_FAILED || WiFi.status() == WL_NO_SSID_AVAIL) {
+      int status = WiFi.status();
       WiFi.disconnect();
-      return WiFi.status();
+      return status;
     }
   }
   return WiFi.status();
@@ -85,6 +87,38 @@ void loadConfig() {
   }
 }
 
+void updateConfig() {
+  while (WiFi.status() != WL_CONNECTED) {
+    connectToWiFi(SYS_SSID, SYS_PASS);
+  }
+  HTTPClient http;
+  char* payload = new char[32];
+
+  http.begin("http://192.168.4.1/ssid.txt");
+  http.GET();
+  http.getString().toCharArray(payload, 32);
+  writeConfig(0, payload, strlen(payload));
+  http.begin("http://192.168.4.1/pass");
+  http.GET();
+  http.getString().toCharArray(payload, 32);
+  writeConfig(1, payload, strlen(payload));
+  http.begin("http://192.168.4.1/host");
+  http.GET();
+  http.getString().toCharArray(payload, 32);
+  writeConfig(2, payload, strlen(payload));
+  
+  EEPROM.commit();
+  WiFi.disconnect();
+}
+
+void writeConfig(uint8_t i, char* data, uint8_t length) {
+  int j = 0;
+  for (; j < 32 && j < length; j++) {
+    EEPROM.write(i * 32 + j, data[j]);
+  }
+  EEPROM.write(i * 32 + j, 0);
+}
+
 void setup() {
   WiFi.softAPdisconnect(true);
 
@@ -100,9 +134,10 @@ void setup() {
   loadConfig();
 
   while (WiFi.status() != WL_CONNECTED) {
-    int status = connectToWiFI(ssid, password);
+    int status = connectToWiFi(ssid, password);
     if (status == WL_NO_SSID_AVAIL) {
-
+      updateConfig();
+      loadConfig();
     }
   }
 
