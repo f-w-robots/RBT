@@ -2,25 +2,19 @@
 #include <ESP8266WiFi.h>
 #include <WebSocketsClient.h>
 #include <EEPROM.h>
-#include <ESP8266HTTPClient.h>
+#include <ESP8266WebServer.h>
+
+#include "DeviceRC522.h"
 
 #define MAX_MSG_LEN 256
 
-#define PIN_LED_WIFI 2
-#define PIN_LED_SOCKET 0
+DeviceRC522 *device = NULL;
 
-
-#include "DeviceRC522.h"//patch
-DeviceRC522 *device = NULL;//patch
+ESP8266WebServer server(80);
 
 boolean pin_led_socket_value = LOW;
 
-int8_t status = 0;
-
 WebSocketsClient webSocket;
-
-const char SYS_SSID[] = "kernel";
-const char SYS_PASS[] = "axtr456E";
 
 char *ssid;
 char *password;
@@ -34,16 +28,8 @@ const uint16_t wifiBlinkDelay = 50;
 void webSocketEvent(WStype_t type, uint8_t *payload, size_t lenght) {
   switch (type) {
     case WStype_DISCONNECTED:
-      if (status) {
-        digitalWrite(PIN_LED_WIFI, HIGH);
-        digitalWrite(PIN_LED_SOCKET, HIGH);
-      }
       break;
     case WStype_CONNECTED:
-      status = 1;
-      digitalWrite(PIN_LED_WIFI, LOW);
-      digitalWrite(PIN_LED_SOCKET, HIGH);
-      Serial.write(0);
       break;
     case WStype_TEXT:
       for (int i = 0; lenght != i; i++)
@@ -60,10 +46,7 @@ uint8_t connectToWiFi(const char* ssid, const char* pass) {
   WiFi.begin(ssid, pass);
 
   while (WiFi.status() != WL_CONNECTED) {
-    delay(wifiBlinkDelay);
-    digitalWrite(PIN_LED_WIFI, LOW);
-    delay(wifiBlinkDelay);
-    digitalWrite(PIN_LED_WIFI, HIGH);
+    delay(100);
     if (WiFi.status() == WL_CONNECT_FAILED || WiFi.status() == WL_NO_SSID_AVAIL) {
       int status = WiFi.status();
       WiFi.disconnect();
@@ -92,30 +75,6 @@ void loadConfig() {
   }
 }
 
-void updateConfig() {
-  while (WiFi.status() != WL_CONNECTED) {
-    connectToWiFi(SYS_SSID, SYS_PASS);
-  }
-  HTTPClient http;
-  char* payload = new char[32];
-
-  http.begin("http://192.168.4.1/ssid.txt");
-  http.GET();
-  http.getString().toCharArray(payload, 32);
-  writeConfig(0, payload, strlen(payload));
-  http.begin("http://192.168.4.1/pass");
-  http.GET();
-  http.getString().toCharArray(payload, 32);
-  writeConfig(1, payload, strlen(payload));
-  http.begin("http://192.168.4.1/host");
-  http.GET();
-  http.getString().toCharArray(payload, 32);
-  writeConfig(2, payload, strlen(payload));
-
-  EEPROM.commit();
-  WiFi.disconnect();
-}
-
 void writeConfig(uint8_t i, char* data, uint8_t length) {
   int j = 0;
   for (; j < 32 && j < length; j++) {
@@ -124,29 +83,77 @@ void writeConfig(uint8_t i, char* data, uint8_t length) {
   EEPROM.write(i * 32 + j, 0);
 }
 
+void startServer() {
+  Serial.println("Start server");
+  server.on("/ssid", [](){
+    Serial.println("FFF");
+    server.send(200, "text/plain", ssid);
+  });
+
+  server.on("/password", [](){
+    server.send(200, "text/plain", password);
+  });
+
+  server.on("/host", [](){
+    server.send(200, "text/plain", host);
+  });
+
+  server.on("/", HTTP_GET, [](){
+    server.sendHeader("Connection", "close");
+    server.sendHeader("Access-Control-Allow-Origin", "*");
+    server.send ( 200, "text/html", "<html>\
+      <head>\
+        <title>Configure</title>\
+        <style>\
+          body { background-color: #cccccc; font-family: Arial, Helvetica, Sans-Serif; Color: #000088; }\
+        </style>\
+      </head>\
+      <body>\
+        <h1>Please enter you router config!</h1>\
+        <form action='/' method='POST'>\
+          SSID:<br>\
+          <input type='text' name='ssid'><br>\
+          PASSWORD:<br>\
+          <input type='password' name='password'><br>\
+          <input type='submit'>\
+        </form>\
+      </body>\
+      </html>");
+   });
+
+   server.on("/", HTTP_POST, [](){
+    if (server.hasArg("ssid") && server.hasArg("password")){
+      char* payload = new char[32];
+      server.arg("ssid").toCharArray(payload, 32);
+      writeConfig(0, payload, 32);
+      server.arg("password").toCharArray(payload, 32);
+      writeConfig(1, payload, 32);
+    }
+    server.sendHeader("Connection", "close");
+    server.sendHeader("Access-Control-Allow-Origin", "*");
+    server.send ( 200, "text/html", "all_saved");
+   });
+
+  server.begin();
+  Serial.println("server.begin();");
+}
+
 void setup() {
   WiFi.softAPdisconnect(true);
-
-  pinMode(PIN_LED_WIFI, OUTPUT);
-  pinMode(PIN_LED_SOCKET, OUTPUT);
-  digitalWrite(PIN_LED_WIFI, HIGH);
-  digitalWrite(PIN_LED_SOCKET, LOW);
 
   Serial.begin(115200);
   delay(10);
 
-  device = new DeviceRC522(2, 4);//patch
+  device = new DeviceRC522(2, 4);
 
   EEPROM.begin(512);
   loadConfig();
-
+  Serial.println("config loaded");
   while (WiFi.status() != WL_CONNECTED) {
-    int status = connectToWiFi(ssid, password);
-    if (status == WL_NO_SSID_AVAIL) {
-      updateConfig();
-      loadConfig();
-    }
+    connectToWiFi(ssid, password);
   }
+
+  startServer();
 
   webSocket.begin(host, port, url);
   webSocket.onEvent(webSocketEvent);
@@ -174,7 +181,6 @@ void readPackages() {
   }
 }
 
-//*patch
 void checkInternalVirtualDevice() {
   if (device != NULL) {
     device->tick();
@@ -183,10 +189,11 @@ void checkInternalVirtualDevice() {
     }
   }
 }
-//*
+
 void loop() {
   webSocket.loop();
+  server.handleClient();
   readPackages();
-  checkInternalVirtualDevice();//patch
+  checkInternalVirtualDevice();
 }
 

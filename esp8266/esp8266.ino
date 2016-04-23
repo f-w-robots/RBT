@@ -106,7 +106,7 @@ void updateConfig() {
   http.GET();
   http.getString().toCharArray(payload, 32);
   writeConfig(2, payload, strlen(payload));
-  
+
   EEPROM.commit();
   WiFi.disconnect();
 }
@@ -169,4 +169,3 @@ void loop() {
   webSocket.loop();
   readPackages();
 }
-
