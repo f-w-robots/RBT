@@ -2,10 +2,10 @@
 
 #include "I2C.h"
 
-I2C::I2C(char deviceId, InCallback inCallback, OutCallback outCallback) {
+I2C::I2C(char deviceId, uint8_t *data, boolean *newPackage) {
   this->deviceId = deviceId;
-  this->inCallback = inCallback;
-  this->outCallback = outCallback;
+  this->package = data;
+  this->newPackage = newPackage;
 }
 
 boolean I2C::check() {
@@ -14,77 +14,47 @@ boolean I2C::check() {
 
   char c = Serial.read();
 
-  if(c == '~') {
+  if (!init && (c == initByte)) {
+    init = true;
     switchLed13();
-    needPackageSize = false;
-    readPackage = false;
-    dataCount = 0;
     return init;
   }
 
-  if (needPackageSize) {
-    needPackageSize = false;
-    _nextPackage(c - 48);
+  if(!init)
+    return init;
+
+  if (!packageRead) {
+    dbgMsg("beginReadPakcage");
+    packageSize = 0;
+    packageRead = true;
+    packageId = c;
     return init;
   }
 
-  if (readPackage) {
-    if (!pinId) {
-      pinId = c;
-    } else {
-      dbgMsg("write Value");
-      if (pinId != ' ')
-        inCallback(pinId - 32, c);
-      pinId = 0;
-    }
-  }
-
-  if (dataCount > 0) {
-    dataCount --;
-    if (dataCount == 0) {
-      if (readPackage) {
-        readPackage = false;
-        outCallback();
-      }
-      dbgMsg("endPackage");
-    }
+  if (packageSize == 0) {
+    dbgMsg("setPackageSize");
+    packageSize = c;
+    packageI = 0;
     return init;
   }
 
-  if (!init) {
-    _checkInit(c);
-  } else {
-    if (c != deviceId) {
-      needPackageSize = true;
-      dbgMsg("NO");
-    } else {
-      needPackageSize = true;
-      readPackage = true;
-      dbgMsg("OK");
-    }
+  if (acceptPackage()) {
+    package[packageI] = c;
+    dbgMsg("readPackage");
   }
-  return init;
-}
+  packageI ++;
+  dbgMsg("packageI++");
 
-void I2C::_checkInit(char c) {
-  if (!initArr[initI] &&  c == initMask[initI]) {
-    initI ++;
-    if (initI >= initPackageSize) {
-      init = true;
-      dbgMsg("init");
-      digitalWrite(13, HIGH);
-    }
-  } else {
-    initI = 0;
+  if (packageI == packageSize) {
+    dbgMsg("packageEnd");
+    packageRead = false;
+    if (acceptPackage())
+      *newPackage = true;
   }
 }
 
-void I2C::_nextPackage(uint8_t size) {
-  dataCount = size;
-}
-
-void I2C::responseStart(uint8_t size) {
-  Serial.write((char)(size + 48));
+boolean I2C::acceptPackage() {
+  return packageId == deviceId;
 }
 
 void I2C::response(char c) {

@@ -1,37 +1,28 @@
 #ifndef I2C_h
 #define I2C_h
 
-typedef void (*InCallback)(uint8_t pin, char c);
-typedef void (*OutCallback)();
-
 class I2C
 {
   public:
-    I2C(char deviceId, InCallback inCallback, OutCallback outCallback);
+    I2C(char deviceId, uint8_t *data, boolean *newPackage);
     boolean check();
-    void responseStart(uint8_t size);
     void response(char c);
 
   private:
-    void _checkInit(char c);
-    void _nextPackage(uint8_t size);
+    boolean acceptPackage();
     void dbgMsg(char msg[]);
     void switchLed13();
 
     boolean led13State = false;
+    byte initByte = 29;
     boolean init = false;
-    static const uint8_t initPackageSize = 6;
-    boolean initArr[initPackageSize] = {false, false, false, false, false, false};
-    char initMask[initPackageSize] = {'0', '4', 'I', 'N', 'I', 'T'};
-    uint8_t initI = 0;
-    uint16_t dataCount = 0;
-    char deviceId = 0;
-    int pinId = 0;
-    boolean needPackageSize = false;
-    boolean readPackage = false;
-    boolean packageSize = false;
-    InCallback inCallback;
-    OutCallback outCallback;
+    uint8_t *package;
+    uint8_t deviceId = 0;
+    uint8_t packageSize = 0;
+    uint8_t packageI = 0;
+    uint8_t packageId = 0;
+    boolean packageRead = false;
+    boolean *newPackage;
 };
 
 #endif

@@ -39,6 +39,7 @@ void webSocketEvent(WStype_t type, uint8_t *payload, size_t lenght) {
       status = 1;
       digitalWrite(PIN_LED_WIFI, LOW);
       digitalWrite(PIN_LED_SOCKET, HIGH);
+      Serial.write(29);
       break;
     case WStype_TEXT:
       for (int i = 0; lenght != i; i++)
@@ -152,7 +153,7 @@ char package[256];
 void readPackages() {
   if (Serial.available() > 0) {
     if (packageLen == 0) {
-      packageLen = Serial.read() - 48;
+      packageLen = Serial.read();
     } else {
       package[packageI] = Serial.read();
       packageI++;
