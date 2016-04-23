@@ -11,6 +11,8 @@
 DeviceRC522 *device = NULL;
 
 ESP8266WebServer server(80);
+const char SYS_SSID[] = "robo";
+const char SYS_PASS[] = "robo";
 
 boolean pin_led_socket_value = LOW;
 
@@ -139,7 +141,7 @@ void startServer() {
 }
 
 void setup() {
-  WiFi.softAPdisconnect(true);
+  WiFi.softAP(SYS_SSID, SYS_PASS);
 
   Serial.begin(115200);
   delay(10);

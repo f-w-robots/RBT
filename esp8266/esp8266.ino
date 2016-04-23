@@ -15,8 +15,8 @@ int8_t status = 0;
 
 WebSocketsClient webSocket;
 
-const char SYS_SSID[] = "kernel";
-const char SYS_PASS[] = "axtr456E";
+const char SYS_SSID[] = "robo";
+const char SYS_PASS[] = "robo";
 
 char *ssid;
 char *password;
