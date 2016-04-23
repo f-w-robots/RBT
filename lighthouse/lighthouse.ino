@@ -146,7 +146,7 @@ void setup() {
   Serial.begin(115200);
   delay(10);
 
-  device = new DeviceRC522(2, 4);
+  device = new DeviceRC522(4, 5);
 
   EEPROM.begin(512);
   loadConfig();

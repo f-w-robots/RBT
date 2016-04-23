@@ -114,12 +114,12 @@ $EndComp
 $Comp
 L LED D2
 U 1 1 571A6EF4
-P 2050 3200
-F 0 "D2" H 2050 3300 50  0000 C CNN
-F 1 "LED" H 2050 3100 50  0000 C CNN
-F 2 "LEDs:LED-5MM" H 2050 3200 50  0001 C CNN
-F 3 "" H 2050 3200 50  0000 C CNN
-	1    2050 3200
+P 1900 2500
+F 0 "D2" H 1900 2600 50  0000 C CNN
+F 1 "LED" H 1900 2400 50  0000 C CNN
+F 2 "LEDs:LED-5MM" H 1900 2500 50  0001 C CNN
+F 3 "" H 1900 2500 50  0000 C CNN
+	1    1900 2500
 	0    1    1    0   
 $EndComp
 $Comp
@@ -137,7 +137,7 @@ $Comp
 L R R2
 U 1 1 571A710A
 P 2400 2650
-F 0 "R2" V 2480 2650 50  0000 C CNN
+F 0 "R2" V 2300 2650 50  0000 C CNN
 F 1 "1k" V 2400 2650 50  0000 C CNN
 F 2 "Resistors_ThroughHole:Resistor_Horizontal_RM7mm" V 2330 2650 50  0001 C CNN
 F 3 "" H 2400 2650 50  0000 C CNN
@@ -147,12 +147,12 @@ $EndComp
 $Comp
 L R R1
 U 1 1 571A724A
-P 2350 3450
-F 0 "R1" V 2430 3450 50  0000 C CNN
-F 1 "1k" V 2350 3450 50  0000 C CNN
-F 2 "Resistors_ThroughHole:Resistor_Horizontal_RM7mm" V 2280 3450 50  0001 C CNN
-F 3 "" H 2350 3450 50  0000 C CNN
-	1    2350 3450
+P 2400 2750
+F 0 "R1" V 2480 2750 50  0000 C CNN
+F 1 "1k" V 2400 2750 50  0000 C CNN
+F 2 "Resistors_ThroughHole:Resistor_Horizontal_RM7mm" V 2330 2750 50  0001 C CNN
+F 3 "" H 2400 2750 50  0000 C CNN
+	1    2400 2750
 	0    1    1    0   
 $EndComp
 $Comp
@@ -167,25 +167,15 @@ F 3 "" H 3450 3350 60  0000 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	4700 2550 4700 1950
+	4700 1950 4700 2550
 Wire Wire Line
-	4700 1950 1950 1950
-Wire Wire Line
-	1950 1950 1950 2750
-Wire Wire Line
-	1950 2750 2600 2750
+	1700 1950 4700 1950
 Wire Wire Line
 	3800 2750 5250 2750
 Wire Wire Line
 	3800 2950 4400 2950
 Wire Wire Line
 	3800 2850 5250 2850
-Wire Wire Line
-	4950 3900 4950 3250
-Wire Wire Line
-	2600 3900 4950 3900
-Wire Wire Line
-	2600 3900 2600 3650
 Wire Wire Line
 	4350 3050 4350 3550
 Wire Wire Line
@@ -199,7 +189,7 @@ Wire Wire Line
 Wire Wire Line
 	4250 2150 4250 3250
 Wire Wire Line
-	5250 2550 4700 2550
+	4700 2550 5250 2550
 Wire Wire Line
 	4250 3250 4150 3250
 Wire Wire Line
@@ -213,7 +203,7 @@ Connection ~ 3050 2150
 Wire Wire Line
 	2550 2650 2600 2650
 Wire Wire Line
-	2050 2200 4150 2200
+	1900 2200 4150 2200
 Wire Wire Line
 	4150 2200 4150 2650
 Connection ~ 3350 2200
@@ -221,21 +211,11 @@ Wire Wire Line
 	3850 2650 3800 2650
 Wire Wire Line
 	3050 2150 4250 2150
-Wire Wire Line
-	2050 3000 2050 2200
 Connection ~ 2150 2200
 Wire Wire Line
 	4550 3450 3800 3450
 Wire Wire Line
 	4550 3150 4550 3450
-Wire Wire Line
-	2500 3450 2600 3450
-Wire Wire Line
-	2550 3550 2600 3550
-Wire Wire Line
-	2050 3450 2200 3450
-Wire Wire Line
-	2050 3400 2050 3450
 Wire Wire Line
 	2150 2250 2150 2200
 Wire Wire Line
@@ -253,4 +233,16 @@ Wire Wire Line
 Wire Wire Line
 	5150 1750 3050 1750
 Connection ~ 3050 1750
+Wire Wire Line
+	2550 2750 2600 2750
+Wire Wire Line
+	1900 2700 1900 2750
+Wire Wire Line
+	1900 2750 2250 2750
+Wire Wire Line
+	1900 2300 1900 2200
+Wire Wire Line
+	1700 1950 1700 3450
+Wire Wire Line
+	1700 3450 2600 3450
 $EndSCHEMATC
