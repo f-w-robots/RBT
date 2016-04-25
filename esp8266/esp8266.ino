@@ -8,9 +8,7 @@
 
 #define PIN_LED_WIFI 2
 #define PIN_LED_SOCKET 0
-
-boolean pin_led_socket_value = LOW;
-
+const uint16_t wifiBlinkDelay = 50;
 int8_t status = 0;
 
 WebSocketsClient webSocket;
@@ -24,8 +22,6 @@ char *password;
 char *host;
 const uint16_t port = 2500;
 char *url;
-
-const uint16_t wifiBlinkDelay = 50;
 
 void webSocketEvent(WStype_t type, uint8_t *payload, size_t lenght) {
   switch (type) {

@@ -6,9 +6,14 @@
 
 #include "DeviceRC522.h"
 
+DeviceRC522 *device = NULL;
+
 #define MAX_MSG_LEN 256
 
-DeviceRC522 *device = NULL;
+#define PIN_LED_WIFI 2
+#define PIN_LED_SOCKET 0
+const uint16_t wifiBlinkDelay = 50;
+int8_t status = 0;
 
 ESP8266WebServer server(80);
 const char SYS_SSID[] = "robolight";
@@ -25,13 +30,18 @@ char *host;
 const uint16_t port = 2500;
 char *url;
 
-const uint16_t wifiBlinkDelay = 50;
-
 void webSocketEvent(WStype_t type, uint8_t *payload, size_t lenght) {
   switch (type) {
     case WStype_DISCONNECTED:
+      if (status) {
+        digitalWrite(PIN_LED_WIFI, HIGH);
+        digitalWrite(PIN_LED_SOCKET, HIGH);
+      }
       break;
     case WStype_CONNECTED:
+      status = 1;
+      digitalWrite(PIN_LED_WIFI, LOW);
+      digitalWrite(PIN_LED_SOCKET, HIGH);
       break;
     case WStype_TEXT:
       for (int i = 0; lenght != i; i++)
@@ -44,11 +54,16 @@ void webSocketEvent(WStype_t type, uint8_t *payload, size_t lenght) {
   }
 }
 
+
+
 uint8_t connectToWiFi(const char* ssid, const char* pass) {
   WiFi.begin(ssid, pass);
 
   while (WiFi.status() != WL_CONNECTED) {
-    delay(100);
+    delay(wifiBlinkDelay);
+    digitalWrite(PIN_LED_WIFI, LOW);
+    delay(wifiBlinkDelay);
+    digitalWrite(PIN_LED_WIFI, HIGH);
     if (WiFi.status() == WL_CONNECT_FAILED || WiFi.status() == WL_NO_SSID_AVAIL) {
       int status = WiFi.status();
       WiFi.disconnect();
@@ -143,6 +158,11 @@ void startServer() {
 }
 
 void setup() {
+  pinMode(PIN_LED_WIFI, OUTPUT);
+  pinMode(PIN_LED_SOCKET, OUTPUT);
+  digitalWrite(PIN_LED_WIFI, HIGH);
+  digitalWrite(PIN_LED_SOCKET, LOW);
+
   WiFi.softAP(SYS_SSID, SYS_PASS);
 
   Serial.begin(115200);
@@ -185,10 +205,10 @@ void readPackages() {
 }
 
 void checkInternalVirtualDevice() {
-  if (device != NULL) {
+  if (device != NULL && status > 0) {
     device->tick();
     if (device->newData()) {
-      webSocket.sendTXT(device->readData(), 4);
+      webSocket.sendTXT(device->readData(), 3);
     }
   }
 }
@@ -197,6 +217,7 @@ void loop() {
   webSocket.loop();
   server.handleClient();
   readPackages();
+
   checkInternalVirtualDevice();
 }
 

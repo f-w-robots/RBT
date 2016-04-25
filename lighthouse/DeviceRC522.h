@@ -13,9 +13,10 @@ class DeviceRC522
 
   private:
     MFRC522 *mfrc522;
-    char buffer[4];
+    char buffer[6];
     boolean updated;
     void dump_byte_array(byte *buffer, byte bufferSize);
+    unsigned long oldTimeValue = 0;
 };
 
 #endif

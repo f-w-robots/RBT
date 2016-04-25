@@ -8,6 +8,10 @@ DeviceRC522::DeviceRC522(uint8_t ss_pin, uint8_t rst_pin) {
 }
 
 void DeviceRC522::tick() {
+  unsigned long newTimeValue = millis() / 300;
+  if (newTimeValue == oldTimeValue) {
+    return;
+  }
   if ( ! mfrc522->PICC_IsNewCardPresent()) {
     return;
   }
