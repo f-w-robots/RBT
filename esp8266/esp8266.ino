@@ -15,8 +15,8 @@ int8_t status = 0;
 
 WebSocketsClient webSocket;
 
-const char SYS_SSID[] = "robo";
-const char SYS_PASS[] = "robo";
+const char SYS_SSID[] = "robolight";
+const char SYS_PASS[] = "robolight";
 
 char *ssid;
 char *password;
@@ -94,17 +94,20 @@ void updateConfig() {
   HTTPClient http;
   char* payload = new char[32];
 
-  http.begin("http://192.168.4.1/ssid.txt");
+  http.begin("http://192.168.4.1/ssid");
   http.GET();
   http.getString().toCharArray(payload, 32);
+  payload[strlen(payload)] = 0;
   writeConfig(0, payload, strlen(payload));
-  http.begin("http://192.168.4.1/pass");
+  http.begin("http://192.168.4.1/password");
   http.GET();
   http.getString().toCharArray(payload, 32);
+  payload[strlen(payload)] = 0;
   writeConfig(1, payload, strlen(payload));
   http.begin("http://192.168.4.1/host");
   http.GET();
   http.getString().toCharArray(payload, 32);
+  payload[strlen(payload)] = 0;
   writeConfig(2, payload, strlen(payload));
 
   EEPROM.commit();

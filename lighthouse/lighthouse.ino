@@ -11,8 +11,8 @@
 DeviceRC522 *device = NULL;
 
 ESP8266WebServer server(80);
-const char SYS_SSID[] = "robo";
-const char SYS_PASS[] = "robo";
+const char SYS_SSID[] = "robolight";
+const char SYS_PASS[] = "robolight";
 
 boolean pin_led_socket_value = LOW;
 
@@ -86,21 +86,20 @@ void writeConfig(uint8_t i, char* data, uint8_t length) {
 }
 
 void startServer() {
-  Serial.println("Start server");
-  server.on("/ssid", [](){
-    Serial.println("FFF");
+  server.on("/ssid", []() {
+
     server.send(200, "text/plain", ssid);
   });
 
-  server.on("/password", [](){
+  server.on("/password", []() {
     server.send(200, "text/plain", password);
   });
 
-  server.on("/host", [](){
+  server.on("/host", []() {
     server.send(200, "text/plain", host);
   });
 
-  server.on("/", HTTP_GET, [](){
+  server.on("/", HTTP_GET, []() {
     server.sendHeader("Connection", "close");
     server.sendHeader("Access-Control-Allow-Origin", "*");
     server.send ( 200, "text/html", "<html>\
@@ -117,27 +116,30 @@ void startServer() {
           <input type='text' name='ssid'><br>\
           PASSWORD:<br>\
           <input type='password' name='password'><br>\
+          HOST:<br>\
+          <input type='host' name='host'><br>\
           <input type='submit'>\
         </form>\
       </body>\
       </html>");
-   });
+  });
 
-   server.on("/", HTTP_POST, [](){
-    if (server.hasArg("ssid") && server.hasArg("password")){
+  server.on("/", HTTP_POST, []() {
+    if (server.hasArg("ssid") && server.hasArg("password")) {
       char* payload = new char[32];
       server.arg("ssid").toCharArray(payload, 32);
       writeConfig(0, payload, 32);
       server.arg("password").toCharArray(payload, 32);
       writeConfig(1, payload, 32);
+      server.arg("host").toCharArray(payload, 32);
+      writeConfig(2, payload, 32);
     }
     server.sendHeader("Connection", "close");
     server.sendHeader("Access-Control-Allow-Origin", "*");
     server.send ( 200, "text/html", "all_saved");
-   });
+  });
 
   server.begin();
-  Serial.println("server.begin();");
 }
 
 void setup() {
@@ -150,7 +152,6 @@ void setup() {
 
   EEPROM.begin(512);
   loadConfig();
-  Serial.println("config loaded");
   while (WiFi.status() != WL_CONNECTED) {
     connectToWiFi(ssid, password);
   }
