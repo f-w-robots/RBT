@@ -2,6 +2,7 @@
 #include <ESP8266WiFi.h>
 #include <WebSocketsClient.h>
 #include <EEPROM.h>
+#include <Ticker.h>
 #include <ESP8266WebServer.h>
 
 #include "DeviceRC522.h"
@@ -12,7 +13,6 @@ DeviceRC522 *device = NULL;
 
 #define PIN_LED_WIFI 2
 #define PIN_LED_SOCKET 0
-const uint16_t wifiBlinkDelay = 50;
 int8_t status = 0;
 
 ESP8266WebServer server(80);
@@ -30,8 +30,7 @@ char *host;
 const uint16_t port = 2500;
 char *url;
 
-//char *allowIds = new char[1];
-char *allowIds = "bug1\nbug2";
+char *allowIds = "";
 
 void webSocketEvent(WStype_t type, uint8_t *payload, size_t lenght) {
   switch (type) {
@@ -66,23 +65,6 @@ void webSocketEvent(WStype_t type, uint8_t *payload, size_t lenght) {
         Serial.write(payload[i]);
       break;
   }
-}
-
-uint8_t connectToWiFi(const char* ssid, const char* pass) {
-  WiFi.begin(ssid, pass);
-
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(wifiBlinkDelay);
-    digitalWrite(PIN_LED_WIFI, LOW);
-    delay(wifiBlinkDelay);
-    digitalWrite(PIN_LED_WIFI, HIGH);
-    if (WiFi.status() == WL_CONNECT_FAILED || WiFi.status() == WL_NO_SSID_AVAIL) {
-      int status = WiFi.status();
-      WiFi.disconnect();
-      return status;
-    }
-  }
-  return WiFi.status();
 }
 
 void loadConfig() {
@@ -149,19 +131,15 @@ void startServer() {
   });
 
   server.on("/host", []() {
-    Serial.println("1000");
     if (server.hasArg("id")) {
       if (allowConenctFor(server.arg("id"))) {
         server.send(200, "text/plain", host);
-        Serial.println("200");
       } else {
         webSocket.sendTXT("id:" + server.arg("id"));
         server.send(403, "text/plain", "");
-        Serial.println("403");
       }
     } else {
       server.send(404, "text/plain", "");
-      Serial.println("404");
     }
   });
 
@@ -194,7 +172,7 @@ void startServer() {
         </form>\
       </body>\
       </html>";
-    server.send ( 200, "text/html", page);
+    server.send( 200, "text/html", page);
   });
 
   server.on("/", HTTP_POST, []() {
@@ -206,6 +184,8 @@ void startServer() {
       writeConfig(1, payload, 32);
       server.arg("host").toCharArray(payload, 32);
       writeConfig(2, payload, 32);
+      writeConfig(3, url, 32);
+      EEPROM.commit();
     }
     server.sendHeader("Connection", "close");
     server.sendHeader("Access-Control-Allow-Origin", "*");
@@ -215,11 +195,13 @@ void startServer() {
   server.begin();
 }
 
+Ticker sta_tick;
+
 void setup() {
   pinMode(PIN_LED_WIFI, OUTPUT);
   pinMode(PIN_LED_SOCKET, OUTPUT);
-  digitalWrite(PIN_LED_WIFI, HIGH);
-  digitalWrite(PIN_LED_SOCKET, LOW);
+  digitalWrite(PIN_LED_WIFI, LOW);
+  digitalWrite(PIN_LED_SOCKET, HIGH);
 
   WiFi.softAP(SYS_SSID, SYS_PASS);
 
@@ -230,14 +212,21 @@ void setup() {
 
   EEPROM.begin(512);
   loadConfig();
-  while (WiFi.status() != WL_CONNECTED) {
-    connectToWiFi(ssid, password);
-  }
 
   startServer();
 
+  WiFi.begin(ssid, password);
+  sta_tick.attach(10, staCheck);
+
   webSocket.begin(host, port, url);
   webSocket.onEvent(webSocketEvent);
+}
+
+void staCheck() {
+  sta_tick.detach();
+  if (!(uint32_t)WiFi.localIP()) {
+    WiFi.mode(WIFI_AP);
+  }
 }
 
 int packageLen = 0;
@@ -272,10 +261,14 @@ void checkInternalVirtualDevice() {
 }
 
 void loop() {
-  webSocket.loop();
-  server.handleClient();
-  readPackages();
+  if (WiFi.status() == WL_CONNECTED) {
+    digitalWrite(PIN_LED_WIFI, HIGH);
+    digitalWrite(PIN_LED_SOCKET, LOW);
 
-  checkInternalVirtualDevice();
+    webSocket.loop();
+    readPackages();
+    checkInternalVirtualDevice();
+  }
+  server.handleClient();
 }
 
