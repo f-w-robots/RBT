@@ -117,7 +117,7 @@ void startServer() {
   server.on("/", HTTP_GET, []() {
     server.sendHeader("Connection", "close");
     server.sendHeader("Access-Control-Allow-Origin", "*");
-    server.send ( 200, "text/html", "<html>\
+    String page = "<html>\
       <head>\
         <title>Configure</title>\
         <style>\
@@ -128,15 +128,20 @@ void startServer() {
         <h1>Please enter you router config!</h1>\
         <form action='/' method='POST'>\
           SSID:<br>\
-          <input type='text' name='ssid'><br>\
+          <input type='text' name='ssid' value='";
+    page += ssid;
+    page += "'><br>\
           PASSWORD:<br>\
           <input type='password' name='password'><br>\
           HOST:<br>\
-          <input type='host' name='host'><br>\
+          <input type='host' name='host' value='";
+    page += host;
+    page += "'><br>\
           <input type='submit'>\
         </form>\
       </body>\
-      </html>");
+      </html>";
+    server.send ( 200, "text/html", page);
   });
 
   server.on("/", HTTP_POST, []() {
@@ -208,7 +213,7 @@ void checkInternalVirtualDevice() {
   if (device != NULL && status > 0) {
     device->tick();
     if (device->newData()) {
-      webSocket.sendTXT(device->readData(), 3);
+      webSocket.sendTXT(device->readData(), 4);
     }
   }
 }

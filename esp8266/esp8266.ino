@@ -47,14 +47,14 @@ void webSocketEvent(WStype_t type, uint8_t *payload, size_t lenght) {
   }
 }
 
-uint8_t connectToWiFi(const char* ssid, const char* pass) {
+uint8_t connectToWiFi(const char* ssid, const char* pass, int8_t wifi_pin = PIN_LED_WIFI) {
   WiFi.begin(ssid, pass);
 
   while (WiFi.status() != WL_CONNECTED) {
     delay(wifiBlinkDelay);
-    digitalWrite(PIN_LED_WIFI, LOW);
+    digitalWrite(wifi_pin, LOW);
     delay(wifiBlinkDelay);
-    digitalWrite(PIN_LED_WIFI, HIGH);
+    digitalWrite(wifi_pin, HIGH);
     if (WiFi.status() == WL_CONNECT_FAILED || WiFi.status() == WL_NO_SSID_AVAIL) {
       int status = WiFi.status();
       WiFi.disconnect();
@@ -85,8 +85,10 @@ void loadConfig() {
 
 void updateConfig() {
   while (WiFi.status() != WL_CONNECTED) {
-    connectToWiFi(SYS_SSID, SYS_PASS);
+    connectToWiFi(SYS_SSID, SYS_PASS, PIN_LED_SOCKET);
   }
+  digitalWrite(PIN_LED_WIFI, HIGH);
+  digitalWrite(PIN_LED_SOCKET, HIGH);
   HTTPClient http;
   char* payload = new char[32];
 
@@ -123,23 +125,22 @@ void setup() {
 
   pinMode(PIN_LED_WIFI, OUTPUT);
   pinMode(PIN_LED_SOCKET, OUTPUT);
-  digitalWrite(PIN_LED_WIFI, HIGH);
+  digitalWrite(PIN_LED_WIFI, LOW);
   digitalWrite(PIN_LED_SOCKET, LOW);
 
   Serial.begin(115200);
   delay(10);
 
   EEPROM.begin(512);
+  updateConfig();
   loadConfig();
+  EEPROM.end();
 
+  digitalWrite(PIN_LED_WIFI, LOW);
+  digitalWrite(PIN_LED_SOCKET, LOW);
   while (WiFi.status() != WL_CONNECTED) {
     int status = connectToWiFi(ssid, password);
-    if (status == WL_NO_SSID_AVAIL) {
-      updateConfig();
-      loadConfig();
-    }
   }
-
   webSocket.begin(host, port, url);
   webSocket.onEvent(webSocketEvent);
 }

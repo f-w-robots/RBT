@@ -27,7 +27,7 @@ boolean DeviceRC522::newData() {
   return updated;
 }
 
-char *DeviceRC522::readData() {
+byte *DeviceRC522::readData() {
   updated = false;
   return buffer;
 }
@@ -36,6 +36,7 @@ void DeviceRC522::dump_byte_array(byte *buffer, byte bufferSize) {
   for (byte i = 0; i < bufferSize && i < 4; i++) {
     this->buffer[i] = buffer[i];
   }
+  buffer[4] = 0;
   updated = true;
 }
 
