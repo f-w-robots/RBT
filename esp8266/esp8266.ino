@@ -83,14 +83,20 @@ void loadConfig() {
   }
 }
 
-void updateConfig() {
-  while (WiFi.status() != WL_CONNECTED) {
-    connectToWiFi(SYS_SSID, SYS_PASS, PIN_LED_SOCKET);
-  }
-  digitalWrite(PIN_LED_WIFI, HIGH);
-  digitalWrite(PIN_LED_SOCKET, HIGH);
-  HTTPClient http;
+HTTPClient http;
+
+boolean fetchConfig() {
   char* payload = new char[32];
+  String requestUrl = "http://192.168.4.1/host?id=";
+  requestUrl += url;
+  http.begin(requestUrl);
+  if (http.GET() == 200) {
+    http.getString().toCharArray(payload, 32);
+    payload[strlen(payload)] = 0;
+    writeConfig(2, payload, strlen(payload));
+  } else {
+    return false;
+  }
 
   http.begin("http://192.168.4.1/ssid");
   http.GET();
@@ -102,13 +108,21 @@ void updateConfig() {
   http.getString().toCharArray(payload, 32);
   payload[strlen(payload)] = 0;
   writeConfig(1, payload, strlen(payload));
-  http.begin("http://192.168.4.1/host");
-  http.GET();
-  http.getString().toCharArray(payload, 32);
-  payload[strlen(payload)] = 0;
-  writeConfig(2, payload, strlen(payload));
 
   EEPROM.commit();
+  return true;
+}
+
+void updateConfig() {
+  while (WiFi.status() != WL_CONNECTED) {
+    connectToWiFi(SYS_SSID, SYS_PASS, PIN_LED_SOCKET);
+  }
+  digitalWrite(PIN_LED_WIFI, HIGH);
+  digitalWrite(PIN_LED_SOCKET, HIGH);
+  while (!fetchConfig()) {
+    delay(1000);
+  }
+
   WiFi.disconnect();
 }
 
@@ -132,6 +146,7 @@ void setup() {
   delay(10);
 
   EEPROM.begin(512);
+  loadConfig();
   updateConfig();
   loadConfig();
   EEPROM.end();
@@ -141,6 +156,7 @@ void setup() {
   while (WiFi.status() != WL_CONNECTED) {
     int status = connectToWiFi(ssid, password);
   }
+
   webSocket.begin(host, port, url);
   webSocket.onEvent(webSocketEvent);
 }

@@ -30,6 +30,9 @@ char *host;
 const uint16_t port = 2500;
 char *url;
 
+//char *allowIds = new char[1];
+char *allowIds = "bug1\nbug2";
+
 void webSocketEvent(WStype_t type, uint8_t *payload, size_t lenght) {
   switch (type) {
     case WStype_DISCONNECTED:
@@ -44,17 +47,26 @@ void webSocketEvent(WStype_t type, uint8_t *payload, size_t lenght) {
       digitalWrite(PIN_LED_SOCKET, HIGH);
       break;
     case WStype_TEXT:
-      for (int i = 0; lenght != i; i++)
-        Serial.write(payload[i]);
-      break;
+      // TODO - payload[0] == 0, binary
+      if (payload[0] == 48) {
+        // TODO - free mem
+        //        delete allowIds;
+        allowIds = new char[lenght];
+        for (int i = 1; lenght != i; i++) {
+          allowIds[i - 1] = payload[i];
+        }
+        allowIds[lenght - 1] = 0;
+      } else {
+        for (int i = 0; lenght != i; i++)
+          Serial.write(payload[i]);
+        break;
+      }
     case WStype_BIN:
       for (int i = 0; lenght != i; i++)
         Serial.write(payload[i]);
       break;
   }
 }
-
-
 
 uint8_t connectToWiFi(const char* ssid, const char* pass) {
   WiFi.begin(ssid, pass);
@@ -100,6 +112,32 @@ void writeConfig(uint8_t i, char* data, uint8_t length) {
   EEPROM.write(i * 32 + j, 0);
 }
 
+boolean allowConenctFor(String id) {
+  int len = strlen(allowIds);
+  int j = 0;
+  for (int i = 0; i < len; i++) {
+    if (allowIds[i] == id[j]) {
+      if (j == 0) {
+        if (i == 0 || allowIds[i - 1] == 10 || allowIds[i - 1 ] == 13) {
+          j++;
+        }
+      } else {
+        j++;
+      }
+      if (j == id.length()) {
+        if (allowIds[i + 1] == 0 || allowIds[i + 1] == 10 || allowIds[i + 1] == 13) {
+          return true;
+        } else {
+
+        }
+      }
+    } else {
+      j = 0;
+    }
+  }
+  return false;
+}
+
 void startServer() {
   server.on("/ssid", []() {
 
@@ -111,12 +149,27 @@ void startServer() {
   });
 
   server.on("/host", []() {
-    server.send(200, "text/plain", host);
+    Serial.println("1000");
+    if (server.hasArg("id")) {
+      if (allowConenctFor(server.arg("id"))) {
+        server.send(200, "text/plain", host);
+        Serial.println("200");
+      } else {
+        webSocket.sendTXT("id:" + server.arg("id"));
+        server.send(403, "text/plain", "");
+        Serial.println("403");
+      }
+    } else {
+      server.send(404, "text/plain", "");
+      Serial.println("404");
+    }
   });
 
   server.on("/", HTTP_GET, []() {
     server.sendHeader("Connection", "close");
     server.sendHeader("Access-Control-Allow-Origin", "*");
+
+    //TODO memory
     String page = "<html>\
       <head>\
         <title>Configure</title>\
