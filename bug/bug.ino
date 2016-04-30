@@ -21,7 +21,7 @@ I2C i2c('1', inCallback, outCallback);
 
 void outCallback() {
   needResponse = true;
-  i2c.responseStart(Config::sensorCount());
+  i2c.responseStart(Config::sensorCount() + 2);
 }
 
 const int speed = 2000;
@@ -68,6 +68,8 @@ void responseNextTick() {
   i2c.response((char)(line.readSensor() + 48));
 
   if (line.sensorsRead()) {
+    i2c.response((char)(digitalRead(10) + 48));
+    i2c.response((char)(digitalRead(11) + 48));
     needResponse = false;
   }
 }
