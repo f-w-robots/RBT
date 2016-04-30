@@ -322,9 +322,7 @@ Wire Wire Line
 Wire Wire Line
 	5750 950  5000 950 
 Wire Wire Line
-	5000 1050 5000 1300
-Wire Wire Line
-	2500 2550 6400 2550
+	5000 1050 5000 2000
 Wire Wire Line
 	4200 3350 4200 2550
 Connection ~ 5750 2550
@@ -369,61 +367,10 @@ Wire Wire Line
 Wire Wire Line
 	5400 3350 5450 3350
 Wire Wire Line
-	5450 3350 5450 1750
-Wire Wire Line
-	5450 1750 2100 1750
-Connection ~ 4200 2550
-$Comp
-L R R5
-U 1 1 57122C38
-P 2350 2550
-F 0 "R5" V 2430 2550 50  0000 C CNN
-F 1 "R" V 2350 2550 50  0000 C CNN
-F 2 "Resistors_ThroughHole:Resistor_Horizontal_RM7mm" V 2280 2550 50  0001 C CNN
-F 3 "" H 2350 2550 50  0000 C CNN
-	1    2350 2550
-	0    1    1    0   
-$EndComp
-$Comp
-L CONN_01X01 P6
-U 1 1 57122CBD
-P 1900 2550
-F 0 "P6" H 1900 2650 50  0000 C CNN
-F 1 "CONN_01X01" V 2000 2550 50  0000 C CNN
-F 2 "Socket_Strips:Socket_Strip_Straight_1x01" H 1900 2550 50  0001 C CNN
-F 3 "" H 1900 2550 50  0000 C CNN
-	1    1900 2550
-	-1   0    0    1   
-$EndComp
-$Comp
-L CONN_01X01 P5
-U 1 1 57122DD6
-P 1900 1750
-F 0 "P5" H 1900 1850 50  0000 C CNN
-F 1 "CONN_01X01" V 2000 1750 50  0000 C CNN
-F 2 "Socket_Strips:Socket_Strip_Straight_1x01" H 1900 1750 50  0001 C CNN
-F 3 "" H 1900 1750 50  0000 C CNN
-	1    1900 1750
-	-1   0    0    1   
-$EndComp
-Wire Wire Line
-	2200 2550 2100 2550
-$Comp
-L CONN_01X02 P7
-U 1 1 5712384B
-P 4800 1350
-F 0 "P7" H 4800 1500 50  0000 C CNN
-F 1 "CONN_01X02" V 4900 1350 50  0000 C CNN
-F 2 "Pin_Headers:Pin_Header_Straight_1x02" H 4800 1350 50  0001 C CNN
-F 3 "" H 4800 1350 50  0000 C CNN
-	1    4800 1350
-	-1   0    0    1   
-$EndComp
-Wire Wire Line
-	5000 1400 5000 2000
-Wire Wire Line
 	3200 2000 5650 2000
 Wire Wire Line
 	5650 2000 5650 2400
 Connection ~ 5000 2000
+Wire Wire Line
+	4200 2550 6400 2550
 $EndSCHEMATC
