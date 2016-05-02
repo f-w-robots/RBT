@@ -1,5 +1,5 @@
-#ifndef Server_h
-#define Server_h
+#ifndef LHServer_h
+#define LHServer_h
 
 #include <ESP8266WebServer.h>
 #include <WebSocketsClient.h>

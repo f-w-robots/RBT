@@ -4,7 +4,7 @@
 
 #include "Led.h"
 #include "Config.h"
-#include "Server.h"
+#include "LHServer.h"
 #include "Package.h"
 #include "DeviceRC522.h"
 
@@ -72,7 +72,7 @@ void setup() {
   config = new Config();
   config->loadConfig();
 
-  device = new DeviceRC522(4, 5);
+  device = new DeviceRC522(4, 5, led);
   server = new LHServer(config, webSocket);
 
   WiFi.begin(config->getSsid(), config->getPass());

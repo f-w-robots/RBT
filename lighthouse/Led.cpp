@@ -1,6 +1,4 @@
 #include <Arduino.h>
-#include <EEPROM.h>
-#include <ESP8266WiFi.h>
 #include "Led.h"
 
 Led::Led(uint8_t wifiPin, uint8_t socketPin) {
@@ -29,5 +27,13 @@ void Led::blink(boolean mode, int16_t timeout) {
     digitalWrite(socketPin, HIGH);
   else
     digitalWrite(wifiPin, HIGH);
+}
+
+void Led::setBlue(boolean wifiPinValue) {
+  digitalWrite(this->wifiPin, wifiPinValue);
+}
+
+void Led::setRed(boolean socketPinValue) {
+  digitalWrite(this->socketPin, socketPinValue);
 }
 

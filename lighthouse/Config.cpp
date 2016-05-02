@@ -1,6 +1,4 @@
-#include <Arduino.h>
 #include <EEPROM.h>
-#include <ESP8266WiFi.h>
 #include "Config.h"
 
 Config::Config() {
@@ -45,4 +43,5 @@ void Config::writeConfig(uint8_t i, char* line, uint8_t length) {
   }
   EEPROM.write(i * 32 + length, 0);
   data[i][length] = 0;
+  EEPROM.commit();
 }

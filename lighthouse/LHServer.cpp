@@ -1,7 +1,6 @@
 #include <Arduino.h>
-#include <EEPROM.h>
 #include <ESP8266WiFi.h>
-#include "Server.h"
+#include "LHServer.h"
 
 LHServer::LHServer(Config* _config, WebSocketsClient *_webSocket) {
   this->config = _config;
@@ -55,7 +54,6 @@ LHServer::LHServer(Config* _config, WebSocketsClient *_webSocket) {
       server->arg("host").toCharArray(payload, 32);
       config->writeConfig(2, payload, strlen(payload));
       config->writeConfig(3, config->getUrl(), 32);
-      EEPROM.commit();
     }
     server->sendHeader("Connection", "close");
     server->sendHeader("Access-Control-Allow-Origin", "*");

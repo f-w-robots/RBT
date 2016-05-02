@@ -50,6 +50,16 @@ void connectToWiFi(const char* ssid, const char* pass, boolean blinkMode = false
   }
 }
 
+void configFromLH() {
+  connectToWiFi(SYS_SSID, SYS_PASS, 1);
+  config->loadConfig();
+  led->set(HIGH, HIGH);
+  while (!config->fetchConfig()) {
+    delay(1000);
+  }
+  WiFi.disconnect();
+}
+
 void setup() {
   WiFi.softAPdisconnect(true);
 
@@ -57,14 +67,9 @@ void setup() {
 
   Serial.begin(115200);
 
-  connectToWiFi(SYS_SSID, SYS_PASS, 1);
   config = new Config();
-  config->loadConfig();
-  led->set(HIGH, HIGH);
-  while (!config->fetchConfig()) {
-    delay(1000);
-  }
-  WiFi.disconnect();
+
+  configFromLH();
 
   config->loadConfig();
 

@@ -5,6 +5,8 @@ class Led {
   public:
     Led(uint8_t wifiPin, uint8_t socketPin);
     void set(boolean wifiPinValue, boolean socketPinValue);
+    void setBlue(boolean wifiPinValue);
+    void setRed(boolean socketPinValue);
     void blink(boolean mode, int16_t timeout);
   private:
     uint8_t socketPin;

@@ -1,17 +1,21 @@
 #include <Arduino.h>
 #include "DeviceRC522.h"
 
-DeviceRC522::DeviceRC522(uint8_t ss_pin, uint8_t rst_pin) {
+DeviceRC522::DeviceRC522(uint8_t ss_pin, uint8_t rst_pin, Led *led) {
   mfrc522 = new MFRC522(ss_pin, rst_pin);
   SPI.begin();           // Init SPI bus
   mfrc522->PCD_Init();    // Init MFRC522
+  this->led = led;
 }
 
 void DeviceRC522::tick() {
   unsigned long newTimeValue = millis() / 300;
+
   if (newTimeValue == oldTimeValue) {
     return;
   }
+
+  led->setRed(LOW);
   if ( ! mfrc522->PICC_IsNewCardPresent()) {
     return;
   }
@@ -20,6 +24,7 @@ void DeviceRC522::tick() {
     return;
   }
   // Show some details of the PICC (that is: the tag/card)
+  led->setRed(HIGH);
   dump_byte_array(mfrc522->uid.uidByte, mfrc522->uid.size);
 }
 

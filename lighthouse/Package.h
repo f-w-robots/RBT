@@ -1,7 +1,6 @@
 #ifndef Package_h
 #define Package_h
 
-#include <ESP8266WebServer.h>
 #include <WebSocketsClient.h>
 
 class Package {
