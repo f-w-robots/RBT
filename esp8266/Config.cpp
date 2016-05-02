@@ -38,14 +38,13 @@ char *Config::getUrl() {
 }
 
 void Config::writeConfig(uint8_t i, char* line, uint8_t length) {
-  Serial.println("write");
   int j = 0;
   for (; j < 32 && j < length; j++) {
     EEPROM.write(i * 32 + j, line[j]);;
     data[i][j] = line[j];
   }
-  EEPROM.write(i * 32 + length - 1, 0);
-  data[i][length - 1] = 0;
+  EEPROM.write(i * 32 + length, 0);
+  data[i][length] = 0;
 }
 
 boolean Config::fetchConfig() {

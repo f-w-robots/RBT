@@ -3,9 +3,9 @@
 #include <ESP8266WiFi.h>
 #include "Server.h"
 
-LHServer::LHServer(Config* _config, WebSocketsClient webSocket, char *allowIds) {
-  this->allowIds = allowIds;
+LHServer::LHServer(Config* _config, WebSocketsClient *_webSocket) {
   this->config = _config;
+  this->webSocket = _webSocket;
 
   server = new ESP8266WebServer(80);
 
@@ -23,7 +23,7 @@ LHServer::LHServer(Config* _config, WebSocketsClient webSocket, char *allowIds) 
       if (allowConenctFor(server->arg("id"))) {
         server->send(200, "text/plain", config->getHost());
       } else {
-        webSocket.sendTXT("id:" + server->arg("id"));
+        webSocket->sendTXT("id:" + server->arg("id"));
         server->send(403, "text/plain", "");
       }
     } else {
@@ -32,7 +32,6 @@ LHServer::LHServer(Config* _config, WebSocketsClient webSocket, char *allowIds) 
   });
 
   server->on("/", HTTP_GET, [&]() {
-    Serial.println("start");
     server->sendHeader("Connection", "close");
     server->sendHeader("Access-Control-Allow-Origin", "*");
 
@@ -50,11 +49,11 @@ LHServer::LHServer(Config* _config, WebSocketsClient webSocket, char *allowIds) 
     if (server->hasArg("ssid") && server->hasArg("password")) {
       char* payload = new char[32];
       server->arg("ssid").toCharArray(payload, 32);
-      config->writeConfig(0, payload, 32);
+      config->writeConfig(0, payload, strlen(payload));
       server->arg("password").toCharArray(payload, 32);
-      config->writeConfig(1, payload, 32);
+      config->writeConfig(1, payload, strlen(payload));
       server->arg("host").toCharArray(payload, 32);
-      config->writeConfig(2, payload, 32);
+      config->writeConfig(2, payload, strlen(payload));
       config->writeConfig(3, config->getUrl(), 32);
       EEPROM.commit();
     }
@@ -72,14 +71,14 @@ boolean LHServer::allowConenctFor(String id) {
   for (int i = 0; i < len; i++) {
     if (allowIds[i] == id[j]) {
       if (j == 0) {
-        if (i == 0 || allowIds[i - 1] == 10 || allowIds[i - 1 ] == 13) {
+        if (i == 0 || allowIds[i - 1] == '|') {
           j++;
         }
       } else {
         j++;
       }
       if (j == id.length()) {
-        if (allowIds[i + 1] == 0 || allowIds[i + 1] == 10 || allowIds[i + 1] == 13) {
+        if (allowIds[i + 1] == 0 || allowIds[i + 1] == '|') {
           return true;
         } else {
 
@@ -96,4 +95,8 @@ void LHServer::handleClient() {
   server->handleClient();
 }
 
+void LHServer::updateAllowIds(char *allowIds) {
+
+  this->allowIds = allowIds;
+}
 

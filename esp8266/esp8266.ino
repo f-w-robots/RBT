@@ -5,7 +5,7 @@
 #include "Config.h"
 #include "Package.h"
 
-WebSocketsClient webSocket;
+WebSocketsClient *webSocket;
 
 Led *led;
 Config *config;
@@ -58,10 +58,8 @@ void setup() {
   Serial.begin(115200);
 
   connectToWiFi(SYS_SSID, SYS_PASS, 1);
-
   config = new Config();
   config->loadConfig();
-  Serial.println(config->getSsid());
   led->set(HIGH, HIGH);
   while (!config->fetchConfig()) {
     delay(1000);
@@ -69,18 +67,19 @@ void setup() {
   WiFi.disconnect();
 
   config->loadConfig();
-  delete config;
 
   led->set(LOW, LOW);
   connectToWiFi(config->getSsid(), config->getPass());
 
+  webSocket = new WebSocketsClient();
+
   package = new Package(webSocket);
 
-  webSocket.begin(config->getHost(), 2500, config->getUrl());
-  webSocket.onEvent(webSocketEvent);
+  webSocket->begin(config->getHost(), 2500, String("/") + config->getUrl());
+  webSocket->onEvent(webSocketEvent);
 }
 
 void loop() {
-  webSocket.loop();
+  webSocket->loop();
   package->readPackages();
 }

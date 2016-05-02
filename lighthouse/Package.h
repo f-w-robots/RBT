@@ -6,14 +6,14 @@
 
 class Package {
   public:
-    Package(WebSocketsClient webSocket);
+    Package(WebSocketsClient *webSocket);
     void readPackages();
   private:
     int packageLen = 0;
     int packageI = 0;
     char package[256];
     char c;
-    WebSocketsClient webSocket;
+    WebSocketsClient *webSocket;
 
 };
 
