@@ -285,28 +285,6 @@ F 3 "" H 4100 4350 50  0000 C CNN
 	1    4100 4350
 	-1   0    0    1   
 $EndComp
-Wire Wire Line
-	4300 3550 7250 3550
-Connection ~ 4600 3550
-Connection ~ 4850 3550
-Connection ~ 5200 3550
-Connection ~ 5450 3550
-Connection ~ 5800 3550
-Connection ~ 6050 3550
-Connection ~ 6400 3550
-Connection ~ 6650 3550
-Connection ~ 7000 3550
-Connection ~ 7000 4350
-Wire Wire Line
-	4300 4350 7250 4350
-Connection ~ 6650 4350
-Connection ~ 6400 4350
-Connection ~ 6050 4350
-Connection ~ 5800 4350
-Connection ~ 5450 4350
-Connection ~ 5200 4350
-Connection ~ 4850 4350
-Connection ~ 4600 4350
 $Comp
 L CONN_01X01 P4
 U 1 1 56E975AA
@@ -362,6 +340,94 @@ F 3 "" H 7400 2950 50  0000 C CNN
 	1    7400 2950
 	0    -1   -1   0   
 $EndComp
+$Comp
+L CONN_01X01 P10
+U 1 1 5724A1DF
+P 4200 2600
+F 0 "P10" V 4200 2700 50  0000 C CNN
+F 1 "CONN_01X01" V 4300 2600 50  0000 C CNN
+F 2 "Pin_Headers:Pin_Header_Straight_1x01" H 4200 2600 50  0001 C CNN
+F 3 "" H 4200 2600 50  0000 C CNN
+	1    4200 2600
+	0    -1   -1   0   
+$EndComp
+$Comp
+L CONN_01X01 P8
+U 1 1 5724A372
+P 3750 2600
+F 0 "P8" V 3750 2700 50  0000 C CNN
+F 1 "CONN_01X01" V 3850 2600 50  0000 C CNN
+F 2 "Pin_Headers:Pin_Header_Straight_1x01" H 3750 2600 50  0001 C CNN
+F 3 "" H 3750 2600 50  0000 C CNN
+	1    3750 2600
+	0    -1   -1   0   
+$EndComp
+$Comp
+L CONN_01X01 P11
+U 1 1 5728B633
+P 3550 2600
+F 0 "P11" V 3550 2700 50  0000 C CNN
+F 1 "CONN_01X01" V 3650 2600 50  0000 C CNN
+F 2 "Pin_Headers:Pin_Header_Straight_1x01" H 3550 2600 50  0001 C CNN
+F 3 "" H 3550 2600 50  0000 C CNN
+	1    3550 2600
+	0    -1   -1   0   
+$EndComp
+$Comp
+L CONN_01X01 P9
+U 1 1 5728B6A1
+P 3300 2600
+F 0 "P9" V 3300 2700 50  0000 C CNN
+F 1 "CONN_01X01" V 3400 2600 50  0000 C CNN
+F 2 "Pin_Headers:Pin_Header_Straight_1x01" H 3300 2600 50  0001 C CNN
+F 3 "" H 3300 2600 50  0000 C CNN
+	1    3300 2600
+	0    -1   -1   0   
+$EndComp
+$Comp
+L CONN_01X01 P12
+U 1 1 5728B718
+P 4350 2600
+F 0 "P12" V 4350 2700 50  0000 C CNN
+F 1 "CONN_01X01" V 4450 2600 50  0000 C CNN
+F 2 "Pin_Headers:Pin_Header_Straight_1x01" H 4350 2600 50  0001 C CNN
+F 3 "" H 4350 2600 50  0000 C CNN
+	1    4350 2600
+	0    -1   -1   0   
+$EndComp
+$Comp
+L CONN_01X01 P13
+U 1 1 5728B78E
+P 4550 2600
+F 0 "P13" V 4550 2700 50  0000 C CNN
+F 1 "CONN_01X01" V 4650 2600 50  0000 C CNN
+F 2 "Pin_Headers:Pin_Header_Straight_1x01" H 4550 2600 50  0001 C CNN
+F 3 "" H 4550 2600 50  0000 C CNN
+	1    4550 2600
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	4300 3550 7250 3550
+Connection ~ 4600 3550
+Connection ~ 4850 3550
+Connection ~ 5200 3550
+Connection ~ 5450 3550
+Connection ~ 5800 3550
+Connection ~ 6050 3550
+Connection ~ 6400 3550
+Connection ~ 6650 3550
+Connection ~ 7000 3550
+Connection ~ 7000 4350
+Wire Wire Line
+	4300 4350 7250 4350
+Connection ~ 6650 4350
+Connection ~ 6400 4350
+Connection ~ 6050 4350
+Connection ~ 5800 4350
+Connection ~ 5450 4350
+Connection ~ 5200 4350
+Connection ~ 4850 4350
+Connection ~ 4600 4350
 Wire Wire Line
 	4600 3950 4600 4050
 Wire Wire Line
@@ -407,80 +473,58 @@ Wire Wire Line
 Wire Wire Line
 	7400 4000 7250 4000
 Connection ~ 7250 4000
-$Comp
-L CONN_01X01 P10
-U 1 1 5724A1DF
-P 4200 2600
-F 0 "P10" V 4200 2700 50  0000 C CNN
-F 1 "CONN_01X01" V 4300 2600 50  0000 C CNN
-F 2 "Pin_Headers:Pin_Header_Straight_1x01" H 4200 2600 50  0001 C CNN
-F 3 "" H 4200 2600 50  0000 C CNN
-	1    4200 2600
-	0    -1   -1   0   
-$EndComp
-$Comp
-L CONN_01X01 P9
-U 1 1 5724A2A5
-P 4000 2600
-F 0 "P9" V 4000 2700 50  0000 C CNN
-F 1 "CONN_01X01" V 4100 2600 50  0000 C CNN
-F 2 "Pin_Headers:Pin_Header_Straight_1x01" H 4000 2600 50  0001 C CNN
-F 3 "" H 4000 2600 50  0000 C CNN
-	1    4000 2600
-	0    -1   -1   0   
-$EndComp
-$Comp
-L CONN_01X01 P8
-U 1 1 5724A372
-P 3750 2600
-F 0 "P8" V 3750 2700 50  0000 C CNN
-F 1 "CONN_01X01" V 3850 2600 50  0000 C CNN
-F 2 "Pin_Headers:Pin_Header_Straight_1x01" H 3750 2600 50  0001 C CNN
-F 3 "" H 3750 2600 50  0000 C CNN
-	1    3750 2600
-	0    -1   -1   0   
-$EndComp
 Wire Wire Line
 	4450 3550 4450 2800
-Wire Wire Line
-	4450 2800 4200 2800
 Connection ~ 4450 3550
-$Comp
-L R R11
-U 1 1 5724A48E
-P 3750 3000
-F 0 "R11" V 3830 3000 50  0000 C CNN
-F 1 "10k" V 3750 3000 50  0000 C CNN
-F 2 "w_pth_resistors:rc05_vert" V 3680 3000 50  0001 C CNN
-F 3 "" H 3750 3000 50  0000 C CNN
-	1    3750 3000
-	1    0    0    -1  
-$EndComp
-$Comp
-L R R12
-U 1 1 5724A596
-P 4000 3000
-F 0 "R12" V 4080 3000 50  0000 C CNN
-F 1 "10k" V 4000 3000 50  0000 C CNN
-F 2 "w_pth_resistors:rc05_vert" V 3930 3000 50  0001 C CNN
-F 3 "" H 4000 3000 50  0000 C CNN
-	1    4000 3000
-	1    0    0    -1  
-$EndComp
 Wire Wire Line
-	3750 2850 3750 2800
-Wire Wire Line
-	4000 2850 4000 2800
-Wire Wire Line
-	4000 3150 4000 3250
-Wire Wire Line
-	4000 3250 3750 3250
-Wire Wire Line
-	3750 3150 3750 4800
+	3750 2800 3750 4800
 Wire Wire Line
 	3750 4800 4400 4800
 Wire Wire Line
 	4400 4800 4400 4350
 Connection ~ 4400 4350
-Connection ~ 3750 3250
+Connection ~ 4450 2800
+Wire Wire Line
+	4200 2800 4550 2800
+Connection ~ 4350 2800
+Wire Wire Line
+	3300 2800 3750 2800
+Connection ~ 3550 2800
+$Comp
+L CONN_01X01 P15
+U 1 1 5728B887
+P 2650 4050
+F 0 "P15" H 2650 4150 50  0000 C CNN
+F 1 "CONN_01X01" V 2750 4050 50  0000 C CNN
+F 2 "Pin_Headers:Pin_Header_Straight_1x01" H 2650 4050 50  0001 C CNN
+F 3 "" H 2650 4050 50  0000 C CNN
+	1    2650 4050
+	-1   0    0    1   
+$EndComp
+$Comp
+L R R11
+U 1 1 5728B949
+P 2850 3800
+F 0 "R11" V 2930 3800 50  0000 C CNN
+F 1 "8k2" V 2850 3800 50  0000 C CNN
+F 2 "w_pth_resistors:rc05_vert" V 2780 3800 50  0001 C CNN
+F 3 "" H 2850 3800 50  0000 C CNN
+	1    2850 3800
+	1    0    0    -1  
+$EndComp
+$Comp
+L CONN_01X01 P14
+U 1 1 5728BAAE
+P 2650 3550
+F 0 "P14" H 2650 3650 50  0000 C CNN
+F 1 "CONN_01X01" V 2750 3550 50  0000 C CNN
+F 2 "Pin_Headers:Pin_Header_Straight_1x01" H 2650 3550 50  0001 C CNN
+F 3 "" H 2650 3550 50  0000 C CNN
+	1    2650 3550
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	2850 3650 2850 3550
+Wire Wire Line
+	2850 3950 2850 4050
 $EndSCHEMATC
