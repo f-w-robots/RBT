@@ -3,7 +3,7 @@
   (general
     (links 49)
     (no_connects 0)
-    (area 0 0 0 0)
+    (area 106.579999 37.999999 182.980001 137.260001)
     (thickness 1.6)
     (drawings 10)
     (tracks 103)
@@ -66,7 +66,7 @@
     (aux_axis_origin 0 0)
     (visible_elements FFFFFF7F)
     (pcbplotparams
-      (layerselection 0x00400_00000001)
+      (layerselection 0x00000_00000001)
       (usegerberextensions false)
       (excludeedgelayer true)
       (linewidth 0.100000)
@@ -785,7 +785,7 @@
   (segment (start 114.3 111.76) (end 120.65 111.76) (width 0.75) (layer F.Cu) (net 10))
   (segment (start 120.65 109.22) (end 114.3 109.22) (width 0.75) (layer F.Cu) (net 11))
   (segment (start 114.3 106.68) (end 120.65 106.68) (width 0.75) (layer F.Cu) (net 12))
-  (segment (start 167.64 106.68) (end 167.64 104.14) (width 0.75) (layer F.Cu) (net 13) (status 400000))
+  (segment (start 167.64 106.68) (end 167.64 104.14) (width 0.75) (layer F.Cu) (net 13))
   (segment (start 165.1 96.52) (end 157.48 96.52) (width 0.75) (layer F.Cu) (net 13) (tstamp 5724AE90))
   (segment (start 165.1 101.6) (end 165.1 96.52) (width 0.75) (layer F.Cu) (net 13) (tstamp 5724AE8F))
   (segment (start 167.64 104.14) (end 165.1 101.6) (width 0.75) (layer F.Cu) (net 13) (tstamp 5724AE8E))
