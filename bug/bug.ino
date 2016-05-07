@@ -2,6 +2,7 @@
 #include "Motor28BYJ.h"
 #include "I2C.h"
 #include "Config.h"
+#include "SR04.h"
 
 boolean pins[4] = {false, false, false, false};
 boolean needResponse = false;
@@ -21,14 +22,14 @@ I2C i2c('1', inCallback, outCallback);
 
 void outCallback() {
   needResponse = true;
-  i2c.responseStart(Config::sensorCount() + 2);
+  i2c.responseStart(Config::sensorCount() + 1);
 }
 
 const int speed = 2000;
 
 Motor28BYJ motor2(2, 3, 4, 5);
 Motor28BYJ motor1(6, 7, 8, 9);
-
+SR04 sr04(12, 11);
 
 uint8_t lineInputs[] = {A0, A1, A2, A3, A4};
 LineSensor line(lineInputs, 5);
@@ -68,8 +69,9 @@ void responseNextTick() {
   i2c.response((char)(line.readSensor() + 48));
 
   if (line.sensorsRead()) {
-    i2c.response((char)(digitalRead(10) + 48));
-    i2c.response((char)(digitalRead(11) + 48));
+    int v = sr04.getValue();
+
+    i2c.response((char)(v + 48));
     needResponse = false;
   }
 }
@@ -84,6 +86,11 @@ int8_t leftDirection() {
 
 void doMove() {
   unsigned long newTimeValue = micros() / speed;
+
+  long val = sr04.read();
+  if (val != -1) {
+    sr04.pulse();
+  }
 
   if (newTimeValue != oldTimeValue) {
     oldTimeValue = newTimeValue;
