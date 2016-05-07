@@ -76,7 +76,7 @@ void setup() {
   server = new LHServer(config, webSocket);
 
   WiFi.begin(config->getSsid(), config->getPass());
-  sta_tick.attach(10, staCheck);
+  sta_tick.attach(30, staCheck);
 
   package = new Package(webSocket);
 
