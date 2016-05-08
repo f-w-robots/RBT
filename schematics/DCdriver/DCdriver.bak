@@ -1,0 +1,224 @@
+EESchema Schematic File Version 2
+LIBS:power
+LIBS:device
+LIBS:transistors
+LIBS:conn
+LIBS:linear
+LIBS:regul
+LIBS:74xx
+LIBS:cmos4000
+LIBS:adc-dac
+LIBS:memory
+LIBS:xilinx
+LIBS:microcontrollers
+LIBS:dsp
+LIBS:microchip
+LIBS:analog_switches
+LIBS:motorola
+LIBS:texas
+LIBS:intel
+LIBS:audio
+LIBS:interface
+LIBS:digital-audio
+LIBS:philips
+LIBS:display
+LIBS:cypress
+LIBS:siliconi
+LIBS:opto
+LIBS:atmel
+LIBS:contrib
+LIBS:valves
+LIBS:bugs
+LIBS:DCdriver-cache
+EELAYER 25 0
+EELAYER END
+$Descr A4 11693 8268
+encoding utf-8
+Sheet 1 1
+Title ""
+Date ""
+Rev ""
+Comp ""
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+$Comp
+L L293D U1
+U 1 1 572F6CE8
+P 5250 3850
+F 0 "U1" H 5550 4350 60  0000 C CNN
+F 1 "L293D" H 5250 4350 60  0000 C CNN
+F 2 "Housings_DIP:DIP-16_W7.62mm" H 5800 3500 60  0001 C CNN
+F 3 "" H 5800 3500 60  0000 C CNN
+	1    5250 3850
+	1    0    0    -1  
+$EndComp
+$Comp
+L CONN_01X01 P4
+U 1 1 572F6D50
+P 5950 3500
+F 0 "P4" H 5950 3600 50  0000 C CNN
+F 1 "5V" V 6050 3500 50  0000 C CNN
+F 2 "Pin_Headers:Pin_Header_Straight_1x01" H 5950 3500 50  0001 C CNN
+F 3 "" H 5950 3500 50  0000 C CNN
+	1    5950 3500
+	1    0    0    -1  
+$EndComp
+$Comp
+L CONN_01X01 P2
+U 1 1 572F6F90
+P 4250 4200
+F 0 "P2" H 4250 4300 50  0000 C CNN
+F 1 "35V" V 4350 4200 50  0000 C CNN
+F 2 "Pin_Headers:Pin_Header_Straight_1x01" H 4250 4200 50  0001 C CNN
+F 3 "" H 4250 4200 50  0000 C CNN
+	1    4250 4200
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	5750 3800 5950 3800
+Wire Wire Line
+	5950 3800 5950 3900
+Wire Wire Line
+	5950 3900 5950 4650
+Wire Wire Line
+	5750 3900 5950 3900
+Connection ~ 5950 3900
+Wire Wire Line
+	4750 3800 4550 3800
+Wire Wire Line
+	4550 3800 4550 3900
+Wire Wire Line
+	4550 3900 4550 4650
+Wire Wire Line
+	4750 3900 4550 3900
+Connection ~ 4550 3900
+Wire Wire Line
+	4550 4650 5350 4650
+Wire Wire Line
+	5350 4650 5950 4650
+Wire Wire Line
+	4450 4200 4750 4200
+Wire Wire Line
+	3950 3500 4750 3500
+Wire Wire Line
+	3950 3600 4750 3600
+Wire Wire Line
+	4750 4100 4400 4100
+Wire Wire Line
+	4400 4100 4400 3700
+Wire Wire Line
+	4400 3700 3950 3700
+Wire Wire Line
+	3950 4200 3950 4900
+Wire Wire Line
+	3950 4900 6200 4900
+Wire Wire Line
+	6200 4900 6200 3600
+Wire Wire Line
+	6200 3600 5750 3600
+Wire Wire Line
+	4050 4800 6100 4800
+Wire Wire Line
+	6100 4800 6100 4100
+Wire Wire Line
+	6100 4100 5750 4100
+Wire Wire Line
+	4150 4700 6000 4700
+Wire Wire Line
+	6000 4700 6000 4200
+Wire Wire Line
+	6000 4200 5750 4200
+Wire Wire Line
+	4750 3700 4750 3200
+Wire Wire Line
+	4750 3200 6400 3200
+Wire Wire Line
+	6400 3200 6400 3800
+Wire Wire Line
+	6400 3800 6500 3800
+Wire Wire Line
+	6500 3700 6500 3100
+Wire Wire Line
+	6500 3100 4700 3100
+Wire Wire Line
+	4700 3100 4700 4000
+Wire Wire Line
+	4700 4000 4750 4000
+Wire Wire Line
+	5750 3700 6350 3700
+Wire Wire Line
+	6350 3700 6350 3900
+Wire Wire Line
+	6350 3900 6500 4000
+Wire Wire Line
+	6500 4100 5750 4000
+$Comp
+L CONN_01X01 P3
+U 1 1 572F745C
+P 5150 4500
+F 0 "P3" H 5150 4600 50  0000 C CNN
+F 1 "GND" V 5250 4500 50  0000 C CNN
+F 2 "Pin_Headers:Pin_Header_Straight_1x01" H 5150 4500 50  0001 C CNN
+F 3 "" H 5150 4500 50  0000 C CNN
+	1    5150 4500
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	5350 4500 5350 4650
+Connection ~ 5350 4650
+$Comp
+L CONN_01X03 P1
+U 1 1 572F7958
+P 3750 3600
+F 0 "P1" H 3750 3800 50  0000 C CNN
+F 1 "CONN_01X03" V 3850 3600 50  0000 C CNN
+F 2 "Pin_Headers:Pin_Header_Straight_1x03" H 3750 3600 50  0001 C CNN
+F 3 "" H 3750 3600 50  0000 C CNN
+	1    3750 3600
+	-1   0    0    1   
+$EndComp
+$Comp
+L CONN_01X03 P6
+U 1 1 572F79A5
+P 3750 4100
+F 0 "P6" H 3750 4300 50  0000 C CNN
+F 1 "CONN_01X03" V 3850 4100 50  0000 C CNN
+F 2 "Pin_Headers:Pin_Header_Straight_1x03" H 3750 4100 50  0001 C CNN
+F 3 "" H 3750 4100 50  0000 C CNN
+	1    3750 4100
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	4050 4100 3950 4100
+Wire Wire Line
+	4050 4100 4050 4800
+Wire Wire Line
+	3950 4000 4150 4000
+Wire Wire Line
+	4150 4000 4150 4700
+$Comp
+L CONN_01X02 P?
+U 1 1 572F7C69
+P 6700 3750
+F 0 "P?" H 6700 3900 50  0000 C CNN
+F 1 "CONN_01X02" V 6800 3750 50  0000 C CNN
+F 2 "" H 6700 3750 50  0000 C CNN
+F 3 "" H 6700 3750 50  0000 C CNN
+	1    6700 3750
+	1    0    0    -1  
+$EndComp
+$Comp
+L CONN_01X02 P?
+U 1 1 572F7CE0
+P 6700 4050
+F 0 "P?" H 6700 4200 50  0000 C CNN
+F 1 "CONN_01X02" V 6800 4050 50  0000 C CNN
+F 2 "" H 6700 4050 50  0000 C CNN
+F 3 "" H 6700 4050 50  0000 C CNN
+	1    6700 4050
+	1    0    0    -1  
+$EndComp
+$EndSCHEMATC
