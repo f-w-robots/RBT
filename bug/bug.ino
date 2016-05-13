@@ -87,10 +87,7 @@ int8_t leftDirection() {
 void doMove() {
   unsigned long newTimeValue = micros() / speed;
 
-  long val = sr04.read();
-  if (val != -1) {
-    sr04.pulse();
-  }
+  sr04.read();
 
   if (newTimeValue != oldTimeValue) {
     oldTimeValue = newTimeValue;

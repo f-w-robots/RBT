@@ -18,26 +18,39 @@ void SR04::pulse()
   delayMicroseconds(10);
   digitalWrite(_trig, LOW);
   time = micros();
+
+  pulsed = true;
+  pulseTime = millis();
 }
 
 int16_t SR04::calibrate(int16_t val) {
   value = (val - 500) / 51;
+  pulsed = false;
   return value;
 }
 
-int16_t SR04::read()
+void SR04::read()
 {
+  if (millis() - pulseTime > 100) {
+    pulse();
+    return;
+  }
+  if (!pulsed) {
+    return;
+  }
   long now = micros();
   if (now - time < 500) {
-    return -1;
+    return;
   } else {
     if (now - time > 3000) {
-      return calibrate(3000);
+      calibrate(3000);
+      return;
     } else {
       if (digitalRead(_echo) == 0) {
-        return calibrate(now - time);
+        calibrate(now - time);
+        return;
       } else {
-        return -1;
+        return;
       }
     }
   }
