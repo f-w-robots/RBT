@@ -1,0 +1,190 @@
+EESchema Schematic File Version 2
+LIBS:power
+LIBS:device
+LIBS:transistors
+LIBS:conn
+LIBS:linear
+LIBS:regul
+LIBS:74xx
+LIBS:cmos4000
+LIBS:adc-dac
+LIBS:memory
+LIBS:xilinx
+LIBS:microcontrollers
+LIBS:dsp
+LIBS:microchip
+LIBS:analog_switches
+LIBS:motorola
+LIBS:texas
+LIBS:intel
+LIBS:audio
+LIBS:interface
+LIBS:digital-audio
+LIBS:philips
+LIBS:display
+LIBS:cypress
+LIBS:siliconi
+LIBS:opto
+LIBS:atmel
+LIBS:contrib
+LIBS:valves
+LIBS:bugs
+EELAYER 25 0
+EELAYER END
+$Descr A4 11693 8268
+encoding utf-8
+Sheet 1 1
+Title ""
+Date ""
+Rev ""
+Comp ""
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+$Comp
+L ATTINY24A-P IC?
+U 1 1 572B3E8C
+P 3700 2900
+F 0 "IC?" H 2850 3650 50  0000 C CNN
+F 1 "ATTINY24A-P" H 4400 2150 50  0000 C CNN
+F 2 "DIP14" H 3700 2700 50  0000 C CIN
+F 3 "" H 3700 2900 50  0000 C CNN
+	1    3700 2900
+	1    0    0    -1  
+$EndComp
+$Comp
+L uln2803A U?
+U 1 1 572B3F22
+P 5500 2700
+F 0 "U?" H 5800 3200 60  0000 C CNN
+F 1 "uln2803A" H 5500 3250 60  0000 C CNN
+F 2 "" H 5700 2850 60  0000 C CNN
+F 3 "" H 5700 2850 60  0000 C CNN
+	1    5500 2700
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4750 2300 5050 2300
+Wire Wire Line
+	4750 2400 5050 2400
+Wire Wire Line
+	4750 2500 5050 2500
+Wire Wire Line
+	4750 2600 5050 2600
+Wire Wire Line
+	4750 2700 5050 2700
+Wire Wire Line
+	4750 2800 5050 2800
+Wire Wire Line
+	4750 2900 5050 2900
+Wire Wire Line
+	5050 3000 4750 3000
+$Comp
+L CONN_01X01 P?
+U 1 1 572B3FE6
+P 4850 4200
+F 0 "P?" H 4850 4300 50  0000 C CNN
+F 1 "INPUT" V 4950 4200 50  0000 C CNN
+F 2 "" H 4850 4200 50  0000 C CNN
+F 3 "" H 4850 4200 50  0000 C CNN
+	1    4850 4200
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	4850 4000 4850 3400
+Wire Wire Line
+	4850 3400 4750 3400
+$Comp
+L CONN_01X01 P?
+U 1 1 572B4186
+P 3300 4250
+F 0 "P?" H 3300 4350 50  0000 C CNN
+F 1 "5V" V 3400 4250 50  0000 C CNN
+F 2 "" H 3300 4250 50  0000 C CNN
+F 3 "" H 3300 4250 50  0000 C CNN
+	1    3300 4250
+	0    1    1    0   
+$EndComp
+$Comp
+L CONN_01X01 P?
+U 1 1 572B420D
+P 2950 4250
+F 0 "P?" H 2950 4350 50  0000 C CNN
+F 1 "GND" V 3050 4250 50  0000 C CNN
+F 2 "" H 2950 4250 50  0000 C CNN
+F 3 "" H 2950 4250 50  0000 C CNN
+	1    2950 4250
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	3300 4050 3300 3850
+Wire Wire Line
+	2500 3850 5950 3850
+Wire Wire Line
+	5950 3850 5950 3100
+Wire Wire Line
+	5050 3750 5050 3100
+Wire Wire Line
+	2650 3750 5050 3750
+Wire Wire Line
+	2950 3750 2950 4050
+Wire Wire Line
+	2650 3750 2650 3500
+Connection ~ 2950 3750
+Wire Wire Line
+	2650 2300 2500 2300
+Wire Wire Line
+	2500 2300 2500 3850
+Connection ~ 3300 3850
+$Comp
+L CONN_01X05 P?
+U 1 1 572B445D
+P 6350 2400
+F 0 "P?" H 6350 2700 50  0000 C CNN
+F 1 "CONN_01X05" V 6450 2400 50  0000 C CNN
+F 2 "" H 6350 2400 50  0000 C CNN
+F 3 "" H 6350 2400 50  0000 C CNN
+	1    6350 2400
+	1    0    0    -1  
+$EndComp
+$Comp
+L CONN_01X05 P?
+U 1 1 572B44DA
+P 6700 2800
+F 0 "P?" H 6700 3100 50  0000 C CNN
+F 1 "CONN_01X05" V 6800 2800 50  0000 C CNN
+F 2 "" H 6700 2800 50  0000 C CNN
+F 3 "" H 6700 2800 50  0000 C CNN
+	1    6700 2800
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5950 2700 6500 2700
+Wire Wire Line
+	6500 2800 5950 2800
+Wire Wire Line
+	5950 2900 6500 2900
+Wire Wire Line
+	6500 3000 5950 3000
+Wire Wire Line
+	5950 2600 6150 2600
+Wire Wire Line
+	6150 2500 5950 2500
+Wire Wire Line
+	5950 2400 6150 2400
+Wire Wire Line
+	5950 2300 6150 2300
+Wire Wire Line
+	6500 2600 6500 2050
+Wire Wire Line
+	6150 2050 6900 2050
+Wire Wire Line
+	6150 2050 6150 2200
+Wire Wire Line
+	6900 2050 6900 3100
+Wire Wire Line
+	6900 3100 5950 3100
+Connection ~ 6500 2050
+$EndSCHEMATC
