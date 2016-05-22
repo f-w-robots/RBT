@@ -1,6 +1,16 @@
 #include <Servo.h>
 #include "SR04.h"
 
+int8_t sign(int num) {
+  if (num == 0)
+    return 0;
+  if (num > 0)
+    return 1;
+  else
+    return -1;
+}
+
+
 Servo myservo;
 
 //передние
@@ -22,10 +32,10 @@ int stop_center;
 int stop_right_n;
 int stop_left_n;
 
-int stop_value_1 = 110;
-int stop_value_2 = 35;
-int stop_value_n = 35;
-int stop_value_c = 100;
+const int STOP_VALUE_1 = 110;
+const int STOP_VALUE_2 = 35;
+const int STOP_VALUE_N = 35;
+const int STOP_VALUE_C = 100;
 
 int i = 0;
 int valueArray[5] = {0, 0, 0, 0, 0};
@@ -45,40 +55,27 @@ int result = 0;
 
 
 void setup() {
-  // put your setup code here, to run once:
   pinMode(2, OUTPUT);
   pinMode(4, OUTPUT);
   pinMode(3, OUTPUT);
-  digitalWrite(2, LOW);
-  digitalWrite(4, HIGH);
+  setDirection(true);
   analogWrite(3, 0);
 
-  pinMode(5, OUTPUT);
-  digitalWrite(5, LOW);
-
   myservo.attach(5);
-  myservo.write(97);
+  myservo.write(CENTR_ALGNLE);
 
-  //  myservo.write(135);
-
-  setSpeed(30);
+  //  setSpeed(30);
   Serial.begin(115200);
-  stop_right = sr04_r.readNow();
-
-  stop_left = sr04_l.readNow();
-
-  stop_right_n = sr04_r_n.readNow();
-
-  stop_right_n = sr04_l_n.readNow();
-
-  stop_center = sr04_c.readNow();
-  //delay(250);
 }
 
 void setSpeed(int speed) {
+  if (speed == -1)
+    speed = 0;
+  else
+    speed = MIN_SPEED + speed;
   if (speed > MAX_SPEED)
-    return;
-  speed = MIN_SPEED + speed;
+    speed = MAX_SPEED;
+
   analogWrite(3, speed);
 }
 
@@ -91,127 +88,142 @@ void setDirection(int direction) {
     digitalWrite(4, LOW);
   }
 }
+
 //сначала мелкие
 void Result() {
-  /*4*/   if (valueArray[2] == 1) {
-    result = 4;
+  //едем возле стенки
+  if (valueArray[0] == 0) {
+    result = 104;
     return;
   }
-  /*2*/   if (valueArray[3] == 1) {
-    result = 2;
+  if (valueArray[4] == 0) {
+    result = -104;
     return;
   }
-  /*9*/    if ( valueArray[4] == 1) {
+
+  // перед нами узкое препятсвие
+  if ( valueArray[2] == 0) {
     result = 12;
     return;
   }
 
-
-  /*18*/  if (valueArray[0] == 2 && valueArray[1] == 2 || valueArray[4] > 0) {
+  // в западне
+  if (valueArray[1] == 0 && valueArray[3] == 0 || valueArray[2] < 2) {
     result = 18;
     return;
   }
 
-  /*0*/   if (valueArray[0] == 0 && valueArray[1] == 0 && valueArray[2] == 0 && valueArray[3] == 0) {
+  // дорога свободна
+  if (valueArray[1] == 2 && valueArray[3] == 2 && valueArray[0] == 1 && valueArray[4] == 1) {
     result = 0;
     return;
   }
-  /*18*/  if (valueArray[0] == 1 && valueArray[1] == 1 && valueArray[2] == 1 && valueArray[3] == 1) {
+
+  //приближаемся к пепятсвие, и по бокам занято
+  /*18*/  if (valueArray[1] == 1 && valueArray[3] == 1 && valueArray[0] == 0 && valueArray[4] == 0) {
     result = 18;
     return;
   }
-  /*12*/   if (valueArray[4] == 1 && (valueArray[0] == 1 || valueArray[0] == 2) && (valueArray[1] == 1 || valueArray[1] == 2) ) {
+
+  // препятсвие середине, угловым далеко
+  /*12*/   if (valueArray[2] == 1 && valueArray[1] < 2 && valueArray[3] < 2 ) {
     result = 12;
     return;
   }
-  /*2'*/  if (valueArray[1] == 1 && valueArray[2] == 1 && valueArray[3] == 1) {
+
+  // по бокам занято, правый передний показывает препятсвие
+  /*2'*/  if (valueArray[3] == 1 && valueArray[0] == 0 && valueArray[4] == 0) {
     result = 5;
     return;
   }
-  /*4'*/  if (valueArray[0] == 1 && valueArray[2] == 1 && valueArray[3] == 1) {
+
+  // по бокам занято, левый передний показывает препятсвие
+  /*4'*/  if (valueArray[1] == 1 && valueArray[0] == 0 && valueArray[4] == 0) {
     result = 6;
     return;
   }
-  /*4'*/  if (valueArray[0] == 1 && valueArray[1] == 1 && valueArray[2] == 1) {
+
+  // слева занято спереди ещё есть свободного немного пространства
+  /*4'*/  if (valueArray[1] == 1 && valueArray[3] == 1 && valueArray[0] == 0) {
     result = 6;
     return;
   }
-  /*2'*/  if (valueArray[0] == 1 && valueArray[1] == 1 && valueArray[3] == 1) {
+
+  // спереди занято, справа свободно
+  /*2'*/  if (valueArray[1] == 1 && valueArray[3] == 1 && valueArray[4] == 0) {
     result = 5;
     return;
   }
-  /*10*/   if (valueArray[4] == 1 && (valueArray[0] == 1 || valueArray[0] == 2)) {
+
+  // спереди близко и слева тоже близко
+  /*10*/   if (valueArray[2] == 1 && (valueArray[1] == 1 || valueArray[1] == 0)) {
     result = 10;
     return;
   }
-  /*11*/   if (valueArray[4] == 1 && (valueArray[1] == 1 || valueArray[1] == 2) ) {
+  // спереди близко и справа тоже близко
+  /*11*/   if (valueArray[2] == 1 && (valueArray[3] == 1 || valueArray[3] == 0) ) {
     result = 11;
     return;
   }
 
-  /*8*/   if (valueArray[2] == 1 && valueArray[3] == 1) {
+  // побокам близко - НЕРАБОТАЕТ
+  /*8*/   if (valueArray[0] == 0 && valueArray[4] == 0) {
     result = 8;
     return;
   }
-  /*0*/   if (valueArray[1] == 1 && valueArray[2] == 1) {
+
+  
+  /*0*/   if (valueArray[3] == 1 && valueArray[0] == 0) {
     result = 0;
     return;
   }
-  /*2*/   if (valueArray[1] == 1 && valueArray[3] == 1) {
+  /*2*/   if (valueArray[3] == 1 && valueArray[4] == 0) {
     result = 2;
     return;
   }
-  /*4*/   if (valueArray[0] == 1 && valueArray[2] == 1) {
+  /*4*/   if (valueArray[1] == 1 && valueArray[0] == 0) {
     result = 4;
     return;
   }
-  /*0*/   if (valueArray[0] == 1 && valueArray[3] == 1) {
+  /*0*/   if (valueArray[1] == 1 && valueArray[4] == 0) {
     result = 0;
     return;
   }
-  /*7*/   if (valueArray[0] == 1 && valueArray[1] == 1) {
+  /*7*/   if (valueArray[1] == 1 && valueArray[3] == 1) {
     result = 7;
     return;
   }
-  /*4'*/  if (valueArray[0] == 2 ) {
+  /*4'*/  if (valueArray[1] == 0 ) {
     result = 6;
     return;
   }
-  /*2'*/  if (valueArray[1] == 2) {
+  /*2'*/  if (valueArray[3] == 0) {
     result = 5;
     return;
   }
 
-  /*3*/   if (valueArray[0] == 1) {
+  /*3*/   if (valueArray[1] == 1) {
     result = 3;
     return;
   }
-  /*1*/   if (valueArray[1] == 1) {
+  /*1*/   if (valueArray[3] == 1) {
     result = 1;
     return;
   }
   return;
-  //if(valueArray[])result;
 }
-void choice() {
 
+void choice() {
   if (result == 0) {
     setDirection(true);
     myservo.write(CENTR_ALGNLE);
     setSpeed(SPEED_THREE);
     return;
   }
-
   if (result == 1) {
     setDirection(true);
     myservo.write(CENTR_ALGNLE - MIN_ANGLE);
     setSpeed(SPEED_TWO);
-    return;
-  }
-  if (result == 2) {
-    setDirection(true);
-    myservo.write(CENTR_ALGNLE - MAX_ANGLE);
-    setSpeed(SPEED_ONE);
     return;
   }
   if (result == 3) {
@@ -220,9 +232,9 @@ void choice() {
     setSpeed(SPEED_TWO);
     return;
   }
-  if (result == 4) {
+  if (result == 104 || result == -104) {
     setDirection(true);
-    myservo.write(CENTR_ALGNLE + MAX_ANGLE);
+    myservo.write(CENTR_ALGNLE + MAX_ANGLE * sign(result));
     setSpeed(SPEED_ONE);
     return;
   }
@@ -278,14 +290,8 @@ void choice() {
   return;
 }
 
-int direction = true;
-int x = -1;
-
-int time = 0;
-
 void loop() {
-  // setDirection(true);
-  for (int i = 0; i < 5; i++) valueArray[i] = 0;
+  for (int i = 0; i < 5; i++) valueArray[i] = 2;
 
   //передние исправление фантастической 4
 
@@ -305,18 +311,30 @@ void loop() {
   stop_center = sr04_c.readNow();
 
   //задание массива
-  if (stop_left <= stop_value_1)valueArray[0] = 1;
-  if (stop_left <= stop_value_2)valueArray[0] = 2;
-  if (stop_right <= stop_value_1)valueArray[1] = 1;
-  if (stop_right <= stop_value_2)valueArray[1] = 2;
+  if (stop_left_n <= STOP_VALUE_N)
+    valueArray[0] = 0;
+  else
+    valueArray[0] = 1;
 
-  if (stop_left_n <= stop_value_n)valueArray[2] = 1;
-  if (stop_right_n <= stop_value_n)valueArray[3] = 1;
+  if (stop_left <= STOP_VALUE_1)
+    valueArray[1] = 1;
+  if (stop_left <= STOP_VALUE_2)
+    valueArray[1] = 0;
 
-  if (stop_center <= stop_value_c)valueArray[4] = 1;
-  if (stop_center <= stop_value_c / 4)valueArray[4] = 2;
+  if (stop_center <= STOP_VALUE_C)
+    valueArray[2] = 1;
+  if (stop_center <= STOP_VALUE_C / 4)
+    valueArray[2] = 0;
 
+  if (stop_right <= STOP_VALUE_1)
+    valueArray[3] = 1;
+  if (stop_right <= STOP_VALUE_2)
+    valueArray[3] = 0;
 
+  if (stop_right_n <= STOP_VALUE_N)
+    valueArray[4] = 0;
+  else
+    valueArray[4] = 1;
   //------end
 
   //результат
@@ -351,13 +369,8 @@ void loop() {
   }
   i++;
 
-
   choice();
 
   result = 0;
-
-
 }
-
-
 

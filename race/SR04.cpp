@@ -63,7 +63,6 @@ int16_t SR04::getValue() {
 
 int16_t SR04::readNow() {
   if (millis() - pulseTime < 50) {
-    if (distance == 0)distance = 300;
     return distance;
   }
   long duration;
@@ -75,7 +74,8 @@ int16_t SR04::readNow() {
   duration = pulseIn(_echo, HIGH, 17000);
   pulseTime = millis();
   distance = (duration / 2) / 29.1;
-  if (distance == 0)distance = 300;
+  if (distance == 0)
+    distance = 300;
   return distance;
 }
 
