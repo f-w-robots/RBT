@@ -298,23 +298,10 @@ Wire Wire Line
 	8350 4550 8550 4550
 Wire Wire Line
 	8400 4450 8550 4450
-$Comp
-L CONN_02X07 P4
-U 1 1 573AD732
-P 3750 4150
-F 0 "P4" H 3750 4550 50  0000 C CNN
-F 1 "CONN_02X07" V 3750 4150 50  0000 C CNN
-F 2 "Pin_Headers:Pin_Header_Straight_2x07" H 3750 2950 50  0001 C CNN
-F 3 "" H 3750 2950 50  0000 C CNN
-	1    3750 4150
-	1    0    0    -1  
-$EndComp
 Wire Wire Line
 	3150 4850 3350 4850
 Wire Wire Line
-	3250 3700 4000 3700
-Wire Wire Line
-	4000 3700 4000 3850
+	3250 3700 4050 3700
 Wire Wire Line
 	3250 4650 3150 4650
 Wire Wire Line
@@ -325,13 +312,9 @@ Wire Wire Line
 	3350 4450 3500 4450
 Wire Wire Line
 	3150 4150 3150 4550
-Wire Wire Line
-	3250 3450 2700 3450
 Connection ~ 3250 3700
 Wire Wire Line
-	2200 4050 2200 4150
-Wire Wire Line
-	2200 4150 3150 4150
+	2150 4150 3150 4150
 $Comp
 L CONN_02X04 P2
 U 1 1 573AE72D
@@ -344,5 +327,84 @@ F 3 "" H 2450 2700 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	2700 3450 2700 3750
+	3450 3850 3450 4450
+Wire Wire Line
+	3450 4350 3500 4350
+Connection ~ 3450 4450
+Wire Wire Line
+	3450 4250 3500 4250
+Connection ~ 3450 4350
+Wire Wire Line
+	3450 4150 3500 4150
+Connection ~ 3450 4250
+Wire Wire Line
+	3450 4050 3500 4050
+Connection ~ 3450 4150
+Wire Wire Line
+	3450 3950 3500 3950
+Connection ~ 3450 4050
+Wire Wire Line
+	3450 3850 3500 3850
+Connection ~ 3450 3950
+$Comp
+L CONN_02X07 P4
+U 1 1 573AD732
+P 3750 4150
+F 0 "P4" H 3750 4550 50  0000 C CNN
+F 1 "CONN_02X07" V 3750 4150 50  0000 C CNN
+F 2 "Pin_Headers:Pin_Header_Straight_2x07" H 3750 2950 50  0001 C CNN
+F 3 "" H 3750 2950 50  0000 C CNN
+	1    3750 4150
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4050 3700 4050 4450
+Wire Wire Line
+	4050 3850 4000 3850
+Wire Wire Line
+	4050 3950 4000 3950
+Connection ~ 4050 3850
+Wire Wire Line
+	4050 4050 4000 4050
+Connection ~ 4050 3950
+Wire Wire Line
+	4050 4150 4000 4150
+Connection ~ 4050 4050
+Wire Wire Line
+	4050 4250 4000 4250
+Connection ~ 4050 4150
+Wire Wire Line
+	4050 4350 4000 4350
+Connection ~ 4050 4250
+Wire Wire Line
+	4050 4450 4000 4450
+Connection ~ 4050 4350
+Wire Wire Line
+	2150 3750 2150 4150
+Wire Wire Line
+	2150 4050 2200 4050
+Wire Wire Line
+	2200 3950 2150 3950
+Connection ~ 2150 4050
+Wire Wire Line
+	2200 3850 2150 3850
+Connection ~ 2150 3950
+Wire Wire Line
+	2200 3750 2150 3750
+Connection ~ 2150 3850
+Wire Wire Line
+	2700 3750 2750 3750
+Wire Wire Line
+	2750 3450 3250 3450
+Wire Wire Line
+	2750 3450 2750 4050
+Wire Wire Line
+	2750 3850 2700 3850
+Connection ~ 2750 3750
+Wire Wire Line
+	2750 3950 2700 3950
+Connection ~ 2750 3850
+Wire Wire Line
+	2750 4050 2700 4050
+Connection ~ 2750 3950
 $EndSCHEMATC
