@@ -66,9 +66,18 @@ void setup() {
 
   //  setSpeed(30);
   Serial.begin(115200);
+
+  pinMode(A5, INPUT);
+
+  pinMode(A2, OUTPUT);
+  pinMode(A3, OUTPUT);
+  digitalWrite(A2, HIGH);
+  digitalWrite(A3, HIGH);
 }
 
 void setSpeed(int speed) {
+  analogWrite(3, 0);
+  return;
   if (speed == -1)
     speed = 0;
   else
@@ -172,7 +181,7 @@ void Result() {
     return;
   }
 
-  
+
   /*0*/   if (valueArray[3] == 1 && valueArray[0] == 0) {
     result = 0;
     return;

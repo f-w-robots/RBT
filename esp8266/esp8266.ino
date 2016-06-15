@@ -17,10 +17,12 @@ int8_t status = 0;
 
 const int slavesCount = 2;
 uint8_t slaves[slavesCount] = {4, 5};
-SPISettings settingsSPI(2000000, MSBFIRST, SPI_MODE0);
+SPISettings settingsSPI(2500, MSBFIRST, SPI_MODE0);
 
 byte** inputPackages = new byte*[slavesCount];
 size_t* inputPackagesSizes = new size_t[slavesCount];
+byte** outputPackages = new byte*[slavesCount];
+size_t* outputPackagesSizes = new size_t[slavesCount];
 
 void webSocketEvent(WStype_t type, uint8_t *payload, size_t lenght) {
   switch (type) {
@@ -34,13 +36,11 @@ void webSocketEvent(WStype_t type, uint8_t *payload, size_t lenght) {
       led->set(LOW, HIGH);
       break;
     case WStype_TEXT:
-    case WStype_BIN:     
-      byte* newPackage = new byte[lenght-1];
-      inputPackagesSizes[payload[0]] = lenght-1;
-      for(int f = 1; f < lenght; f++) {
+    case WStype_BIN:
+      byte* newPackage = new byte[lenght - 1];
+      inputPackagesSizes[payload[0]] = lenght - 1;
+      for (int f = 1; f < lenght; f++) {
         newPackage[f - 1] = payload[f];
-//      Serial.print("r: ");
-//      Serial.println(newPackage[f - 1]);
       }
       inputPackages[payload[0]] = newPackage;
       break;
@@ -92,8 +92,11 @@ void setup() {
 
   for (int i = 0; i < slavesCount; i++) {
     inputPackages[i] = NULL;
+    outputPackages[i] = NULL;
   }
 
+  pinMode(slaves[0], OUTPUT);
+  pinMode(slaves[1], OUTPUT);
   digitalWrite(slaves[0], HIGH);
   digitalWrite(slaves[1], HIGH);
   SPI.begin();
@@ -111,35 +114,61 @@ void loop() {
   SPI.beginTransaction(settingsSPI);
   digitalWrite(slaves[currentSlave], LOW);
 
-  byte result = 0;
-  if (inputPackages[currentSlave] != NULL) {
-//    Serial.println("NN");
-    byte *tmp = inputPackages[currentSlave];
+  byte recived = 0;
 
-    result = SPI.transfer(inputPackagesSizes[currentSlave]);
-//    Serial.print("xtrasfer: ");
-//    Serial.println(inputPackagesSizes[currentSlave]);
+  byte *output = inputPackages[currentSlave];
+  byte *input = NULL;
 
-    if (result != 0) {
-      // set read all package
-    }
-
-    for (uint8_t i = 0; i < inputPackagesSizes[currentSlave]; i++) {
-      SPI.transfer(tmp[i]);
-//      Serial.print("strasfer: ");
-//      Serial.println(tmp[i]);
-    }
-    delete inputPackages[currentSlave];
-    inputPackages[currentSlave] = NULL;
+  int exchangeSize = 0;
+  int inputSize = 0;
+  int outputSize = 0;
+  if (output != NULL) {
+    outputSize = inputPackagesSizes[currentSlave];
   } else {
-    result = SPI.transfer(0);
-    if (result != 0) {
-//       read package
+    outputSize = 0;
+  }
+
+  SPI.transfer(outputSize + 1);
+  recived = SPI.transfer(0);
+//  SPI.transfer(0);
+
+  if (recived != 0) {
+    inputSize = recived;
+    input = new byte[inputSize];
+  }
+
+  if (inputSize < outputSize) {
+    exchangeSize = outputSize;
+  } else {
+    exchangeSize = inputSize;
+  }
+
+  for (uint8_t i = 0; i < exchangeSize; i++) {
+    if (outputSize > i) {
+      recived = SPI.transfer(output[i]);
+    } else {
+      recived = SPI.transfer(0);
+    }
+    if (inputSize > i) {
+      input[i] = recived;
+//      input[i] = 'H';
     }
   }
+  if (output != NULL) delete output;
+  inputPackages[currentSlave] = NULL;
+  outputPackages[currentSlave] = input;
+  outputPackagesSizes[currentSlave] = inputSize;
+
   digitalWrite(slaves[currentSlave], HIGH);
   SPI.endTransaction();
 
+  if (outputPackages[currentSlave] != NULL) {
+    webSocket->sendBIN(outputPackages[currentSlave], outputPackagesSizes[currentSlave]);
+    delete outputPackages[currentSlave];
+    outputPackages[currentSlave] = NULL;
+  }
+
   nextCurrentSlave();
+
   webSocket->loop();
 }

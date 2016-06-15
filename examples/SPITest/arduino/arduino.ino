@@ -7,6 +7,7 @@ volatile bool process_it;
 void setup (void)
 {
   Serial.begin (9600);   // debugging
+  Serial.println("11400");
 
   // turn on SPI in slave mode
   SPCR |= bit (SPE);
@@ -27,29 +28,31 @@ void setup (void)
 // SPI interrupt routine
 ISR (SPI_STC_vect)
 {
-byte c = SPDR;  // grab byte from SPI Data Register
+  byte c = SPDR;  // grab byte from SPI Data Register
+  SPDR = c;
 
   // add to buffer if room
   if (pos < sizeof buf)
-    {
+  {
     buf [pos++] = c;
-//    Serial.println(c);
+    //    Serial.println(c, HEX);
+    //    Serial.println(c);
     // example: newline means time to process buffer
     if (c == '\n')
       process_it = true;
 
-    }  // end of room available
+  }  // end of room available
 }  // end of interrupt routine SPI_STC_vect
 
 // main loop - wait for flag set in interrupt routine
 void loop (void)
 {
   if (process_it)
-    {
+  {
     buf [pos] = 0;
     Serial.println (buf);
     pos = 0;
     process_it = false;
-    }  // end of flag set
+  }  // end of flag setN
 
 }  // end of loop
