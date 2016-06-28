@@ -14,7 +14,9 @@ boolean RobatzDCMotor::update(byte data) {
 }
 
 void RobatzDCMotor::loop() {
+  
   if (updated) {
+    Serial.println("updated");
     digitalWrite(pin1, data % 2);
     data = data / 2;
     digitalWrite(pin2, data % 2);

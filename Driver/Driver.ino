@@ -1,5 +1,5 @@
-//#define DC_MOTOR
-#define STEPPER_MOTOR
+#define DC_MOTOR
+//#define STEPPER_MOTOR
 
 #include <SPI.h>
 #include "RobatzModule.h"
@@ -9,8 +9,16 @@
 RobatzModule **modules;
 uint8_t modulesSize = 0;
 
+void setupSPI()
+{
+  SPCR |= bit (SPE);
+  pinMode(MISO, OUTPUT);
+  SPI.attachInterrupt();
+}
+
 void setup()
 {
+  Serial.begin(115200);
   // INITIALIZE MODULES --- BEGIN
 
 #ifdef DC_MOTOR
@@ -29,10 +37,7 @@ void setup()
 
   // INITIALIZE MODULES --- END
 
-  Serial.begin(115200);
-  SPCR |= bit (SPE);
-  pinMode(MISO, OUTPUT);
-  SPI.attachInterrupt();
+  setupSPI();
 }
 
 void parseRequest(uint8_t moduleId, byte data) {

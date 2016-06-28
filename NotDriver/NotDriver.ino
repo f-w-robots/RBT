@@ -1,5 +1,5 @@
 #include <SPI.h>
-#include "SR04.h"
+#include "RobatzSR04.h"
 
 void setupSPI()
 {
@@ -18,8 +18,6 @@ int inPackagePos = 0;
 int inPackageSize = 0;
 byte* outPackage = new byte[1];
 
-boolean skip = false;
-
 ISR (SPI_STC_vect)
 {
   byte b = SPDR;
@@ -28,7 +26,6 @@ ISR (SPI_STC_vect)
     if (b > 0) {
       SPDR = outSize;
       outSize = 0;
-      skip = true;
       packageSize = max(b, outSize);
       if(b > 1) {
         inPackageSize = b - 1;
@@ -50,38 +47,42 @@ ISR (SPI_STC_vect)
   }
 }
 
-SR04 sr04(6, 7);
+RobatzModule *sr04;
 
 void setup() {
-  setupSPI();
-  sr04.setMaxDistance(255);
   Serial.begin(115200);
-  pinMode(3, OUTPUT);
-  pinMode(4, OUTPUT);
-  pinMode(5, OUTPUT);
+    
+  sr04 = new RobatzSR04(9, 8);
+  
+  setupSPI();
+
+//  pinMode(3, OUTPUT);
+//  pinMode(4, OUTPUT);
+//  pinMode(5, OUTPUT);
 }
 
 long time = 0;
 
 void loop() {
   if (millis() - time > 2000) {
-    outPackage[0] = sr04.readNow();
+    outPackage[0] = sr04->outData();
     outSize = 1;
     time = millis();
   }
-  if(inPackage[0] > 10) {
-    digitalWrite(3, HIGH);
-  } else {
-    digitalWrite(3, LOW);
-  }
-  if(inPackage[1] > 10) {
-    digitalWrite(4, HIGH);
-  } else {
-    digitalWrite(4, LOW);
-  }
-  if(inPackage[2] > 10) {
-    digitalWrite(5, HIGH);
-  } else {
-    digitalWrite(5, LOW);
-  }
+  sr04->loop();
+//  if(inPackage[0] > 10) {
+//    digitalWrite(3, HIGH);
+//  } else {
+//    digitalWrite(3, LOW);
+//  }
+//  if(inPackage[1] > 10) {
+//    digitalWrite(4, HIGH);
+//  } else {
+//    digitalWrite(4, LOW);
+//  }
+//  if(inPackage[2] > 10) {
+//    digitalWrite(5, HIGH);
+//  } else {
+//    digitalWrite(5, LOW);
+//  }
 }
