@@ -33,7 +33,6 @@ ISR (SPI_STC_vect)
       if(b > 1) {
         inPackageSize = b - 1;
         inPackagePos = -2;
-//        inPackage = new byte[inPackageSize];
       }
     }
     return;
@@ -60,9 +59,6 @@ void setup() {
   pinMode(3, OUTPUT);
   pinMode(4, OUTPUT);
   pinMode(5, OUTPUT);
-  //  digitalWrite(3, HIGH);
-  //  digitalWrite(4, HIGH);
-  //  digitalWrite(5, HIGH);
 }
 
 long time = 0;

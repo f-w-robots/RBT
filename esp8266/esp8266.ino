@@ -15,8 +15,8 @@ const char SYS_PASS[] = "robolight";
 
 int8_t status = 0;
 
-const int slavesCount = 2;
-uint8_t slaves[slavesCount] = {4, 5};
+const int slavesCount = 3;
+uint8_t slaves[slavesCount] = {4, 5, 10};
 SPISettings settingsSPI(2500, MSBFIRST, SPI_MODE0);
 
 byte** inputPackages = new byte*[slavesCount];
@@ -28,12 +28,12 @@ void webSocketEvent(WStype_t type, uint8_t *payload, size_t lenght) {
   switch (type) {
     case WStype_DISCONNECTED:
       if (status) {
-        led->set(HIGH, HIGH);
+        led->set(LOW, LOW);
       }
       break;
     case WStype_CONNECTED:
       status = 1;
-      led->set(LOW, HIGH);
+      led->set(HIGH, LOW);
       break;
     case WStype_TEXT:
     case WStype_BIN:
@@ -86,10 +86,8 @@ void setup() {
   connectToWiFi(config->getSsid(), config->getPass());
 
   webSocket = new WebSocketsClient();
-
   webSocket->begin(config->getHost(), 2500, String("/") + config->getUrl());
   webSocket->onEvent(webSocketEvent);
-
   for (int i = 0; i < slavesCount; i++) {
     inputPackages[i] = NULL;
     outputPackages[i] = NULL;
@@ -130,7 +128,6 @@ void loop() {
 
   SPI.transfer(outputSize + 1);
   recived = SPI.transfer(0);
-//  SPI.transfer(0);
 
   if (recived != 0) {
     inputSize = recived;
@@ -151,7 +148,6 @@ void loop() {
     }
     if (inputSize > i) {
       input[i] = recived;
-//      input[i] = 'H';
     }
   }
   if (output != NULL) delete output;

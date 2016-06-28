@@ -1,45 +1,47 @@
+//#define DC_MOTOR
+#define STEPPER_MOTOR
+
 #include <SPI.h>
-#include "Motor28BYJ.h"
+#include "RobatzModule.h"
+#include "RobatzMotor28BYJ.h"
+#include "RobatzDCMotor.h"
 
-int8_t rightDirection = 0;
-int8_t leftDirection = 0;
-
-unsigned long oldTimeValue = 0;
-uint16_t speed = 3000;
-
-Motor28BYJ motor2(2, 3, 4, 5);
-Motor28BYJ motor1(6, 7, 8, 9);
+RobatzModule **modules;
+uint8_t modulesSize = 0;
 
 void setup()
 {
+  // INITIALIZE MODULES --- BEGIN
+
+#ifdef DC_MOTOR
+  modulesSize = 2;
+  modules = new RobatzModule*[modulesSize];
+  modules[0] = new RobatzDCMotor(3, 2, 4);
+  modules[1] = new RobatzDCMotor(9, 8, 5);
+#endif
+
+#ifdef STEPPER_MOTOR
+  modulesSize = 2;
+  modules = new RobatzModule*[modulesSize];
+  modules[0] = new RobatzMotor28BYJ(2, 3, 4, 5);
+  modules[1] = new RobatzMotor28BYJ(6, 7, 8, 9);
+#endif
+
+  // INITIALIZE MODULES --- END
+
   Serial.begin(115200);
   SPCR |= bit (SPE);
-
   pinMode(MISO, OUTPUT);
-
   SPI.attachInterrupt();
 }
 
-void parseRequest(byte b) {
-  int t = b % 4;
-  if (t == 1)
-    rightDirection = 1;
-  else if (t == 2)
-    rightDirection = -1;
-  else
-    rightDirection = 0;
-  b = b / 4;
-  t = b % 4;
-  if (t == 1)
-    leftDirection = 1;
-  else if (t == 2)
-    leftDirection = -1;
-  else
-    leftDirection = 0;
+void parseRequest(uint8_t moduleId, byte data) {
+  if (moduleId >= modulesSize)
+    return;
+  modules[moduleId]->update(data);
 }
 
 uint16_t packageSize = 0;
-byte* inPackage = new byte[10];
 int inPackagePos = 0;
 int inPackageSize = 0;
 byte* outPackage = new byte[1];
@@ -52,10 +54,9 @@ ISR (SPI_STC_vect)
     if (b > 0) {
       SPDR = 0;
       packageSize = max(b, 0);
-      if(b > 1) {
+      if (b > 1) {
         inPackageSize = b - 1;
         inPackagePos = -2;
-//        inPackage = new byte[inPackageSize];
       }
     }
     return;
@@ -65,37 +66,18 @@ ISR (SPI_STC_vect)
     packageSize--;
     inPackagePos++;
     if (inPackagePos < inPackageSize && inPackagePos > -1) {
-      inPackage[inPackagePos] = SPDR;
-      parseRequest(inPackage[inPackagePos]);
-      
+      parseRequest(inPackagePos, SPDR);
     }
-      
+
     SPDR = outPackage[0];
     return;
   }
 }
 
-//ISR (SPI_STC_vect)
-//{
-//  byte b = SPDR;
-//  if (b != 0 && packageSize == 0) {
-//    packageSize = b;
-////    Serial.println(b);
-//  } else {
-//    if (packageSize > 0) {
-//      parseRequest(b);
-//      packageSize--;
-//    }
-//  }
-//}
 
 void loop ()
 {
-  unsigned long newTimeValue = micros() / speed;
-
-  if (newTimeValue != oldTimeValue) {
-    oldTimeValue = newTimeValue;
-    motor1.step(rightDirection);
-    motor2.step(leftDirection);
-  }
+  for (int i = 0; i < modulesSize; i++)
+    modules[i]->loop();
 }
+
