@@ -45,14 +45,14 @@ void setup()
 #endif
 
 #ifdef SENSORS
-  modulesSize = 1 ;
+  modulesSize = 6;
   modules = new RobatzModule*[modulesSize];
   modules[0] = new RobatzSR04(9, 8);
-//  modules[1] = new RobatzSensor(A3);
-//  modules[2] = new RobatzSensor(A2);
-//  modules[3] = new RobatzSensor(A1);
-//  modules[4] = new RobatzSensor(A0);
-//  modules[5] = new RobatzSensor(A4);
+  modules[1] = new RobatzSensor(A3);
+  modules[2] = new RobatzSensor(A2);
+  modules[3] = new RobatzSensor(A1);
+  modules[4] = new RobatzSensor(A0);
+  modules[5] = new RobatzSensor(A4);
 #endif
 
   outPackage = new byte[modulesSize];
@@ -80,7 +80,7 @@ ISR (SPI_STC_vect)
     if (b > 0) {
       SPDR = outSize;
       packageSize = max(b, outSize);
-      
+
       outSize = 0;
       if (b > 1) {
         inPackageSize = b - 1;
@@ -96,10 +96,11 @@ ISR (SPI_STC_vect)
     if (inPackagePos < inPackageSize && inPackagePos > -1) {
       parseRequest(inPackagePos, SPDR);
     }
-//    if(inPackagePos > 1)
-//    Serial.println(packageSize);
-    SPDR = outPackage[0];
-    return;
+
+    int outPackagePos = inPackagePos - 1;
+    if (outPackagePos < modulesSize && outPackagePos > -1) {
+      SPDR = outPackage[outPackagePos];
+    }
   }
 }
 
