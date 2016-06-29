@@ -21,7 +21,7 @@ boolean RobatzSR04::loop() {
     updated = false;
   }
 
-  unsigned long newTimeValue = micros() / speed;
+  unsigned long newTimeValue = millis() / speed;
 
   if (newTimeValue != oldTimeValue) {
     oldTimeValue = newTimeValue;
