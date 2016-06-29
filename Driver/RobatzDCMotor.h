@@ -7,8 +7,9 @@
 class RobatzDCMotor : public RobatzModule {
   public:
     RobatzDCMotor(uint8_t pinA, uint8_t pin1, uint8_t pin2);
-    boolean update(byte data);
-    void loop();
+    void update(byte data);
+    boolean loop();
+    byte outData();
   private:
     byte data = 0;
     boolean updated = false;

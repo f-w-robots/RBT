@@ -43,7 +43,6 @@ void setup() {
 
 
 int outSize = 0;
-uint16_t distance = 0;
 
 void parseRequest(uint8_t moduleId, byte data) {
   if (moduleId >= modulesSize)

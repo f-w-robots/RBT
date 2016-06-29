@@ -7,13 +7,16 @@ RobatzDCMotor::RobatzDCMotor(uint8_t pinA, uint8_t pin1, uint8_t pin2) {
   this->pin2 = pin2;
 }
 
-boolean RobatzDCMotor::update(byte data) {
+void RobatzDCMotor::update(byte data) {
   this->data = data;
   this->updated = true;
-  return false;
 }
 
-void RobatzDCMotor::loop() {
+byte RobatzDCMotor::outData() {
+  return 0;
+}
+
+boolean RobatzDCMotor::loop() {
   
   if (updated) {
     Serial.println("updated");
@@ -24,4 +27,6 @@ void RobatzDCMotor::loop() {
     digitalWrite(pinA, data * 4);
     updated = false;
   }
+
+  return false;
 }

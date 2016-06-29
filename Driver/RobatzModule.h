@@ -3,8 +3,9 @@
 
 class RobatzModule {
   public:
-    virtual boolean update(byte data);
-    virtual void loop();
+    virtual void update(byte data);
+    virtual boolean loop();
+    virtual byte outData();
 };
 
 #endif

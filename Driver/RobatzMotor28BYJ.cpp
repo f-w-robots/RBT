@@ -5,13 +5,16 @@ RobatzMotor28BYJ::RobatzMotor28BYJ(uint8_t pin1, uint8_t pin2, uint8_t pin3, uin
   motor = new Motor28BYJ (pin1, pin2, pin3, pin4);
 }
 
-boolean RobatzMotor28BYJ::update(byte data) {
+void RobatzMotor28BYJ::update(byte data) {
   this->data = data;
   this->updated = true;
-  return false;
 }
 
-void RobatzMotor28BYJ::loop() {
+byte RobatzMotor28BYJ::outData() {
+  return 0;
+}
+
+boolean RobatzMotor28BYJ::loop() {
   if (updated) {
     int8_t t = data % 4;
     data = data / 4;
@@ -32,7 +35,7 @@ void RobatzMotor28BYJ::loop() {
   }
 
   if (speed == 0)
-    return;
+    return false;
 
   unsigned long newTimeValue = micros() / speed;
 
@@ -40,4 +43,6 @@ void RobatzMotor28BYJ::loop() {
     oldTimeValue = newTimeValue;
     motor->step(direction);
   }
+
+  return false;
 }

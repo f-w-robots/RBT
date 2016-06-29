@@ -7,8 +7,9 @@
 class RobatzMotor28BYJ : public RobatzModule {
   public:
     RobatzMotor28BYJ(uint8_t pin1, uint8_t pin2, uint8_t pin3, uint8_t pin4);
-    boolean update(byte data);
-    void loop();
+    void update(byte data);
+    boolean loop();
+    byte outData();
   private:
     byte data = 0;
     boolean updated = false;
