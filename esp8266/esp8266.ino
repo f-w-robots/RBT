@@ -91,12 +91,10 @@ void setup() {
   for (int i = 0; i < slavesCount; i++) {
     inputPackages[i] = NULL;
     outputPackages[i] = NULL;
+    pinMode(slaves[i], OUTPUT);
+    digitalWrite(slaves[i], HIGH);
   }
 
-  pinMode(slaves[0], OUTPUT);
-  pinMode(slaves[1], OUTPUT);
-  digitalWrite(slaves[0], HIGH);
-  digitalWrite(slaves[1], HIGH);
   SPI.begin();
 }
 
@@ -159,9 +157,17 @@ void loop() {
   SPI.endTransaction();
 
   if (outputPackages[currentSlave] != NULL) {
-    webSocket->sendBIN(outputPackages[currentSlave], outputPackagesSizes[currentSlave]);
+    uint8_t outSize = outputPackagesSizes[currentSlave] + 1;
+    byte* out = new byte[outSize];
+    out[0] = currentSlave;
+    for (int i = 0; i < outSize - 1; i++)
+      out[i + 1] = outputPackages[currentSlave][i];
+
+    webSocket->sendBIN(out, outSize);
+
     delete outputPackages[currentSlave];
     outputPackages[currentSlave] = NULL;
+    delete out;
   }
 
   nextCurrentSlave();
