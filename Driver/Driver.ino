@@ -28,6 +28,7 @@ void setupSPI()
 void setup()
 {
   Serial.begin(115200);
+
   // INITIALIZE MODULES --- BEGIN
 
 #ifdef DC_MOTOR
@@ -80,12 +81,9 @@ ISR (SPI_STC_vect)
     if (b > 0) {
       SPDR = outSize;
       packageSize = max(b, outSize);
-
       outSize = 0;
-      if (b > 1) {
-        inPackageSize = b - 1;
-        inPackagePos = -2;
-      }
+      inPackageSize = b - 1;
+      inPackagePos = -2;
     }
     return;
   }
