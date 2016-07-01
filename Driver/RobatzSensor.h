@@ -14,7 +14,7 @@ class RobatzSensor : public RobatzModule {
     byte output = 0;
     uint8_t pin = 0;
     unsigned long oldTimeValue = 0;
-    uint16_t latency = 200;
+    uint16_t latency = 2000;
 };
 
 #endif

@@ -19,12 +19,11 @@ byte RobatzDCMotor::outData() {
 boolean RobatzDCMotor::loop() {
   
   if (updated) {
-    Serial.println("updated");
     digitalWrite(pin1, data % 2);
     data = data / 2;
     digitalWrite(pin2, data % 2);
     data = data / 2;
-    digitalWrite(pinA, data * 4);
+    analogWrite(pinA, data * 4);
     updated = false;
   }
 
