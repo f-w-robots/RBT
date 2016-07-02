@@ -48,12 +48,12 @@ void setup()
 #ifdef SENSORS
   modulesSize = 6;
   modules = new RobatzModule*[modulesSize];
-  modules[0] = new RobatzSR04(9, 8);
-  modules[1] = new RobatzSensor(A3);
-  modules[2] = new RobatzSensor(A2);
-  modules[3] = new RobatzSensor(A1);
-  modules[4] = new RobatzSensor(A0);
-  modules[5] = new RobatzSensor(A4);
+  modules[0] = new RobatzSensor(A3);
+  modules[1] = new RobatzSensor(A2);
+  modules[2] = new RobatzSensor(A1);
+  modules[3] = new RobatzSensor(A0);
+  modules[4] = new RobatzSensor(A4);
+  modules[5] = new RobatzSR04(9, 8);
 #endif
 
   outPackage = new byte[modulesSize];
@@ -95,18 +95,23 @@ ISR (SPI_STC_vect)
       parseRequest(inPackagePos, SPDR);
     }
 
-    int outPackagePos = inPackagePos - 1;
+    int outPackagePos = inPackagePos - 1 + 2;
     if (outPackagePos < modulesSize && outPackagePos > -1) {
       SPDR = outPackage[outPackagePos];
     }
   }
 }
 
+uint32_t lastSendTime = 0;
+
 void loop() {
   for (int i = 0; i < modulesSize; i++) {
     if (modules[i]->loop()) {
       outPackage[i] = modules[i]->outData();
-      outSize = modulesSize;
+      if (millis() - lastSendTime > 10) {
+        outSize = modulesSize;
+        lastSendTime = millis();
+      }
     }
   }
 }
