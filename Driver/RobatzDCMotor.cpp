@@ -12,12 +12,16 @@ void RobatzDCMotor::update(byte data) {
   this->updated = true;
 }
 
-byte RobatzDCMotor::outData() {
+int32_t RobatzDCMotor::outData() {
+  return 0;
+}
+
+byte RobatzDCMotor::answerSize() {
   return 0;
 }
 
 boolean RobatzDCMotor::loop() {
-  
+
   if (updated) {
     digitalWrite(pin1, data % 2);
     data = data / 2;

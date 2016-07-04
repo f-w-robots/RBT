@@ -5,7 +5,8 @@ class RobatzModule {
   public:
     virtual void update(byte data);
     virtual boolean loop();
-    virtual byte outData();
+    virtual int32_t outData();
+    virtual byte answerSize();
 };
 
 #endif

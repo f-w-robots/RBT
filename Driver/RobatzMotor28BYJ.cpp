@@ -10,7 +10,11 @@ void RobatzMotor28BYJ::update(byte data) {
   this->updated = true;
 }
 
-byte RobatzMotor28BYJ::outData() {
+int32_t RobatzMotor28BYJ::outData() {
+  return 0;
+}
+
+byte RobatzMotor28BYJ::answerSize() {
   return 0;
 }
 

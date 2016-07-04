@@ -11,7 +11,7 @@ class SR04
     int16_t getValue();
     int16_t readNow();
     void setMaxDistance(uint32_t maxDist);
-
+  
   private:
     const uint8_t distRatio = 58.2;
     uint16_t maxDist = 100;

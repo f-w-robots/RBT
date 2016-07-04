@@ -9,7 +9,8 @@ class RobatzSR04 : public RobatzModule {
     RobatzSR04(uint8_t trig, uint8_t echo);
     void update(byte data);
     boolean loop();
-    byte outData();
+    int32_t outData();
+    byte answerSize();
   private:
     byte data = 0;
     boolean updated = false;

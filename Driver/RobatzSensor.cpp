@@ -11,21 +11,16 @@ void RobatzSensor::update(byte data) {
   
 }
 
-byte RobatzSensor::outData() {
+int32_t RobatzSensor::outData() {
   return output;
 }
 
+byte RobatzSensor::answerSize() {
+  return 2;
+}
+
 boolean RobatzSensor::loop() {
-//  unsigned long newTimeValue = millis() / latency;
-//
-//  if (newTimeValue != oldTimeValue) {
-//    oldTimeValue = newTimeValue;
-//    output = analogRead(pin) / 4;
-//    return true;
-//  }
-//
-//  return false;
-  uint16_t newOutput = analogRead(pin) / 4;
+  uint16_t newOutput = analogRead(pin);
   if(newOutput != output) {
     output = newOutput;
     return true;

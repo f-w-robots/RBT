@@ -9,9 +9,10 @@ class RobatzSensor : public RobatzModule {
     RobatzSensor(uint8_t pin);
     void update(byte data);
     boolean loop();
-    byte outData();
+    int32_t outData();
+    byte answerSize();
   private:
-    byte output = 0;
+    uint16_t output = 0;
     uint8_t pin = 0;
     unsigned long oldTimeValue = 0;
     uint16_t latency = 2000;

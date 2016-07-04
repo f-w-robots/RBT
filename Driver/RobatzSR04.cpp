@@ -11,13 +11,17 @@ void RobatzSR04::update(byte data) {
   this->updated = true;
 }
 
-byte RobatzSR04::outData() {
+byte RobatzSR04::answerSize() {
+  return 2;
+}
+
+int32_t RobatzSR04::outData() {
   return output;
 }
 
 boolean RobatzSR04::loop() {
   if (updated) {
-   
+
     updated = false;
   }
 

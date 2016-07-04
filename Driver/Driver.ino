@@ -8,6 +8,8 @@
 #include "RobatzDCMotor.h"
 #include "RobatzSR04.h"
 #include "RobatzSensor.h"
+#include "RobatzIRREC.h"
+#include "RobatzIRSend.h"
 
 RobatzModule **modules;
 uint8_t modulesSize = 0;
@@ -17,6 +19,9 @@ int inPackagePos = 0;
 int inPackageSize = 0;
 int outSize = 0;
 byte* outPackage = NULL;
+
+uint8_t outPackageSize = 0;
+uint8_t *outPackagePositions = NULL;
 
 void setupSPI()
 {
@@ -54,10 +59,22 @@ void setup()
   modules[3] = new RobatzSensor(A0);
   modules[4] = new RobatzSensor(A4);
   modules[5] = new RobatzSR04(9, 8);
+  //  modules[6] = new RobatzIRREC(5);
+  //  modules[7] = new RobatzIRSend(3);
 #endif
 
-  outPackage = new byte[modulesSize];
+  outPackagePositions = new uint8_t[modulesSize];
+
   for (int i = 0; i < modulesSize; i++) {
+    outPackagePositions[i] = outPackageSize;
+
+    outPackageSize += modules[i]->answerSize();
+  }
+
+  outPackage = new byte[outPackageSize];
+
+  int outPackagePosition = 0;
+  for (int i = 0; i < outPackageSize; i++) {
     outPackage[i] = 0;
   }
 
@@ -96,7 +113,7 @@ ISR (SPI_STC_vect)
     }
 
     int outPackagePos = inPackagePos - 1 + 2;
-    if (outPackagePos < modulesSize && outPackagePos > -1) {
+    if (outPackagePos < outPackageSize && outPackagePos > -1) {
       SPDR = outPackage[outPackagePos];
     }
   }
@@ -107,9 +124,16 @@ uint32_t lastSendTime = 0;
 void loop() {
   for (int i = 0; i < modulesSize; i++) {
     if (modules[i]->loop()) {
-      outPackage[i] = modules[i]->outData();
+
+      int32_t value = modules[i]->outData();
+
+      for (int g = 0; g < modules[i]->answerSize(); g++) {
+        byte one = ((value >> (g * 8)) & 0xFF);
+        outPackage[outPackagePositions[i] + g] = one;
+      }
+
       if (millis() - lastSendTime > 10) {
-        outSize = modulesSize;
+        outSize = outPackageSize;
         lastSendTime = millis();
       }
     }
