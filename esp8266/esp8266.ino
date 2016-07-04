@@ -32,6 +32,7 @@ void webSocketEvent(WStype_t type, uint8_t *payload, size_t lenght) {
       }
       break;
     case WStype_CONNECTED:
+      Serial.println("connected");
       status = 1;
       led->set(HIGH, LOW);
       break;
@@ -158,7 +159,7 @@ void loop() {
 
   if (outputPackages[currentSlave] != NULL) {
     uint8_t outSize = outputPackagesSizes[currentSlave] + 1;
-    byte* out;
+    byte* out = NULL;
     if (outSize > 0) {
       out = new byte[outSize];
       out[0] = currentSlave;
