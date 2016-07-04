@@ -17,7 +17,7 @@ int8_t status = 0;
 
 const int slavesCount = 3;
 uint8_t slaves[slavesCount] = {4, 5, 10};
-SPISettings settingsSPI(2500, MSBFIRST, SPI_MODE0);
+SPISettings settingsSPI(200000, MSBFIRST, SPI_MODE0);
 
 byte** inputPackages = new byte*[slavesCount];
 size_t* inputPackagesSizes = new size_t[slavesCount];
@@ -158,16 +158,19 @@ void loop() {
 
   if (outputPackages[currentSlave] != NULL) {
     uint8_t outSize = outputPackagesSizes[currentSlave] + 1;
-    byte* out = new byte[outSize];
-    out[0] = currentSlave;
-    for (int i = 0; i < outSize - 1; i++)
-      out[i + 1] = outputPackages[currentSlave][i];
+    byte* out;
+    if (outSize > 0) {
+      out = new byte[outSize];
+      out[0] = currentSlave;
+      for (int i = 0; i < outSize - 1; i++)
+        out[i + 1] = outputPackages[currentSlave][i];
 
-    webSocket->sendBIN(out, outSize);
+      webSocket->sendBIN(out, outSize);
+    }
 
     delete outputPackages[currentSlave];
     outputPackages[currentSlave] = NULL;
-    delete out;
+    if (out != NULL) delete out;
   }
 
   nextCurrentSlave();
