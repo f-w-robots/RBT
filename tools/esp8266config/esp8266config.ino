@@ -38,7 +38,7 @@ void setup() {
   Serial.println("begin setup");
   EEPROM.begin(512);
   // ssid, password, host, url
-  char data[4][32] = {"cyberhub", "cyberpass497", "192.168.100.4", "esp8266"};
+  char data[4][32] = {"cyberhub", "cyberhub1", "192.168.33.3", "esp8266"};
   Serial.println("begin cicle");
   for (int i = 0; i < 4; i ++) {
     writeConfig(i, data[i]);
