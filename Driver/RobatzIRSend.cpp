@@ -22,7 +22,8 @@ byte RobatzIRSend::answerSize() {
 boolean RobatzIRSend::loop() {
   if(updated) {
     updated = false;
-    irsend->sendSony(0x90, 12);
+    if(byte == 'h')
+      irsend->sendNEC(0x00FF30CF, 32);
   }
   return false;
 }

@@ -19,16 +19,13 @@ byte RobatzIRREC::answerSize() {
 }
 
 boolean RobatzIRREC::loop() {
-  unsigned long newTimeValue = micros() / speed;
-  
-  if (newTimeValue != oldTimeValue) {
-    oldTimeValue = newTimeValue;
-    if (irrecv->decode(&results)) {
-      out = results.value;
-      irrecv->resume(); // Receive the next value
-      return true;
-    }
+  if (irrecv->decode(&results)) {
+    out = results.value;
+    Serial.println(out);
+    irrecv->resume(); // Receive the next value
+    return true;
   }
+  
   return false;
 }
 

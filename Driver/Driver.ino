@@ -1,6 +1,6 @@
-//#define DC_MOTOR
+#define DC_MOTOR
 //#define STEPPER_MOTOR
-#define SENSORS
+//#define SENSORS
 
 #include <SPI.h>
 #include "RobatzModule.h"
@@ -36,31 +36,37 @@ void setup()
 
   // INITIALIZE MODULES --- BEGIN
 
-#ifdef DC_MOTOR
-  modulesSize = 2;
-  modules = new RobatzModule*[modulesSize];
-  modules[0] = new RobatzDCMotor(3, 2, 4);
-  modules[1] = new RobatzDCMotor(9, 8, 5);
-#endif
-
-#ifdef STEPPER_MOTOR
-  modulesSize = 2;
-  modules = new RobatzModule*[modulesSize];
-  modules[0] = new RobatzMotor28BYJ(2, 3, 4, 5);
-  modules[1] = new RobatzMotor28BYJ(6, 7, 8, 9);
-#endif
+//#ifdef DC_MOTOR
+//  modulesSize = 2;
+//  modules = new RobatzModule*[modulesSize];
+//  modules[0] = new RobatzDCMotor(3, 2, 4);
+//  modules[1] = new RobatzDCMotor(9, 8, 5);
+//#endif
+//
+//#ifdef STEPPER_MOTOR
+//  modulesSize = 2;
+//  modules = new RobatzModule*[modulesSize];
+//  modules[0] = new RobatzMotor28BYJ(2, 3, 4, 5);
+//  modules[1] = new RobatzMotor28BYJ(6, 7, 8, 9);
+//#endif
+//
+//#ifdef SENSORS
+//  modulesSize = 6;
+//  modules = new RobatzModule*[modulesSize];
+//  modules[0] = new RobatzSensor(A3);
+//  modules[1] = new RobatzSensor(A2);
+//  modules[2] = new RobatzSensor(A1);
+//  modules[3] = new RobatzSensor(A0);
+//  modules[4] = new RobatzSensor(A4);
+//  modules[5] = new RobatzSR04(9, 8);
+//  //  modules[6] = new RobatzIRREC(5);
+//  //  modules[7] = new RobatzIRSend(3);
+//#endif
 
 #ifdef SENSORS
-  modulesSize = 6;
+  modulesSize = 1;
   modules = new RobatzModule*[modulesSize];
-  modules[0] = new RobatzSensor(A3);
-  modules[1] = new RobatzSensor(A2);
-  modules[2] = new RobatzSensor(A1);
-  modules[3] = new RobatzSensor(A0);
-  modules[4] = new RobatzSensor(A4);
-  modules[5] = new RobatzSR04(9, 8);
-  //  modules[6] = new RobatzIRREC(5);
-  //  modules[7] = new RobatzIRSend(3);
+  modules[0] = new RobatzIRSend(3);
 #endif
 
   outPackagePositions = new uint8_t[modulesSize];

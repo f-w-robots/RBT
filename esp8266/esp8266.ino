@@ -16,7 +16,7 @@ const char SYS_PASS[] = "robolight";
 int8_t status = 0;
 
 const int slavesCount = 3;
-uint8_t slaves[slavesCount] = {4, 5, 10};
+uint8_t slaves[slavesCount] = {4, 5};
 SPISettings settingsSPI(200000, MSBFIRST, SPI_MODE0);
 
 byte** inputPackages = new byte*[slavesCount];
@@ -27,17 +27,23 @@ size_t* outputPackagesSizes = new size_t[slavesCount];
 void webSocketEvent(WStype_t type, uint8_t *payload, size_t lenght) {
   switch (type) {
     case WStype_DISCONNECTED:
-      if (status) {
-        led->set(LOW, LOW);
-      }
       break;
     case WStype_CONNECTED:
       Serial.println("connected");
       status = 1;
-      led->set(HIGH, LOW);
+//      led->set(0,0);
       break;
     case WStype_TEXT:
     case WStype_BIN:
+//      if(payload[0] == 104) {
+//        Serial.println("1");
+//        led->set(1,1);
+//      } else {
+//        Serial.println("0");
+//        led->set(0,0);
+//      }
+      
+      
       byte* newPackage = new byte[lenght - 1];
       inputPackagesSizes[payload[0]] = lenght - 1;
       for (int f = 1; f < lenght; f++) {

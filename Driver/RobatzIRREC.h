@@ -13,7 +13,7 @@ class RobatzIRREC : public RobatzModule {
     byte answerSize();
   private:
     int8_t pin = 0;
-    int8_t out = 0;
+    int32_t out = 34;
     IRrecv *irrecv;
     decode_results results;
     unsigned long oldTimeValue = 0;
