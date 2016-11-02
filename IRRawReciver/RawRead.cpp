@@ -1,56 +1,43 @@
 #include <Arduino.h>
 #include "RawRead.h"
 
-RawRead::RawRead(uint16_t _maxSignalSize) {
-  this->maxSignalSize = _maxSignalSize;
+RawRead::RawRead(uint8_t pin, uint16_t maxSignalSize, InterruptCallback interruptCallback) {
+  this->pin = pin;
+  this->maxSignalSize = maxSignalSize;
   timings = new uint16_t[maxSignalSize];
+  this->interruptCallback = interruptCallback;
+  clear();
+}
+
+RawRead::~RawRead() {
+  delete timings;
+}
+
+void RawRead::beginLisning() {
+  clear();
+  attachInterrupt(pin, interruptCallback, CHANGE);
+}
+
+void RawRead::stopLisning() {
+  detachInterrupt(pin);
+}
+
+void RawRead::clear() {
   for (int i = 0; i < maxSignalSize; i++) {
     timings[i] = 0;
   }
 }
 
-int8_t RawRead::getStateIR() {
-  if(state == 2 || state == -1) {
-    return state;
-  }
-  long d = micros() - lastTime;
-  if (state == 1 && d > 1000000) {
-    state = 2;
-  }
-  return this->state;
+int8_t RawRead::getState() {
+  return -100;
 }
 
-void RawRead::handleInterruptIR() {
-  if(state == 2 || state == -1) {
-    return;
-  }
-  if (state == 0) {
-    timings[0] = 0;
-    lastTime = micros();
-    tindex = 1;
-    state = 1;
-    return;
-  } else {
-    if (tindex >= maxSignalSize) {
-      state = -1;
-      return;
-    }
-    long currentTime = micros();
-    long delta = currentTime - lastTime;
-    if(delta > 20000) {
-      state = 2;
-      return;
-    }
-    timings[tindex] = delta;
-    lastTime = currentTime;
-    tindex++;
-  }
-}
+void RawRead::handleInterrupt() {}
 
 void RawRead::print() {
   Serial.print("Size: ");
   Serial.println(tindex);
-  for(int i=0; i < tindex; i++) {
+  for (int i = 0; i < tindex; i++) {
     Serial.println(timings[i]);
   }
 }
