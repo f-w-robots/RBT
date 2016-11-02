@@ -12,8 +12,10 @@ class RawRead {
     virtual int8_t getState();
     virtual void handleInterrupt();
     void print();
-    void clear();
+    uint16_t getTimingsLength();
+    uint16_t *getTimings();
   protected:
+    void clear();
     uint8_t pin;
     uint16_t maxSignalSize;
     uint16_t *timings;

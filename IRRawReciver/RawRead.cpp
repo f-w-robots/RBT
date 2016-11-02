@@ -42,3 +42,11 @@ void RawRead::print() {
   }
 }
 
+uint16_t RawRead::getTimingsLength() {
+  return tindex;
+}
+
+uint16_t *RawRead::getTimings() {
+  return timings;
+}
+
