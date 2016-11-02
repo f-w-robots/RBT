@@ -3,7 +3,7 @@
 
 typedef void (*InterruptCallback)();
 
-class RawRead{
+class RawRead {
   public:
     RawRead(uint8_t pin, uint16_t maxSignalSize, InterruptCallback interruptCallback);
     ~RawRead();

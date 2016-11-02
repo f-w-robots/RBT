@@ -1,7 +1,7 @@
 #include <Arduino.h>
 #include "IRRawRead.h"
 
-IRRawRead::IRRawRead(uint8_t pin, uint16_t maxSignalSize, InterruptCallback interruptCallback) 
+IRRawRead::IRRawRead(uint8_t pin, uint16_t maxSignalSize, InterruptCallback interruptCallback)
   : RawRead(pin, maxSignalSize, interruptCallback)  { }
 
 int8_t IRRawRead::getState() {

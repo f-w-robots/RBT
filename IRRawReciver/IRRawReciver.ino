@@ -1,4 +1,5 @@
 #include "IRRawRead.h"
+#include "RC433RawRead.h"
 const uint8_t INPUT_PIN = 5;
 
 RawRead *reader = NULL;
@@ -11,7 +12,8 @@ void callInterrupt() {
 void setup() {
   Serial.begin(115200);
   Serial.println();
-  reader = new IRRawRead(INPUT_PIN, 2014 * 3, callInterrupt);
+  //  reader = new IRRawRead(INPUT_PIN, 2014 * 3, callInterrupt);
+  reader = new RC433RawRead(INPUT_PIN, 2014 * 3, callInterrupt);
   reader->beginLisning();
 }
 
@@ -25,7 +27,6 @@ void loop() {
       Serial.println("signal is complete recived");
     }
     reader->print();
-
   }
 }
 
