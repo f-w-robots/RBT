@@ -13,7 +13,7 @@ class SR04
     void setMaxDistance(uint32_t maxDist);
   
   private:
-    const uint8_t distRatio = 58.2;
+    const uint8_t distRatio = 58.3;
     uint16_t maxDist = 100;
     void pulse();
     int16_t calibrate(int16_t val);
